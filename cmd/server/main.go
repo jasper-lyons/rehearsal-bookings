@@ -11,8 +11,7 @@ import (
 	// web/templates directories) so that we can import them here and access the 
 	// embedded static files!
 	// "rehearsal-bookings/web/static"
-	tmpl "rehearsal-bookings/web/templates"
-	"html/template"
+	templates "rehearsal-bookings/web/templates"
 )
 
 func EnvOrDefault(key string, fallback string) string {
@@ -23,17 +22,10 @@ func EnvOrDefault(key string, fallback string) string {
 	return value
 }
 
+
 func main() {
 	http.HandleFunc("GET /", func (rw http.ResponseWriter, r *http.Request) {
-		bytes, err := tmpl.TemplateFiles.ReadFile("bookings.html.tmpl")
-		if err != nil {
-			log.Fatal(err)
-		}
-		t, err := template.New("bookings").Parse(string(bytes))
-		if err != nil {
-			log.Fatal(err)
-		}
-		t.Execute(rw, nil)
+		templates.Render(rw, "bookings.html.tmpl", nil)
 	})
 
 	log.Fatal(http.ListenAndServe(EnvOrDefault("PORT", ":8080"), nil))
