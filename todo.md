@@ -17,3 +17,7 @@
 3.4. [x] - Create
 3.5. [x] - Update
 3.6. [x] - Delete
+4.1. [x] - Identify solution for handlers
+4.1.1. [x] - We'll have a big routes file and have each handler exist in it's own file. Each handler can then be tested.
+4.1.2. [ ] - Figure out middleware so that all handlers can have auth checks etc.
+

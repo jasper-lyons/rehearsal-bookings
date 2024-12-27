@@ -6,7 +6,7 @@ import (
 )
 
 func TestBookings(t *testing.T) {
-	driver := NewSqliteDriver("../../db/development.db")
+	driver := NewSqliteDriver("../../db/test.db")
 	br := NewBookingsRepository(driver)
 
 	bookings, err := br.Create(

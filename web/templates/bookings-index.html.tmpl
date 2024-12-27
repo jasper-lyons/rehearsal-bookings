@@ -1,0 +1,12 @@
+<h1>Create a new booking</h1>
+
+<ol>
+{{ range .Bookings }}
+	<li>
+		<h2>{{.CustomerName}}</h2>
+		<p><span>Room:</span> {{.RoomName}}</p>
+		<p><span>Start:</span> {{.StartTime}}</p>
+		<p><span>End:</span> {{.EndTime}}</p>
+	</li>
+{{ end }}
+</ol>
