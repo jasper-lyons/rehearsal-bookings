@@ -39,6 +39,7 @@ func main() {
 	http.Handle("GET /", handlers.BookingsNew(br))
 	http.Handle("GET /booking", handlers.BookingsIndex(br))
 	http.Handle("POST /booking", handlers.BookingsCreate(br))
+	http.Handle("POST /sumup/checkout", handlers.SumupCheckoutCreate())
 
 	server := &http.Server {
 		Addr: EnvOrDefault("PORT", ":8080"),
