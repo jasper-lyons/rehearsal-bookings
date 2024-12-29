@@ -1,8 +1,21 @@
+{{template "layout.html.tmpl" .}}
+
+{{define "body"}}
+<script src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"></script>
+
 <h1>Create a new booking</h1>
 
 <form method="POST" action="/" class="max-w-lg mx-auto p-6">
    <!-- CSRF Protection -->
    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+
+	 <div>
+		 <label for="type">Type</label>
+		 <select id="type" name="type" required>
+		 	<option value="band">Band £12.00/h</option>
+		 	<option value="solo">Solo £6.50/h</option>
+		 </select>
+	 </div>
    
    <!-- Customer Details -->
    <div class="mb-4">
@@ -81,8 +94,59 @@
        </select>
    </div>
 
-   <button type="submit" 
+	 <div>
+		<script>
+			window.addEventListener('load', function () {
+				let type = document.getElementById('type')
+				let duration = document.getElementById('duration')
+
+				function updatePrice() {
+					let price = document.getElementById('price')
+					switch (type.value) {
+						case 'solo':
+							price.textContent = `£${(parseInt(duration.value, 10) * 6.50).toFixed(2)}`
+							break;
+						case 'band':
+							price.textContent = `£${(parseInt(duration.value, 10) * 12.00).toFixed(2)}`
+							break;
+					}
+				}
+
+				type.addEventListener('change', updatePrice)
+				duration.addEventListener('change', updatePrice)
+				updatePrice()
+			})
+		</script>
+		<span>Price:</span>
+		<span id="price">£0.00</span>
+	 </div>
+
+	<script>
+		window.addEventListener('load', function () {
+			let submit = document.getElementById('submit')
+			submit.addEventListener('click', async function (e) {
+				e.preventDefault()
+				// create charge
+				let result = await fetch("/sumup/checkout", {
+					method: 'POST',
+					body: JSON.stringify({
+
+					}),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+				console.log(await result.json())
+				// open sumup UI
+				// confirm payment
+				return false
+			})
+		})
+	</script>
+   <button type="submit"
+	 					id="submit"
            class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
        Book Room
    </button>
 </form>
+{{end}}

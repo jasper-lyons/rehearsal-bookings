@@ -1,4 +1,7 @@
-<h1>Create a new booking</h1>
+{{template "layout.html.tmpl" .}}
+
+{{define "body"}}
+<h1>Bookings</h1>
 
 <ol>
 {{ range .Bookings }}
@@ -10,3 +13,4 @@
 	</li>
 {{ end }}
 </ol>
+{{end}}
