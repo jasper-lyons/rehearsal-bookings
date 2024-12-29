@@ -11,11 +11,7 @@ import (
 var TemplateFiles embed.FS
 
 func Render(rw http.ResponseWriter, templateString string, context any) error {
-	bytes, err := TemplateFiles.ReadFile(templateString)
-	if err != nil {
-		log.Fatal(err)
-	}
-	t, err := template.New(templateString).Parse(string(bytes))
+	t, err := template.New(templateString).ParseFS(TemplateFiles, templateString, "layout.html.tmpl")
 	if err != nil {
 		log.Fatal(err)
 	}

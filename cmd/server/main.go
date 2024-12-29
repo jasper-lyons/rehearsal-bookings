@@ -14,6 +14,8 @@ import (
 	// "rehearsal-bookings/web/static"
 	da "rehearsal-bookings/pkg/data_access"
 	handlers "rehearsal-bookings/pkg/handlers"
+	"github.com/joho/godotenv"
+
 )
 
 func EnvOrDefault(key string, fallback string) string {
@@ -26,12 +28,23 @@ func EnvOrDefault(key string, fallback string) string {
 
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	driver := da.NewSqliteDriver("db/development.db")
 	br := da.NewBookingsRepository(driver)
 
-	http.Handle("GET /new", handlers.BookingsNew(br))
-	http.Handle("GET /", handlers.BookingsIndex(br))
-	http.Handle("POST /", handlers.BookingsCreate(br))
+	http.Handle("GET /", handlers.BookingsNew(br))
+	http.Handle("GET /booking", handlers.BookingsIndex(br))
+	http.Handle("POST /booking", handlers.BookingsCreate(br))
 
-	log.Fatal(http.ListenAndServe(EnvOrDefault("PORT", ":8080"), nil))
+	server := &http.Server {
+		Addr: EnvOrDefault("PORT", ":8080"),
+		Handler: handlers.Logging(http.DefaultServeMux),
+	}
+
+	log.Printf("Listening on port %s\n", EnvOrDefault("PORT", ":8080"))
+	log.Fatal(server.ListenAndServe())
 }

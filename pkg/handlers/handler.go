@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 	templates "rehearsal-bookings/web/templates"
 )
@@ -32,6 +33,17 @@ func Template(name string, data any) Handler {
 func Redirect(url string) Handler {
 	return Handler(func (w http.ResponseWriter, r* http.Request) Handler {
 		http.Redirect(w, r, url, http.StatusSeeOther)
+		return nil
+	})
+}
+
+// Middleware is code that should be run on every request
+func Logging(next http.Handler) Handler {
+	return Handler(func (w http.ResponseWriter, r* http.Request) Handler {
+		defer func () {
+			log.Println(r.Method, r.URL.Path)
+		}()
+		next.ServeHTTP(w, r)
 		return nil
 	})
 }
