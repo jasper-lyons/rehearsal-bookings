@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	templates "rehearsal-bookings/web/templates"
+	"encoding/json"
 )
 
 // Infrastructure Type for nicer handler writing
@@ -33,6 +34,14 @@ func Template(name string, data any) Handler {
 func Redirect(url string) Handler {
 	return Handler(func (w http.ResponseWriter, r* http.Request) Handler {
 		http.Redirect(w, r, url, http.StatusSeeOther)
+		return nil
+	})
+}
+
+func JSON(object any) Handler {
+	return Handler(func (w http.ResponseWriter, r* http.Request) Handler {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(object)
 		return nil
 	})
 }
