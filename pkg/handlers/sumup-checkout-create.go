@@ -2,7 +2,13 @@ package handlers
 
 import (
 	"net/http"
+	_ "encoding/json"
+	_ "bytes"
 )
+
+type CreateCheckoutRequest struct {
+	
+}
 
 type SumupCheckout struct {
 	Amount float32 `json:"amount"`

@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"log"
+	"fmt"
+	"time"
 	"net/http"
 	templates "rehearsal-bookings/web/templates"
 	"encoding/json"
@@ -47,12 +49,41 @@ func JSON(object any) Handler {
 }
 
 // Middleware is code that should be run on every request
+type LoggedResponseWriter struct {
+	http.ResponseWriter
+	status int
+}
+
+func (w *LoggedResponseWriter) WriteHeader(code int) {
+	w.status = code
+	w.ResponseWriter.WriteHeader(code)
+	fmt.Println("here %i", code)
+}
+
+func (w *LoggedResponseWriter) Status() int {
+	if w.status == 0 {
+		return 200
+	}
+	return w.status
+}
+
 func Logging(next http.Handler) Handler {
 	return Handler(func (w http.ResponseWriter, r* http.Request) Handler {
-		defer func () {
-			log.Println(r.Method, r.URL.Path)
-		}()
-		next.ServeHTTP(w, r)
+		loggedWriter := &LoggedResponseWriter {
+			ResponseWriter: w,
+		}
+
+		startTime := time.Now()
+
+		next.ServeHTTP(loggedWriter, r)
+
+		log.Println(
+			time.Since(startTime).String(),
+			r.Method,
+			r.URL.Path,
+			loggedWriter.Status(),
+		)
+
 		return nil
 	})
 }
