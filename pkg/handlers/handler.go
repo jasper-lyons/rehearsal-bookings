@@ -21,7 +21,11 @@ func (handle Handler) ServeHTTP(response http.ResponseWriter, request *http.Requ
 // Handlers that represent values
 func Error(err error, code int) Handler {
 	return Handler(func (w http.ResponseWriter, r* http.Request) Handler {
-		http.Error(w, err.Error(), code)
+		if err != nil {
+			http.Error(w, err.Error(), code)
+		} else {
+			http.Error(w, "", code)
+		}
 		return nil
 	})
 }

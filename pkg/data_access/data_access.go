@@ -333,11 +333,15 @@ func (br* BookingsRepository[StorageDriver]) Update(bookings []Booking) ([]Booki
 
 type Booking struct {
 	Id int64 `sql:"id" generated:"true"`
+	Type string `sql:"type"`
 	CustomerName string `sql:"customer_name"`
 	CustomerEmail string `sql:"customer_email"`
+	CustomerPhone string `sql:"customer_phone"`
 	RoomName string `sql:"room_name"`
 	StartTime time.Time `sql:"start_time"`
 	EndTime time.Time `sql:"end_time"`
+	Status string `sql:"status"`
+	Expiration time.Time `sql:"expiration"`
 }
 
 func FuckTheError[T any](result T, err error) T {

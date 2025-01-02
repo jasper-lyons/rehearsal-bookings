@@ -4,40 +4,50 @@ package handlers
 import (
 	"net/http"
 	"time"
-	"strconv"
 	da "rehearsal-bookings/pkg/data_access"
 )
 
-// Actual handlers
+type CreateBookingsForm struct {
+	Type string `json:"type"`
+	Name string `json:"name"`
+	Email string `json:"email"`
+	Phone string `json:"phone"`
+	Room string `json:"room"`
+	Date string `json:"date"`
+	StartTime string `json:"start_time"`
+	Duration int `json:"duration"`
+}
+
+// All bookings are created with a "hold" status
 func BookingsCreate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 	return Handler(func (w http.ResponseWriter, r *http.Request) Handler {
-		if err := r.ParseForm(); err != nil {
+		form, err := ExtractForm[CreateBookingsForm](r)
+		if err != nil {
 			return Error(err, http.StatusBadRequest)
 		}
 
-		startTime, err := time.Parse("2006-01-02 15:04", r.FormValue("date") + " " + r.FormValue("start_time"))
+		startTime, err := time.Parse("2006-01-02 15:04", form.Date + " " + form.StartTime)
 		if err != nil {
 			return Error(err, http.StatusBadRequest)
 		}
 		
-		hours, err := strconv.ParseInt(r.FormValue("duration"), 10, 0)
-		if err != nil {
-			return Error(err, http.StatusBadRequest)
-		}
-
 		booking := da.Booking {
-			CustomerName: r.FormValue("name"),
-			CustomerEmail: r.FormValue("email"),
-			RoomName: r.FormValue("room"),
+			Type: form.Type,
+			CustomerName: form.Name,
+			CustomerEmail: form.Email,
+			CustomerPhone: form.Phone,
+			RoomName: form.Room,
 			StartTime: startTime,
-			EndTime: startTime.Add(time.Hour * time.Duration(hours)),
+			EndTime: startTime.Add(time.Hour * time.Duration(form.Duration)),
+			Status: "hold",
+			Expiration: time.Now().Add(time.Minute * 15),
 		}
 
-		_, err = br.Create([]da.Booking { booking })
+		bookings, err := br.Create([]da.Booking { booking })
 		if err != nil {
 			return Error(err, http.StatusInternalServerError)
 		}
 
-		return Redirect("/")
+		return JSON(bookings[0])
 	})
 }

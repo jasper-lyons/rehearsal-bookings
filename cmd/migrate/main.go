@@ -34,7 +34,7 @@ func normaliseUrl(URL string) (string, error) {
 
 func main() {
 	var command string
-	flag.StringVar(&command, "command", "", "Migration command (up/down/version)")
+	flag.StringVar(&command, "command", "", "Migration command (up/down/version/create)")
 
 	var url string
 	flag.StringVar(&url, "url", "", "Url of the database, will override DATABASE_URL")

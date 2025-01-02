@@ -37,9 +37,9 @@ func main() {
 	br := da.NewBookingsRepository(driver)
 
 	http.Handle("GET /", handlers.BookingsNew(br))
-	http.Handle("GET /booking", handlers.BookingsIndex(br))
-	http.Handle("POST /booking", handlers.BookingsCreate(br))
-	http.Handle("POST /sumup/checkout", handlers.SumupCheckoutCreate())
+	http.Handle("GET /bookings", handlers.BookingsIndex(br))
+	http.Handle("POST /bookings", handlers.BookingsCreate(br))
+	http.Handle("POST /sumup/checkouts", handlers.SumupCheckoutCreate())
 
 	server := &http.Server {
 		Addr: EnvOrDefault("PORT", ":8080"),

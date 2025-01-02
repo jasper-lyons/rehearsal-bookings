@@ -5,7 +5,7 @@
 
 <h1>Create a new booking</h1>
 
-<form method="POST" action="/" class="max-w-lg mx-auto p-6">
+<form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
    <!-- CSRF Protection -->
    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 
@@ -24,8 +24,7 @@
               id="name"
               name="name" 
               pattern="[A-Za-z0-9 ]+" 
-              class="w-full p-2 border rounded"
-              required>
+              class="w-full p-2 border rounded">
    </div>
 
    <div class="mb-4">
@@ -33,8 +32,7 @@
        <input type="email"
               id="email" 
               name="email"
-              class="w-full p-2 border rounded"
-              required>
+              class="w-full p-2 border rounded">
    </div>
 
    <div class="mb-4">
@@ -43,8 +41,7 @@
               id="phone"
               name="phone"
               pattern="[0-9]{11}"
-              class="w-full p-2 border rounded"
-              required>
+              class="w-full p-2 border rounded">
    </div>
 
    <!-- Booking Details -->
@@ -52,8 +49,7 @@
        <label class="block mb-2" for="room">Rehearsal Room</label>
        <select id="room"
                name="room"
-               class="w-full p-2 border rounded"
-               required>
+               class="w-full p-2 border rounded">
            <option value="Room 1">Room 1</option>
            <option value="Room 2">Room 2</option>
        </select>
@@ -64,8 +60,7 @@
        <input type="date"
               id="date"
               name="date"
-              class="w-full p-2 border rounded"
-              required>
+              class="w-full p-2 border rounded">
    </div>
 
    <div class="mb-4">
@@ -73,16 +68,14 @@
        <input type="time"
               id="start_time"
               name="start_time"
-              class="w-full p-2 border rounded"
-              required>
+              class="w-full p-2 border rounded">
    </div>
 
    <div class="mb-4">
        <label class="block mb-2" for="duration">Duration (hours)</label>
        <select id="duration"
                name="duration"
-               class="w-full p-2 border rounded"
-               required>
+               class="w-full p-2 border rounded">
            <option value="1">1 hour</option>
            <option value="2">2 hours</option>
            <option value="3">3 hours</option>
@@ -123,14 +116,34 @@
 
 	<script>
 		window.addEventListener('load', function () {
-			let submit = document.getElementById('submit')
-			submit.addEventListener('click', async function (e) {
+			let form = document.getElementById('form')
+			form.addEventListener('submit', async function (e) {
 				e.preventDefault()
-				// create charge
-				let result = await fetch("/sumup/checkout", {
+
+				// create held booking
+				let result = await fetch('/bookings', {
 					method: 'POST',
 					body: JSON.stringify({
+						type: document.getElementById('type').value,
+						name: document.getElementById('name').value,
+						email: document.getElementById('email').value,
+						phone: document.getElementById('phone').value,
+						room: document.getElementById('room').value,
+						date: document.getElementById('date').value,
+						start_time: document.getElementById('start_time').value,
+						duration: parseInt(document.getElementById('duration').value, 10),
+					}),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
 
+				// create charge
+				result = await fetch('/sumup/checkouts', {
+					method: 'POST',
+					body: JSON.stringify({
+						amount: parseFloat(document.getElementById('price').textContent.replace('£', '')),
+						checkout_reference: 'the booking id'
 					}),
 					headers: {
 						'Content-Type': 'application/json'
@@ -139,7 +152,6 @@
 				console.log(await result.json())
 				// open sumup UI
 				// confirm payment
-				return false
 			})
 		})
 	</script>
