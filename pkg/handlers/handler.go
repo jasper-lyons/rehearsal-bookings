@@ -44,7 +44,7 @@ func Redirect(url string) Handler {
 	})
 }
 
-func JSON(object any) Handler {
+func JSON[T any](object T) Handler {
 	return Handler(func (w http.ResponseWriter, r* http.Request) Handler {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(object)

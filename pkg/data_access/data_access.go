@@ -223,12 +223,13 @@ func NewBookingsRepository(sd StorageDriver) (*BookingsRepository[StorageDriver]
 	return &BookingsRepository[StorageDriver] { driver: sd }
 }
 
-func (br* BookingsRepository[StorageDriver]) Find(id int64) ([]Booking, error) {
-	rows, err := br.driver.Query("select * from bookings where id = ?", id)
+func (br* BookingsRepository[StorageDriver]) Find(id int) (*Booking, error) {
+	rows, err := br.driver.Query("select * from bookings where id = ? limit 1", id)
 	if err != nil {
 		return nil, err
 	}
-	return RowsToType[Booking](rows)
+	bookings, err := RowsToType[Booking](rows)
+	return &bookings[0], err
 }
 
 func (br* BookingsRepository[StorageDriver]) All() ([]Booking, error) {
@@ -332,16 +333,17 @@ func (br* BookingsRepository[StorageDriver]) Update(bookings []Booking) ([]Booki
 }
 
 type Booking struct {
-	Id int64 `sql:"id" generated:"true"`
-	Type string `sql:"type"`
-	CustomerName string `sql:"customer_name"`
-	CustomerEmail string `sql:"customer_email"`
-	CustomerPhone string `sql:"customer_phone"`
-	RoomName string `sql:"room_name"`
-	StartTime time.Time `sql:"start_time"`
-	EndTime time.Time `sql:"end_time"`
-	Status string `sql:"status"`
-	Expiration time.Time `sql:"expiration"`
+	Id int64 `sql:"id" generated:"true" json:"id"`
+	Type string `sql:"type" json:"type"`
+	CustomerName string `sql:"customer_name" json:"cutomer_name"`
+	CustomerEmail string `sql:"customer_email" json:"customer_email"`
+	CustomerPhone string `sql:"customer_phone" json:"customer_phone"`
+	RoomName string `sql:"room_name" json:"room_name"`
+	StartTime time.Time `sql:"start_time" json:"start_time"`
+	EndTime time.Time `sql:"end_time" json:"end_time"`
+	Status string `sql:"status" json:"status"`
+	Expiration time.Time `sql:"expiration" json:"expiration"`
+	Price float32 `sql:"price" json:"price"`
 }
 
 func FuckTheError[T any](result T, err error) T {

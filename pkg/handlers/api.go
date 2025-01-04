@@ -49,3 +49,7 @@ func (a* Api) Request(method string, path string, body interface{}) (string, err
 func (a* Api) Post(path string, body interface{}) (string, error) {
 	return a.Request(http.MethodPost, path, body) 
 }
+
+func (a* Api) Get(path string, args... any) (string, error) {
+	return a.Request(http.MethodGet, path, nil)
+}

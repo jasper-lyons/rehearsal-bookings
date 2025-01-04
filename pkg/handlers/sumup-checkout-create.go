@@ -20,6 +20,7 @@ type CreateSumupCheckoutRequest struct {
 }
 
 type SumupCheckout struct {
+	Id string `json:"id"`
 	Amount float32 `json:"amount"`
 	CheckoutReference string `json:"checkout_reference"`
 }

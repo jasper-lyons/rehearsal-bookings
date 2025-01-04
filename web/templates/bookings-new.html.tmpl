@@ -1,7 +1,7 @@
 {{template "layout.html.tmpl" .}}
 
 {{define "body"}}
-<script src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"></script>
+<script defer src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"></script>
 
 <h1>Create a new booking</h1>
 
@@ -121,7 +121,7 @@
 				e.preventDefault()
 
 				// create held booking
-				let result = await fetch('/bookings', {
+				let bookingResponse = await fetch('/bookings', {
 					method: 'POST',
 					body: JSON.stringify({
 						type: document.getElementById('type').value,
@@ -138,20 +138,60 @@
 					}
 				})
 
+				if (!bookingResponse.ok) {
+					alert("Can't book ", document.getElementById('room').value, " at that time!")
+					return
+				}
+
+				let booking = await bookingResponse.json()
+
 				// create charge
-				result = await fetch('/sumup/checkouts', {
+				let checkoutResponse = await fetch('/sumup/checkouts', {
 					method: 'POST',
 					body: JSON.stringify({
 						amount: parseFloat(document.getElementById('price').textContent.replace('£', '')),
-						checkout_reference: 'the booking id'
+						checkout_reference: `booking-${booking.id}`
 					}),
 					headers: {
 						'Content-Type': 'application/json'
 					}
 				})
-				console.log(await result.json())
+
+				if (!checkoutResponse.ok) {
+					alert("Payment provider failed, please reach out!")
+					return
+				}
+
+				let checkout = await checkoutResponse.json()
+
 				// open sumup UI
-				// confirm payment
+				SumUpCard.mount({
+					id: 'sumup-card',
+					checkoutId: checkout.id,
+					onResponse: async function (type, body) {
+						switch (type) {
+							case "sent":
+								break;
+							case "success":
+								// TODO: Confirm booking
+								let confirmBookingResponse = await fetch(`/bookings/${booking.id}/confirm`, {
+									method: 'POST',
+									body: JSON.stringify(body),
+									headers: {
+										'Content-Type': 'application/json'
+									}
+								})
+
+								// TODO: Display success, perhaps redirect?
+								document.getElementById('sumup-card').style.display = "none"
+								document.getElementById('success').style.display = "block"
+								break;
+							case "error":
+								// TODO: Handle error
+								break;
+						}
+					}
+				})
 			})
 		})
 	</script>
@@ -161,4 +201,8 @@
        Book Room
    </button>
 </form>
+<div id="sumup-card"></div>
+<div id="success" style="display: none">
+	<h1>Booking Successful! You should recieve a text and email comfirming your booking shortly.</h1>
+</div>
 {{end}}

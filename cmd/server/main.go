@@ -37,8 +37,11 @@ func main() {
 	br := da.NewBookingsRepository(driver)
 
 	http.Handle("GET /", handlers.BookingsNew(br))
+
 	http.Handle("GET /bookings", handlers.BookingsIndex(br))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))
+	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br))
+
 	http.Handle("POST /sumup/checkouts", handlers.SumupCheckoutCreate())
 
 	server := &http.Server {
