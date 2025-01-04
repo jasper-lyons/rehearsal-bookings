@@ -26,19 +26,14 @@ type SumupCheckout struct {
 }
 
 // Actual handlers
-func SumupCheckoutCreate() Handler {
+func SumupCheckoutCreate(sumupApi Api) Handler {
 	return Handler(func (w http.ResponseWriter, r *http.Request) Handler {
 		form, err := ExtractForm[CreateCheckoutForm](r)
 		if err != nil {
 			return Error(err, http.StatusInternalServerError)
 		}
-	
-		sumupApi := NewApi("https://api.sumup.com/v0.1", map[string]string {
-			"Content-Type": "application/json",
-			"Authorization": fmt.Sprintf("Bearer %s", os.Getenv("SUMUP_API_KEY")),
-		})
 
-		responseBody, err := sumupApi.Post("/checkouts", CreateSumupCheckoutRequest {
+		responseBody, err := sumupApi.Post("/v0.1/checkouts", CreateSumupCheckoutRequest {
 			Amount: form.Amount,
 			CheckoutReference: form.CheckoutReference,
 			Currency: "GBP",

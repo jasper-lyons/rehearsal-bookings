@@ -32,7 +32,7 @@ type SumupTransaction struct {
 }
 
 // Actual handlers
-func BookingsConfirm(br *da.BookingsRepository[da.StorageDriver]) Handler {
+func BookingsConfirm(br *da.BookingsRepository[da.StorageDriver], sumupApi Api) Handler {
 	return Handler(func (w http.ResponseWriter, r *http.Request) Handler {
 		form, err := ExtractForm[SumupCheckoutProcessSuccessForm](r)
 		if err != nil {
@@ -56,15 +56,9 @@ func BookingsConfirm(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			return Error(fmt.Errorf("Cannot confirm booking"), http.StatusInternalServerError)
 		}
 
-		// TODO: extract sumup api into main method and pass it in
-		sumupApi := NewApi("https://api.sumup.com/v2.1", map[string]string {
-			"Content-Type": "application/json",
-			"Authorization": fmt.Sprintf("Bearer %s", os.Getenv("SUMUP_API_KEY")),
-		})
-
 		// TODO: Shift param serialisation into api model
 		url := fmt.Sprintf(
-			"/merchants/%s/transactions?id=%s",
+			"/v2.1/merchants/%s/transactions?id=%s",
 			os.Getenv("SUMUP_MERCHANT_CODE"),
 			form.TransactionId,
 		)

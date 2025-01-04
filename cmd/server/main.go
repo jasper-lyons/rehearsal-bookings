@@ -15,6 +15,7 @@ import (
 	da "rehearsal-bookings/pkg/data_access"
 	handlers "rehearsal-bookings/pkg/handlers"
 	"github.com/joho/godotenv"
+	"fmt"
 
 )
 
@@ -26,7 +27,6 @@ func EnvOrDefault(key string, fallback string) string {
 	return value
 }
 
-
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -35,14 +35,18 @@ func main() {
 
 	driver := da.NewSqliteDriver("db/development.db")
 	br := da.NewBookingsRepository(driver)
+	sumupApi := handlers.NewApi("https://api.sumup.com", map[string]string {
+		"Content-Type": "application/json",
+		"Authorization": fmt.Sprintf("Bearer %s", os.Getenv("SUMUP_API_KEY")),
+	})
 
 	http.Handle("GET /", handlers.BookingsNew(br))
 
 	http.Handle("GET /bookings", handlers.BookingsIndex(br))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))
-	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br))
+	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, sumupApi))
 
-	http.Handle("POST /sumup/checkouts", handlers.SumupCheckoutCreate())
+	http.Handle("POST /sumup/checkouts", handlers.SumupCheckoutCreate(sumupApi))
 
 	server := &http.Server {
 		Addr: EnvOrDefault("PORT", ":8080"),
