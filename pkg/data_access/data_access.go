@@ -314,7 +314,7 @@ func generateUpdateStatement[T any](tableName string) string {
 	}
 
 	return fmt.Sprintf(
-		"update %s set %s where id = ?", 
+		"update %s set %s, updated_at = current_time_stamp where id = ?", 
 		tableName, 
 		strings.Join(sets, ", "),
 	)
