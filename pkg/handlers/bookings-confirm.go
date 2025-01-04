@@ -49,7 +49,10 @@ func BookingsConfirm(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			return Error(err, http.StatusNotFound)
 		}
 
-		if fmt.Sprintf("booking-%i", booking.Id) != form.CheckoutReference {
+		fmt.Println(fmt.Sprintf("booking-%d", booking.Id))
+		fmt.Println(form.CheckoutReference)
+
+		if fmt.Sprintf("booking-%d", booking.Id) != form.CheckoutReference {
 			return Error(fmt.Errorf("Cannot confirm booking"), http.StatusInternalServerError)
 		}
 

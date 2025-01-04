@@ -19,12 +19,12 @@ type CreateBookingsForm struct {
 	Duration int `json:"duration"`
 }
 
-func BookingPrice(_type string, duration int) (float32, error) {
+func BookingPrice(_type string, duration int) (float64, error) {
 	switch _type {
 		case "solo":
-			return 6.5 * float32(duration), nil
+			return 6.5 * float64(duration), nil
 		case "band":
-			return 12 * float32(duration), nil
+			return 12 * float64(duration), nil
 	}
 
 	return -1.0, fmt.Errorf("Unknown rehearsal type: %s", _type)
