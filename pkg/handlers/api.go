@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"net/http"
 	"io"
+	"fmt"
 )
 
 type Api struct {
@@ -51,5 +52,5 @@ func (a* Api) Post(path string, body interface{}) (string, error) {
 }
 
 func (a* Api) Get(path string, args... any) (string, error) {
-	return a.Request(http.MethodGet, path, nil)
+	return a.Request(http.MethodGet, fmt.Sprintf(path, args...), nil)
 }

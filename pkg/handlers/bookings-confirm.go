@@ -49,20 +49,15 @@ func BookingsConfirm(br *da.BookingsRepository[da.StorageDriver], sumupApi Api) 
 			return Error(err, http.StatusNotFound)
 		}
 
-		fmt.Println(fmt.Sprintf("booking-%d", booking.Id))
-		fmt.Println(form.CheckoutReference)
-
 		if fmt.Sprintf("booking-%d", booking.Id) != form.CheckoutReference {
 			return Error(fmt.Errorf("Cannot confirm booking"), http.StatusInternalServerError)
 		}
 
-		// TODO: Shift param serialisation into api model
-		url := fmt.Sprintf(
+		responseBody, err := sumupApi.Get(
 			"/v2.1/merchants/%s/transactions?id=%s",
 			os.Getenv("SUMUP_MERCHANT_CODE"),
 			form.TransactionId,
 		)
-		responseBody, err := sumupApi.Get(url)
 		if err != nil {
 			return Error(err, http.StatusInternalServerError)
 		}
