@@ -14,6 +14,7 @@ import (
 	// "rehearsal-bookings/web/static"
 	da "rehearsal-bookings/pkg/data_access"
 	handlers "rehearsal-bookings/pkg/handlers"
+	static "rehearsal-bookings/web/static"
 	"github.com/joho/godotenv"
 	"fmt"
 
@@ -40,13 +41,15 @@ func main() {
 		"Authorization": fmt.Sprintf("Bearer %s", os.Getenv("SUMUP_API_KEY")),
 	})
 
-	http.Handle("GET /", handlers.BookingsNew(br))
 
 	http.Handle("GET /bookings", handlers.BookingsIndex(br))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))
 	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, sumupApi))
 
 	http.Handle("POST /sumup/checkouts", handlers.SumupCheckoutCreate(sumupApi))
+
+	http.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.FS(static.StaticFiles))))
+	http.Handle("GET /", handlers.BookingsNew(br))
 
 	server := &http.Server {
 		Addr: EnvOrDefault("PORT", ":8080"),

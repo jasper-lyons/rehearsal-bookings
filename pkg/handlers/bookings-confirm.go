@@ -69,7 +69,8 @@ func BookingsConfirm(br *da.BookingsRepository[da.StorageDriver], sumupApi Api) 
 			return Error(fmt.Errorf("Cannot confirm booking, payment unsuccessful"), http.StatusInternalServerError)
 		}
 
-		booking.Status ="paid"
+		booking.Status = "paid"
+		booking.TransactionId = form.TransactionId
 		br.Update([]da.Booking { *booking })
 
 		return JSON(booking)

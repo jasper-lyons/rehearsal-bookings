@@ -344,6 +344,7 @@ type Booking struct {
 	Status string `sql:"status" json:"status"`
 	Expiration time.Time `sql:"expiration" json:"expiration"`
 	Price float64 `sql:"price" json:"price"`
+	TransactionId string `sql:"transaction_id" json:"transaction_id"`
 }
 
 func FuckTheError[T any](result T, err error) T {
