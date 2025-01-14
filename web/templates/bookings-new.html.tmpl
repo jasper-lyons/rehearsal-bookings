@@ -2,33 +2,6 @@
 
 {{define "body"}}
 <script defer src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"></script>
-<style>
-	.toggle-button.selected {
-		background-color: #007bff;
-		color: white;
-		border-color: #0056b3;
-	}
-
-	.date-picker-container {
-    display: flex;
-    gap: 10px;
-	}
-
-	button {
-		padding: 10px 20px;
-		margin: 5px;
-		border: 1px solid #ccc;
-		font-size: 1rem;
-		border-radius: 5px;
-
-	}
-
-	button:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-</style>
-
 <h1>Create a new booking</h1>
 
 <form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
@@ -233,12 +206,12 @@
 				let bookingResponse = await fetch('/bookings', {
 					method: 'POST',
 					body: JSON.stringify({
-						type: document.getElementById('type').value,
+						type: document.getElementById('session-type').value,
 						name: document.getElementById('name').value,
 						email: document.getElementById('email').value,
 						phone: document.getElementById('phone').value,
 						room: document.getElementById('room').value,
-						date: document.getElementById('date').value,
+						date: document.getElementById('date-input').value,
 						start_time: document.getElementById('start_time').value,
 						duration: parseInt(document.getElementById('duration').value, 10),
 					}),
