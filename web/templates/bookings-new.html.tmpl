@@ -2,6 +2,32 @@
 
 {{define "body"}}
 <script defer src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"></script>
+<style>
+	.toggle-button.selected {
+		background-color: #007bff;
+		color: white;
+		border-color: #0056b3;
+	}
+
+	.date-picker-container {
+    display: flex;
+    gap: 10px;
+	}
+
+	button {
+		padding: 10px 20px;
+		margin: 5px;
+		border: 1px solid #ccc;
+		font-size: 1rem;
+		border-radius: 5px;
+
+	}
+
+	button:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+</style>
 
 <h1>Create a new booking</h1>
 
@@ -9,14 +35,72 @@
    <!-- CSRF Protection -->
    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 
-	 <div>
-		 <label for="type">Type</label>
-		 <select id="type" name="type" required>
-		 	<option value="band">Band £12.00/h</option>
-		 	<option value="solo">Solo £6.50/h</option>
-		 </select>
-	 </div>
+
+	<!--  Toggle buttons for selecting solo or band sessions -->
+	<div id="button-container">
+	<button type="button" class="toggle-button selected" data-value="band" onclick="selectButton(this)">Band</button>
+	<button type="button" class="toggle-button" data-value="solo" onclick="selectButton(this)">Solo</button>
+	</div>
+
+	<!-- Hidden input to store the selected session type -->
+	<input type="hidden" id="session-type" name="type" value="band">
    
+   <!--  Date picker for booking -->
+   <div class="date-picker-container">
+            <button type="button" id="prev-day">← Previous</button>
+			<input type="date" id="date-input" name="date">
+            <button type="button" id="next-day">Next →</button>
+	</div>
+
+	<script>
+        // Initialize the current date and define the range
+		const currentDate = new Date();
+        const minDate = new Date(currentDate); 	// Start of the range (today)
+		const maxDate = new Date(currentDate); // End of the range (90 days from today)
+		maxDate.setDate(maxDate.getDate() + 90);
+
+		// define the selectedDate - by default this is the current date
+		let selectedDate = new Date(currentDate);
+
+		// Update the displayed date and button states
+        function updateDatePicker() {
+			const datePicker = document.getElementById('date-input');
+
+			datePicker.min = minDate.toLocaleDateString('en-CA');
+			datePicker.max = maxDate.toLocaleDateString('en-CA');
+			datePicker.value = selectedDate.toLocaleDateString('en-CA');
+			document.getElementById('prev-day').disabled = selectedDate <= minDate;
+			document.getElementById('next-day').disabled = selectedDate >= maxDate;
+		}
+
+		// Add event listeners for buttons
+		document.getElementById('prev-day').addEventListener('click', () => {
+			if (selectedDate > minDate) {
+				selectedDate.setDate(selectedDate.getDate() - 1); // Move one day back
+				updateDatePicker();
+			}
+		});
+
+		document.getElementById('next-day').addEventListener('click', () => {
+			if (selectedDate < maxDate) {
+				selectedDate.setDate(selectedDate.getDate() + 1); // Move one day forward
+				updateDatePicker();
+			}
+		});
+
+		// Add event listener for the date picker input
+		document.getElementById('date-input').addEventListener('change', (e) => {
+			const newDate = new Date(e.target.value);
+			if (newDate >= minDate && newDate <= maxDate) {
+				selectedDate = newDate;
+				updateDatePicker();
+			}
+		});
+
+		// Initialize the display and hidden input with today's date
+		updateDatePicker();
+	</script>
+
    <!-- Customer Details -->
    <div class="mb-4">
        <label class="block mb-2" for="name">Full Name</label>
@@ -86,34 +170,59 @@
            <option value="8">8 hours</option>
        </select>
    </div>
-
 	 <div>
 		<script>
-			window.addEventListener('load', function () {
-				let type = document.getElementById('type')
+			function updatePrice() {
+				let price = document.getElementById('price')
+				let session_type = document.getElementById('session-type')
 				let duration = document.getElementById('duration')
 
-				function updatePrice() {
-					let price = document.getElementById('price')
-					switch (type.value) {
-						case 'solo':
-							price.textContent = `£${(parseInt(duration.value, 10) * 6.50).toFixed(2)}`
-							break;
-						case 'band':
-							price.textContent = `£${(parseInt(duration.value, 10) * 12.00).toFixed(2)}`
-							break;
-					}
+				switch (session_type.value) {
+					case 'solo':
+						price.textContent = `£${(parseInt(duration.value, 10) * 6.50).toFixed(2)}`
+						break;
+					case 'band':
+						price.textContent = `£${(parseInt(duration.value, 10) * 12.00).toFixed(2)}`
+						break;
 				}
+			}
 
-				type.addEventListener('change', updatePrice)
+			function selectButton(button) {
+				// Deselect all buttons
+				const buttons = document.querySelectorAll('.toggle-button');
+				buttons.forEach(btn => btn.classList.remove('selected'));
+
+				// Select the clicked button
+				button.classList.add('selected');
+
+				// Save the selected value to type input
+				document.getElementById('session-type').value = button.getAttribute('data-value');
+			}
+
+			window.addEventListener('load', function () {
+				let session_type = document.getElementById('session-type')
+				let duration = document.getElementById('duration')
+				let buttons = document.querySelectorAll('.toggle-button');
+
+				// event listeners for input changes
+				session_type.addEventListener('change', updatePrice)
 				duration.addEventListener('change', updatePrice)
+
+				// event listeners for toggle buttons
+				buttons.forEach(button => {
+            		button.addEventListener('click', function (e) {
+                		e.preventDefault(); // Prevent form submission
+                		selectButton(button);
+                		session_type.dispatchEvent(new Event('change')); // Trigger price update
+            		});
+        		});
+
 				updatePrice()
 			})
 		</script>
 		<span>Price:</span>
 		<span id="price">£0.00</span>
 	 </div>
-
 	<script>
 		window.addEventListener('load', function () {
 			let form = document.getElementById('form')
