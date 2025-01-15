@@ -1,65 +1,21 @@
-#button-container {
-    display: flex;
-    flex-direction: row;
-    flex-grow: 1; /* Allows children to grow and take up available space */
-    width: 100%; /* Full width */
-    height: 100%;
-    justify-content: space-between; /* Distribute space between elements */
-    align-items: stretch; /* Stretch items to fill the container height */
+body {
+    font-family: 'Courier', sans-serif;
+    margin: 20px;
 }
 
-.toggle-button.selected {
-    background-color: black;
-    color: white;
-    border-color: black;
-}
-
-.date-picker-container {
-    display: flex;
-    flex-direction: row;
-    flex-grow: 1; /* Allows children to grow and take up available space */
-    width: 100%; /* Full width */
-    height: 100%;
-    justify-content: space-between; /* Distribute space between elements */
-    align-items: center;
-    gap: 10px;
-}
-
-#date-input {
-    width: 400px;
-    padding: 10px;
+/* BUTTONS */
+button {
+    font-family: 'Impact Label Reversed', sans-serif;
+    font-size: 20px;
+    background-color: #f4f4f4;
+    color: black;  
     border: 2px solid black; /* Bold black border for a label maker feel */
     border-radius: 0; /* Sharp edges */
-    color: black;
-    background-color: #f4f4f4; /* Slightly off-white background */
-    text-transform: uppercase; /* Mimic label maker's uppercase-only text */
-    outline: none;
     box-shadow: 2px 2px 0px black; /* Add a shadow for a raised effect */
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-    font-size: 20px;
-    font-family: 'Impact Label Reversed', sans-serif;
-}
-
-#date-input:focus {
-    box-shadow: 2px 2px 4px black; /* Slightly larger shadow on focus */
-    transform: translate(-1px, -1px); /* Small "pressed" effect */
-    background-color: #fff; /* Brighter background on focus */
-}
-
-button {
-    flex: 1; /* Grow to take up available space */
+    transition: box-shadow 0.3s ease, transform 0.3s ease, background-color 0.3s ease;  /* Add transitions for a smooth effect */
     padding: 10px 15px;
-    margin: 5px;
-    border: 2px solid black;
-    border-radius: 0; /* Sharp edges for buttons */
-    background-color: #f4f4f4;
-    color: black;
-    text-transform: uppercase;
-    cursor: pointer;
-    box-shadow: 2px 2px 0px black;
-    transition: box-shadow 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
-    font-size: 20px;
-    font-family: 'Impact Label Reversed', sans-serif;
+    margin: 5px;        
+    flex: 1;
 }
 
 button:hover:not(:disabled) {
@@ -75,6 +31,80 @@ button:active:not(:disabled) {
 button:disabled {
     background-color: #e0e0e0; /* Light gray for disabled state */
     border-color: #bbb; /* Muted border for disabled state */
-    box-shadow: none;
-    cursor: not-allowed;
+    box-shadow: none; /* No shadow for disabled state */
+    cursor: not-allowed;  /* Not-allowed cursor for disabled state */
+}
+
+/* session selector buttons */
+#session-type-container {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1; /* Allows children to grow and take up available space */
+    width: 100%; /* Full width */
+    height: 100%;
+    justify-content: space-between; /* Distribute space between elements */
+    align-items: stretch; /* Stretch items to fill the container height */
+}
+
+.toggle-button.selected {
+    background-color: black;
+    color: white;
+    border-color: black;
+}
+
+ /* date selectors */
+.date-picker-container {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1; /* Allows children to grow and take up available space */
+    width: 100%; /* Full width */
+    height: 100%;
+    justify-content: space-between; /* Distribute space between elements */
+    align-items: center;
+    gap: 10px;
+}
+
+#date-input {
+    font-family: 'Impact Label Reversed', sans-serif;
+    font-size: 20px;
+    background-color: #f4f4f4; /* Slightly off-white background */
+    text-align: center;
+    color: black;
+    border: 2px solid black; /* Bold black border for a label maker feel */
+    border-radius: 0; /* Sharp edges */
+    box-shadow: 2px 2px 0px black; /* Add a shadow for a raised effect */
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    width: 400px;
+    padding: 10px;
+}
+
+#date-input:focus {
+    box-shadow: 2px 2px 4px black; /* Slightly larger shadow on focus */
+    background-color: #fff; /* Brighter background on focus */
+}
+
+/* Time table */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+th {
+    background-color: black;
+    color: white;
+    text-transform: uppercase;
+}
+
+td.selected {
+    background-color: grey;
+    color: white;
 }

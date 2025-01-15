@@ -5,145 +5,218 @@
 <h1>Create a new booking</h1>
 
 <form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
-   <!-- CSRF Protection -->
-   <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
-
+	<!-- CSRF Protection -->
+	<input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 
 	<!--  Toggle buttons for selecting solo or band sessions -->
-	<div id="button-container">
-	<button type="button" class="toggle-button selected" data-value="band" onclick="selectButton(this)">Band</button>
-	<button type="button" class="toggle-button" data-value="solo" onclick="selectButton(this)">Solo</button>
+	<div id="session-type-container">
+		<button type="button" class="toggle-button selected" data-value="band" onclick="selectButton(this)">Band</button>
+		<button type="button" class="toggle-button" data-value="solo" onclick="selectButton(this)">Solo</button>
+
+		<!-- Hidden input to store the selected session type -->
+		<input type="hidden" id="session-type" name="type" value="band">
 	</div>
 
-	<!-- Hidden input to store the selected session type -->
-	<input type="hidden" id="session-type" name="type" value="band">
-   
-   <!--  Date picker for booking -->
-   <div class="date-picker-container">
-            <button type="button" id="prev-day">← Previous</button>
-			<input type="date" id="date-input" name="date">
-            <button type="button" id="next-day">Next →</button>
+	<!--  Date picker for booking -->
+	<div class="date-picker-container">
+		<button type="button" id="prev-day">← Previous</button>
+		<input type="date" id="date-input" name="date">
+		<button type="button" id="next-day">Next →</button>
+		<script>
+			// Initialize the current date and define the range
+			const currentDate = new Date();
+			const minDate = new Date(currentDate); 	// Start of the range (today)
+			const maxDate = new Date(currentDate); // End of the range (90 days from today)
+			maxDate.setDate(maxDate.getDate() + 90);
+	
+			// define the selectedDate - by default this is the current date
+			let selectedDate = new Date(currentDate);
+	
+			// Update the displayed date and button states
+			function updateDatePicker() {
+				const datePicker = document.getElementById('date-input');
+	
+				datePicker.min = minDate.toLocaleDateString('en-CA');
+				datePicker.max = maxDate.toLocaleDateString('en-CA');
+				datePicker.value = selectedDate.toLocaleDateString('en-CA');
+				document.getElementById('prev-day').disabled = selectedDate <= minDate;
+				document.getElementById('next-day').disabled = selectedDate >= maxDate;
+				clearSelection();
+			}
+	
+			// Add event listeners for buttons
+			document.getElementById('prev-day').addEventListener('click', () => {
+				if (selectedDate > minDate) {
+					selectedDate.setDate(selectedDate.getDate() - 1); // Move one day back
+					updateDatePicker();
+				}
+			});
+	
+			document.getElementById('next-day').addEventListener('click', () => {
+				if (selectedDate < maxDate) {
+					selectedDate.setDate(selectedDate.getDate() + 1); // Move one day forward
+					updateDatePicker();
+				}
+			});
+
+			// Add event listener for the date picker input
+			document.getElementById('date-input').addEventListener('change', (e) => {
+				const newDate = new Date(e.target.value);
+				if (newDate >= minDate && newDate <= maxDate) {
+					selectedDate = newDate;
+					updateDatePicker();
+				}
+			});
+	
+			// Initialize the display and hidden input with today's date
+			updateDatePicker();
+		</script>	
 	</div>
 
-	<script>
-        // Initialize the current date and define the range
-		const currentDate = new Date();
-        const minDate = new Date(currentDate); 	// Start of the range (today)
-		const maxDate = new Date(currentDate); // End of the range (90 days from today)
-		maxDate.setDate(maxDate.getDate() + 90);
+	<!-- Time & Room Selection -->
+	<div id="time-slot-container">
+		<table>
+			<thead>
+				<tr>
+					<th>Hour</th>
+					<th>Room 1</th>
+					<th>Room 2</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- Generate time slots dynamically -->
+				<script>
+					const startHour = 10; // 12 AM
+					const endHour = 23; // 11 PM
 
-		// define the selectedDate - by default this is the current date
-		let selectedDate = new Date(currentDate);
+					for (let hour = startHour; hour <= endHour; hour++) {
+						const formattedHour = `${hour.toString().padStart(2, '0')}:00`;
+						document.write(`
+							<tr>
+								<td>${formattedHour}</td>
+								<td class="time-slot" data-room="room1" data-time="${formattedHour}"></td>
+								<td class="time-slot" data-room="room2" data-time="${formattedHour}"></td>
+							</tr>
+						`);
+					}
+				</script>
+			</tbody>
+		</table>
 
-		// Update the displayed date and button states
-        function updateDatePicker() {
-			const datePicker = document.getElementById('date-input');
+		<!-- Hidden input to store the room, time & durations -->
+		<input type="hidden" id="start-time" name="start-time">
+		<input type="hidden" id="end-time" name="end-time">
+		<input type="hidden" id="room" name="room">
+		<input type="hidden" id="duration" name="duration" value="1">
 
-			datePicker.min = minDate.toLocaleDateString('en-CA');
-			datePicker.max = maxDate.toLocaleDateString('en-CA');
-			datePicker.value = selectedDate.toLocaleDateString('en-CA');
-			document.getElementById('prev-day').disabled = selectedDate <= minDate;
-			document.getElementById('next-day').disabled = selectedDate >= maxDate;
-		}
+		<div id="output"></div>
 
-		// Add event listeners for buttons
-		document.getElementById('prev-day').addEventListener('click', () => {
-			if (selectedDate > minDate) {
-				selectedDate.setDate(selectedDate.getDate() - 1); // Move one day back
-				updateDatePicker();
+		<script>
+			// Initialize variables for time slot selection
+			const timeSlots = document.querySelectorAll('.time-slot');
+			let isDragging = false;
+			let firstSelected = null;
+			let selectedRoom = null;
+			let selectedSlots = [];
+			let startTime = null;
+			let endTime = null;
+
+			// Function to clear the selection and reset the variables 
+			// This is needed so that users can book more than one room or time-range
+			// This function is also called by updateDatePicker()
+			function clearSelection() {
+				timeSlots.forEach(slot => slot.classList.remove('selected'));
+				selectedSlots = [];
+				firstSelected = null;
+				selectedRoom = null;
 			}
-		});
 
-		document.getElementById('next-day').addEventListener('click', () => {
-			if (selectedDate < maxDate) {
-				selectedDate.setDate(selectedDate.getDate() + 1); // Move one day forward
-				updateDatePicker();
-			}
-		});
+			// Add event listeners for mouse down and mouse over events
+			timeSlots.forEach(slot => {
+				// On mouse down, get the room, and first selected slot and add to selectedSlots array
+				slot.addEventListener('mousedown', (event) => {
+					clearSelection()
+					isDragging = true;
+					selectedRoom = slot.dataset.room;;
+					firstSelected = slot;
+					slot.classList.add('selected');
+					selectedSlots.push(slot);
+				});
 
-		// Add event listener for the date picker input
-		document.getElementById('date-input').addEventListener('change', (e) => {
-			const newDate = new Date(e.target.value);
-			if (newDate >= minDate && newDate <= maxDate) {
-				selectedDate = newDate;
-				updateDatePicker();
-			}
-		});
+				// On mouse over, if dragging, add the slots affected to the selectedSlots array
+				slot.addEventListener('mouseover', () => {
+					if (isDragging) {
+						if (selectedRoom === slot.dataset.room) {
+							slot.classList.add('selected');
+							selectedSlots.push(slot);
+						}
+					}
+				});
+			});
 
-		// Initialize the display and hidden input with today's date
-		updateDatePicker();
-	</script>
+			// On mouse up, save the selected slots to the hidden inputs and print the room/time selection
+			document.addEventListener('mouseup', () => {
+				isDragging = false;
+				firstIndex = selectedSlots[0].dataset.time;
+				lastIndex = selectedSlots[selectedSlots.length - 1].dataset.time;
+				if (firstIndex < lastIndex) {
+					startTime = firstIndex;
+					endTime = lastIndex;
+				} else {
+					startTime = lastIndex;
+					endTime = firstIndex;
+				}
 
-   <!-- Customer Details -->
-   <div class="mb-4">
-       <label class="block mb-2" for="name">Full Name</label>
-       <input type="text" 
-              id="name"
-              name="name" 
-              pattern="[A-Za-z0-9 ]+" 
-              class="w-full p-2 border rounded">
-   </div>
+				formattedRoom = selectedRoom === 'room1' ? 'Room 1' : 'Room 2';
+				
+				// save the data to the hidden inputs
+				document.getElementById('start-time').value = startTime;
+				document.getElementById('end-time').value = endTime; // we might not need this if using duration?
+				document.getElementById('room').value = formattedRoom;
+				document.getElementById('duration').value = selectedSlots.length; 
 
-   <div class="mb-4">
-       <label class="block mb-2" for="email">Email</label>
-       <input type="email"
-              id="email" 
-              name="email"
-              class="w-full p-2 border rounded">
-   </div>
+				// trigger the change event on the duration input to update the price in UpdatePrice()
+				document.getElementById('duration').dispatchEvent(new Event('change'));
 
-   <div class="mb-4">
+				// print the selection for user to see room/time details
+				output.innerHTML = `
+					<h2>YOUR SELECTION</h2>
+					<h2><strong>${formattedRoom}</strong> ${startTime} - ${endTime} </h2>
+				`;
+			});
+
+		</script>
+	</div>
+
+	<!-- Customer Details -->
+	<div class="mb-4">
+		<label class="block mb-2" for="name">Full Name</label>
+		<input type="text" 
+				id="name"
+				name="name" 
+				pattern="[A-Za-z0-9 ]+" 
+				class="w-full p-2 border rounded">
+	</div>
+
+	<div class="mb-4">
+		<label class="block mb-2" for="email">Email</label>
+		<input type="email"
+				id="email" 
+				name="email"
+				class="w-full p-2 border rounded">
+	</div>
+
+   	<div class="mb-4">
        <label class="block mb-2" for="phone">Phone</label>
        <input type="tel"
               id="phone"
               name="phone"
               pattern="[0-9]{11}"
               class="w-full p-2 border rounded">
-   </div>
+	</div>
 
-   <!-- Booking Details -->
-   <div class="mb-4">
-       <label class="block mb-2" for="room">Rehearsal Room</label>
-       <select id="room"
-               name="room"
-               class="w-full p-2 border rounded">
-           <option value="Room 1">Room 1</option>
-           <option value="Room 2">Room 2</option>
-       </select>
-   </div>
-
-   <div class="mb-4">
-       <label class="block mb-2" for="date">Date</label>
-       <input type="date"
-              id="date"
-              name="date"
-              class="w-full p-2 border rounded">
-   </div>
-
-   <div class="mb-4">
-       <label class="block mb-2" for="start_time">Start Time</label>
-       <input type="time"
-              id="start_time"
-              name="start_time"
-              class="w-full p-2 border rounded">
-   </div>
-
-   <div class="mb-4">
-       <label class="block mb-2" for="duration">Duration (hours)</label>
-       <select id="duration"
-               name="duration"
-               class="w-full p-2 border rounded">
-           <option value="1">1 hour</option>
-           <option value="2">2 hours</option>
-           <option value="3">3 hours</option>
-           <option value="4">4 hours</option>
-           <option value="5">5 hour</option>
-           <option value="6">6 hours</option>
-           <option value="7">7 hours</option>
-           <option value="8">8 hours</option>
-       </select>
-   </div>
-	 <div>
+	<!-- Price Calculations-->
+	<div>
 		<script>
 			function updatePrice() {
 				let price = document.getElementById('price')
@@ -212,7 +285,7 @@
 						phone: document.getElementById('phone').value,
 						room: document.getElementById('room').value,
 						date: document.getElementById('date-input').value,
-						start_time: document.getElementById('start_time').value,
+						start_time: document.getElementById('start-time').value,
 						duration: parseInt(document.getElementById('duration').value, 10),
 					}),
 					headers: {
