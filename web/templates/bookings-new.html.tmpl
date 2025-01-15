@@ -8,6 +8,7 @@
 	<!-- CSRF Protection -->
 	<input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 
+
 	<!--  Toggle buttons for selecting solo or band sessions -->
 	<div id="session-type-container">
 		<button type="button" class="toggle-button selected" data-value="band" onclick="selectButton(this)">Band</button>
@@ -16,6 +17,7 @@
 		<!-- Hidden input to store the selected session type -->
 		<input type="hidden" id="session-type" name="type" value="band">
 	</div>
+
 
 	<!--  Date picker for booking -->
 	<div class="date-picker-container">
@@ -72,6 +74,7 @@
 			updateDatePicker();
 		</script>	
 	</div>
+
 
 	<!-- Time & Room Selection -->
 	<div id="time-slot-container">
@@ -155,7 +158,7 @@
 			});
 
 			// On mouse up, save the selected slots to the hidden inputs and print the room/time selection
-			document.addEventListener('mouseup', () => {
+			document.getElementById('time-slot-container').addEventListener('mouseup', () => {
 				isDragging = false;
 				firstIndex = selectedSlots[0].dataset.time;
 				lastIndex = selectedSlots[selectedSlots.length - 1].dataset.time;
