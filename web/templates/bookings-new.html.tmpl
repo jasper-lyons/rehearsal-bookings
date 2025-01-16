@@ -11,15 +11,15 @@
 	<div id="session-types">
 		<!--  Toggle buttons for selecting solo or band sessions -->
 		<div id="session-type-container">
-			<button type="button" class="toggle-button" data-value="band" onclick="selectButton(this)">Band</button>
+			<button type="button" class="toggle-button selected" data-value="band" onclick="selectButton(this)">Band</button>
 			<button type="button" class="toggle-button" data-value="solo" onclick="selectButton(this)">Solo</button>
 
 			<!-- Hidden input to store the selected session type -->
-			<input type="hidden" id="session-type" name="type" value="">
+			<input type="hidden" id="session-type" name="type" value="band">
 		</div>
 		<!-- Session type information box -->
-		<div id="info-box" class="info-box hidden">
-			<!-- Content will be updated dynamically -->
+		<div id="info-box" class="info-box">
+			<p>Rehearsal session for up to six people</p>
 		</div>
 	</div>
 
@@ -39,7 +39,7 @@
 			let selectedDate = new Date(currentDate);
 	
 			// Update the displayed date and button states
-			function updateDatePicker() {
+			function updateDatePicker(animated = false) {
 				const datePicker = document.getElementById('date-input');
 	
 				datePicker.min = minDate.toLocaleDateString('en-CA');
@@ -49,15 +49,17 @@
 				document.getElementById('next-day').disabled = selectedDate >= maxDate;
 
 				// Trigger animation
+				if (animated) {
 				datePicker.classList.add('animate');
 				setTimeout(() => datePicker.classList.remove('animate'), 150); // Match the animation duration
+				}
         	}
 	
 			// Add event listeners for buttons
 			document.getElementById('prev-day').addEventListener('click', () => {
 				if (selectedDate > minDate) {
 					selectedDate.setDate(selectedDate.getDate() - 1); // Move one day back
-					updateDatePicker();
+					updateDatePicker(animated = true);
 					clearSelection(); // clear the time slot selection when 
 				}
 			});
@@ -65,7 +67,7 @@
 			document.getElementById('next-day').addEventListener('click', () => {
 				if (selectedDate < maxDate) {
 					selectedDate.setDate(selectedDate.getDate() + 1); // Move one day forward
-					updateDatePicker();
+					updateDatePicker(animated = true);
 					clearSelection(); // clear the time slot selection when 
 				}
 			});
@@ -233,20 +235,24 @@
 	</div>
 
 	<!-- Price Calculations-->
-	<div>
+	<div id="price-box" class="floating-box">
 		<script>
 			function updatePrice() {
 				let price = document.getElementById('price')
 				let session_type = document.getElementById('session-type')
 				let duration = document.getElementById('duration')
 
-				switch (session_type.value) {
+				if (selectedRoom) {
+					switch (session_type.value) {
 					case 'solo':
 						price.textContent = `£${(parseInt(duration.value, 10) * 6.50).toFixed(2)}`
 						break;
 					case 'band':
 						price.textContent = `£${(parseInt(duration.value, 10) * 12.00).toFixed(2)}`
 						break;
+					}
+				} else {
+					price.textContent = '£0.00'
 				}
 			}
 
@@ -265,9 +271,6 @@
 				} else if (button.dataset.value === 'solo') {
 					infoBox.innerHTML = '<p align=right>Rehearsal session for one person</p>';
 				}
-
-				// Remove the hidden class to make the info box visible
-				infoBox.classList.remove('hidden');
 
 				// Save the selected value to type input
 				document.getElementById('session-type').value = button.getAttribute('data-value');
@@ -294,7 +297,7 @@
 				updatePrice()
 			})
 		</script>
-		<span>Price:</span>
+		<span>BOOK NOW:</span>
 		<span id="price">£0.00</span>
 	 </div>
 	<script>

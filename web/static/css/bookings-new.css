@@ -130,3 +130,34 @@ td.selected {
     background-color: grey;
     color: white;
 }
+
+/* Floating box */
+.floating-box {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #f8f9fa;
+    padding: 10px 40px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    border: 2px solid black;
+    font-size: 24px;
+    font-weight: bold;
+    z-index: 1000;
+    text-align: center;
+    transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+}
+
+.floating-box:hover {
+    background-color: lightgrey;
+    box-shadow: 3px 3px 0px black;
+}
+
+.floating-box:active {
+    transform: translate(-50%, 2px); /* Relative to its centered position */
+    box-shadow: 0 1px 0px black; /* Minimal shadow for pressed state */
+    background-color: black;
+    color: white;
+    border-color: black;
+}
