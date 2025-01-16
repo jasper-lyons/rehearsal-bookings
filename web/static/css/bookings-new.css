@@ -3,6 +3,10 @@ body {
     margin: 20px;
 }
 
+.hidden {
+    display: none;
+}
+
 /* BUTTONS */
 button {
     font-family: 'Impact Label Reversed', sans-serif;
@@ -44,9 +48,22 @@ button:disabled {
     height: 100%;
     justify-content: space-between; /* Distribute space between elements */
     align-items: stretch; /* Stretch items to fill the container height */
+    margin-bottom: 0px; /* so that the information box is flush with the buttons */
 }
 
 .toggle-button.selected {
+    background-color: black;
+    color: white;
+    border-color: black;
+    margin-bottom: 0px;
+    box-shadow: none; /* No shadow for selected state */
+
+}
+
+.info-box {
+    margin: 5px;
+    margin-top: 0px; /* so that the information box is flush with the buttons */
+    padding: 10px;
     background-color: black;
     color: white;
     border-color: black;

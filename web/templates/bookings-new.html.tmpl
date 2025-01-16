@@ -8,16 +8,20 @@
 	<!-- CSRF Protection -->
 	<input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 
+	<div id="session-types">
+		<!--  Toggle buttons for selecting solo or band sessions -->
+		<div id="session-type-container">
+			<button type="button" class="toggle-button" data-value="band" onclick="selectButton(this)">Band</button>
+			<button type="button" class="toggle-button" data-value="solo" onclick="selectButton(this)">Solo</button>
 
-	<!--  Toggle buttons for selecting solo or band sessions -->
-	<div id="session-type-container">
-		<button type="button" class="toggle-button selected" data-value="band" onclick="selectButton(this)">Band</button>
-		<button type="button" class="toggle-button" data-value="solo" onclick="selectButton(this)">Solo</button>
-
-		<!-- Hidden input to store the selected session type -->
-		<input type="hidden" id="session-type" name="type" value="band">
+			<!-- Hidden input to store the selected session type -->
+			<input type="hidden" id="session-type" name="type" value="">
+		</div>
+		<!-- Session type information box -->
+		<div id="info-box" class="info-box hidden">
+			<!-- Content will be updated dynamically -->
+		</div>
 	</div>
-
 
 	<!--  Date picker for booking -->
 	<div class="date-picker-container">
@@ -46,7 +50,7 @@
 
 				// Trigger animation
 				datePicker.classList.add('animate');
-				setTimeout(() => datePicker.classList.remove('animate'), 300); // Match the animation duration
+				setTimeout(() => datePicker.classList.remove('animate'), 150); // Match the animation duration
         	}
 	
 			// Add event listeners for buttons
@@ -249,10 +253,21 @@
 			function selectButton(button) {
 				// Deselect all buttons
 				const buttons = document.querySelectorAll('.toggle-button');
+				const infoBox = document.getElementById('info-box');
 				buttons.forEach(btn => btn.classList.remove('selected'));
 
 				// Select the clicked button
 				button.classList.add('selected');
+
+				// Update and show the information box content
+        		if (button.dataset.value === 'band') {
+					infoBox.innerHTML = '<p>Rehearsal session for up to six people</p>';
+				} else if (button.dataset.value === 'solo') {
+					infoBox.innerHTML = '<p align=right>Rehearsal session for one person</p>';
+				}
+
+				// Remove the hidden class to make the info box visible
+				infoBox.classList.remove('hidden');
 
 				// Save the selected value to type input
 				document.getElementById('session-type').value = button.getAttribute('data-value');
