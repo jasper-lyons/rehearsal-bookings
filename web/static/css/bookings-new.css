@@ -19,7 +19,7 @@ button {
 }
 
 button:hover:not(:disabled) {
-    background-color: #ddd; /* Slightly darker on hover */
+    background-color: lightgrey; /* Slightly darker on hover */
     box-shadow: 3px 3px 0px black; /* Larger shadow for hover effect */
 }
 
@@ -78,6 +78,11 @@ button:disabled {
     padding: 10px;
 }
 
+#date-input.animate {
+    background-color:lightgrey; /* Highlight color */
+    transform: scale(1.02);
+}
+
 #date-input:focus {
     box-shadow: 2px 2px 4px black; /* Slightly larger shadow on focus */
     background-color: #fff; /* Brighter background on focus */
@@ -91,7 +96,7 @@ table {
 }
 
 th, td {
-    border: 1px solid #ddd;
+    border: 1px solid lightgrey;
     padding: 8px;
     text-align: center;
     cursor: pointer;

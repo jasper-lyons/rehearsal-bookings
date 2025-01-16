@@ -43,14 +43,18 @@
 				datePicker.value = selectedDate.toLocaleDateString('en-CA');
 				document.getElementById('prev-day').disabled = selectedDate <= minDate;
 				document.getElementById('next-day').disabled = selectedDate >= maxDate;
-				clearSelection();
-			}
+
+				// Trigger animation
+				datePicker.classList.add('animate');
+				setTimeout(() => datePicker.classList.remove('animate'), 300); // Match the animation duration
+        	}
 	
 			// Add event listeners for buttons
 			document.getElementById('prev-day').addEventListener('click', () => {
 				if (selectedDate > minDate) {
 					selectedDate.setDate(selectedDate.getDate() - 1); // Move one day back
 					updateDatePicker();
+					clearSelection(); // clear the time slot selection when 
 				}
 			});
 	
@@ -58,6 +62,7 @@
 				if (selectedDate < maxDate) {
 					selectedDate.setDate(selectedDate.getDate() + 1); // Move one day forward
 					updateDatePicker();
+					clearSelection(); // clear the time slot selection when 
 				}
 			});
 
@@ -67,6 +72,7 @@
 				if (newDate >= minDate && newDate <= maxDate) {
 					selectedDate = newDate;
 					updateDatePicker();
+					clearSelection(); // clear the time slot selection when 
 				}
 			});
 	
@@ -92,13 +98,17 @@
 					const startHour = 10; // 12 AM
 					const endHour = 23; // 11 PM
 
+					function formatHour(hour_value)  {
+						return `${hour_value.toString().padStart(2, '0')}:00`;
+					}
+
 					for (let hour = startHour; hour <= endHour; hour++) {
-						const formattedHour = `${hour.toString().padStart(2, '0')}:00`;
+						const formattedHour = formatHour(hour);
 						document.write(`
 							<tr>
 								<td>${formattedHour}</td>
-								<td class="time-slot" data-room="room1" data-time="${formattedHour}"></td>
-								<td class="time-slot" data-room="room2" data-time="${formattedHour}"></td>
+								<td class="time-slot" data-room="room1" data-time="${hour}"></td>
+								<td class="time-slot" data-room="room2" data-time="${hour}"></td>
 							</tr>
 						`);
 					}
@@ -163,18 +173,18 @@
 				firstIndex = selectedSlots[0].dataset.time;
 				lastIndex = selectedSlots[selectedSlots.length - 1].dataset.time;
 				if (firstIndex < lastIndex) {
-					startTime = firstIndex;
-					endTime = lastIndex;
+					startTime = formatHour(firstIndex);
+					endTime = formatHour(parseInt(lastIndex,10) + 1);
 				} else {
-					startTime = lastIndex;
-					endTime = firstIndex;
+					startTime = formatHour(lastIndex);
+					endTime = formatHour(parseInt(firstIndex,10) + 1);
 				}
 
 				formattedRoom = selectedRoom === 'room1' ? 'Room 1' : 'Room 2';
 				
 				// save the data to the hidden inputs
 				document.getElementById('start-time').value = startTime;
-				document.getElementById('end-time').value = endTime; // we might not need this if using duration?
+				document.getElementById('end-time').value = endTime ; // we might not need this if using duration?
 				document.getElementById('room').value = formattedRoom;
 				document.getElementById('duration').value = selectedSlots.length; 
 
