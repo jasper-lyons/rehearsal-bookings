@@ -102,7 +102,7 @@
 				<!-- Generate time slots dynamically -->
 				<script>
 					const startHour = 10; // 12 AM
-					const endHour = 23; // 11 PM
+					const endHour = 22; // 10 PM (Last booking to finish at 11pm)
 
 					function formatHour(hour_value)  {
 						return `${hour_value.toString().padStart(2, '0')}:00`;
@@ -158,7 +158,7 @@
 					isDragging = true;
 					selectedRoom = slot.dataset.room;;
 					firstSelected = slot;
-					slot.classList.add('selected');
+					slot.classList.add("selected", "grabbing");
 					selectedSlots.push(slot);
 				});
 
@@ -176,6 +176,10 @@
 			// On mouse up, save the selected slots to the hidden inputs and print the room/time selection
 			document.getElementById('time-slot-container').addEventListener('mouseup', () => {
 				isDragging = false;
+				data_cells = document.querySelectorAll('td');
+				[].forEach.call(data_cells, function(dc) {
+					dc.classList.remove("grabbing");
+				});
 				firstIndex = selectedSlots[0].dataset.time;
 				lastIndex = selectedSlots[selectedSlots.length - 1].dataset.time;
 				if (firstIndex < lastIndex) {
@@ -192,7 +196,7 @@
 				document.getElementById('start-time').value = startTime;
 				document.getElementById('end-time').value = endTime ; // we might not need this if using duration?
 				document.getElementById('room').value = formattedRoom;
-				document.getElementById('duration').value = selectedSlots.length; 
+				document.getElementById('duration').value = Math.abs(parseInt(firstIndex, 10) - parseInt(lastIndex, 10)) + 1; // calculate the duration
 
 				// trigger the change event on the duration input to update the price in UpdatePrice()
 				document.getElementById('duration').dispatchEvent(new Event('change'));
@@ -248,7 +252,13 @@
 						price.textContent = `£${(parseInt(duration.value, 10) * 6.50).toFixed(2)}`
 						break;
 					case 'band':
-						price.textContent = `£${(parseInt(duration.value, 10) * 12.00).toFixed(2)}`
+						if (duration.value > 9) {
+							price.textContent = `£100.00`
+						} else if (duration.value > 3) {
+							price.textContent = `£${(parseInt(duration.value, 10) * 10.00).toFixed(2)}`
+						} else {
+							price.textContent = `£${(parseInt(duration.value, 10) * 12.00).toFixed(2)}`
+						}
 						break;
 					}
 				} else {
