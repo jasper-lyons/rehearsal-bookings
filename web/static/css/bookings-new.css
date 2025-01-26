@@ -126,7 +126,7 @@ th {
 }
 
 td.selected {
-    background-color: darkslategrey;
+    background-color: grey;
 }
 
 td.unavailable {

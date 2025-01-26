@@ -133,7 +133,7 @@
 
 		<script>
 			// Initialize variables for time slot selection
-			const timeSlots = document.querySelectorAll('.time-slot');
+			const timeSlots = document.querySelectorAll('.time-slot:not(.unavailable)');
 			let startSlot = null;
 			let endSlot = null;
 			let selectedRoom = null;
@@ -186,39 +186,41 @@
 			// Add event listeners for clicking on time slots
 			timeSlots.forEach(slot => {
 				slot.addEventListener('click', () => {
-					if (!startSlot) {
-						// First click: set the start slot
-						selectFirstSlot(slot);
-					} else if (!endSlot && slot.dataset.room === selectedRoom) {
-						// Second click: set the end slot and select all in between
-						endSlot = slot;
-						selectSlotsBetween(startSlot, endSlot);
+					if (!slot.classList.contains('unavailable')) {
+						if (!startSlot) {
+							// First click: set the start slot
+							selectFirstSlot(slot);
+						} else if (!endSlot && slot.dataset.room === selectedRoom) {
+							// Second click: set the end slot and select all in between
+							endSlot = slot;
+							selectSlotsBetween(startSlot, endSlot);
 
-						const startTimeValue = parseInt(startSlot.dataset.time, 10);
-						const endTimeValue = parseInt(endSlot.dataset.time, 10);
-						const formattedStartTime = formatHour(Math.min(startTimeValue, endTimeValue));
-						const formattedEndTime = formatHour(Math.max(startTimeValue, endTimeValue) + 1);
-						const formattedRoom = selectedRoom === 'room1' ? 'Room 1' : 'Room 2';
+							const startTimeValue = parseInt(startSlot.dataset.time, 10);
+							const endTimeValue = parseInt(endSlot.dataset.time, 10);
+							const formattedStartTime = formatHour(Math.min(startTimeValue, endTimeValue));
+							const formattedEndTime = formatHour(Math.max(startTimeValue, endTimeValue) + 1);
+							const formattedRoom = selectedRoom === 'room1' ? 'Room 1' : 'Room 2';
 
-						// Save the data to the hidden inputs
-						document.getElementById('start-time').value = formattedStartTime;
-                    	document.getElementById('end-time').value = formattedEndTime;
-						document.getElementById('room').value = formattedRoom;
-						document.getElementById('duration').value = Math.abs(startTimeValue - endTimeValue) + 1;
+							// Save the data to the hidden inputs
+							document.getElementById('start-time').value = formattedStartTime;
+							document.getElementById('end-time').value = formattedEndTime;
+							document.getElementById('room').value = formattedRoom;
+							document.getElementById('duration').value = Math.abs(startTimeValue - endTimeValue) + 1;
 
-						// Trigger the change event on the duration input to update the price
-						document.getElementById('duration').dispatchEvent(new Event('change'));
+							// Trigger the change event on the duration input to update the price
+							document.getElementById('duration').dispatchEvent(new Event('change'));
 
-						// print the selection for user to see room/time details
-						timeslot_output.innerHTML = `
-							<h2>YOUR SELECTION</h2>
-							<h2><strong>${formattedRoom}</strong>: ${formattedStartTime} - ${formattedEndTime} </h2>
-						`;
+							// print the selection for user to see room/time details
+							timeslot_output.innerHTML = `
+								<h2>YOUR SELECTION</h2>
+								<h2><strong>${formattedRoom}</strong>: ${formattedStartTime} - ${formattedEndTime} </h2>
+							`;
 
-						timeSlots.forEach(slot => slot.classList.remove('grabbing'));
-					} else {
-						// Third click: clear the selection and start again
-						selectFirstSlot(slot);
+							timeSlots.forEach(slot => slot.classList.remove('grabbing'));
+						} else {
+							// Third click: clear the selection and start again
+							selectFirstSlot(slot);
+						}
 					}
 				});
 
