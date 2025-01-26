@@ -37,11 +37,12 @@
 	
 			// define the selectedDate - by default this is the current date
 			let selectedDate = new Date(currentDate);
+			let isWeekday = selectedDate.getDay() >= 1 && selectedDate.getDay() <= 5; // Monday = 1, Friday = 5
 	
 			// Update the displayed date and button states
 			function updateDatePicker(animated = false) {
 				const datePicker = document.getElementById('date-input');
-	
+				isWeekday = selectedDate.getDay() >= 1 && selectedDate.getDay() <= 5; // Monday = 1, Friday = 5
 				datePicker.min = minDate.toLocaleDateString('en-CA');
 				datePicker.max = maxDate.toLocaleDateString('en-CA');
 				datePicker.value = selectedDate.toLocaleDateString('en-CA');
@@ -50,8 +51,8 @@
 
 				// Trigger animation
 				if (animated) {
-				datePicker.classList.add('animate');
-				setTimeout(() => datePicker.classList.remove('animate'), 150); // Match the animation duration
+					datePicker.classList.add('animate');
+					setTimeout(() => datePicker.classList.remove('animate'), 150); // Match the animation duration
 				}
         	}
 	
@@ -60,7 +61,7 @@
 				if (selectedDate > minDate) {
 					selectedDate.setDate(selectedDate.getDate() - 1); // Move one day back
 					updateDatePicker(animated = true);
-					clearSelection(); // clear the time slot selection when 
+					clearSelection(); // clear the time slot selection when date changes
 				}
 			});
 	
@@ -68,7 +69,7 @@
 				if (selectedDate < maxDate) {
 					selectedDate.setDate(selectedDate.getDate() + 1); // Move one day forward
 					updateDatePicker(animated = true);
-					clearSelection(); // clear the time slot selection when 
+					clearSelection(); // clear the time slot selection when date changes
 				}
 			});
 
@@ -78,7 +79,7 @@
 				if (newDate >= minDate && newDate <= maxDate) {
 					selectedDate = newDate;
 					updateDatePicker();
-					clearSelection(); // clear the time slot selection when 
+					clearSelection(); // clear the time slot selection when date changes
 				}
 			});
 	
@@ -107,7 +108,7 @@
 					function formatHour(hour_value)  {
 						return `${hour_value.toString().padStart(2, '0')}:00`;
 					}
-
+					
 					for (let hour = startHour; hour <= endHour; hour++) {
 						const formattedHour = formatHour(hour);
 						document.write(`
@@ -141,7 +142,15 @@
 			// This is needed so that users can book more than one room or time-range
 			// This function is also called by updateDatePicker()
 			function clearSelection() {
-				timeSlots.forEach(slot => slot.classList.remove('selected'));
+				timeSlots.forEach(slot => {
+					slot.classList.remove('selected');
+					if (isWeekday && slot.dataset.time < 12) {
+						slot.classList.add('unavailable');
+					} else {
+						slot.classList.remove('unavailable');
+					}
+				});
+
 				startSlot = null;
 				endSlot = null;
 				selectedRoom = null;

@@ -126,7 +126,12 @@ th {
 }
 
 td.selected {
-    background-color: grey;
+    background-color: darkslategrey;
+}
+
+td.unavailable {
+    background-image: repeating-linear-gradient(45deg, white, white 2.5px, lightgray 2.5px, lightgray 5px);
+    cursor: not-allowed; 
 }
 
 td.grabbing {
