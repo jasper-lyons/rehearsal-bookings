@@ -128,86 +128,100 @@
 		<input type="hidden" id="room" name="room">
 		<input type="hidden" id="duration" name="duration" value="1">
 
-		<div id="output"></div>
+		<div id="timeslot_output"></div>
 
 		<script>
 			// Initialize variables for time slot selection
 			const timeSlots = document.querySelectorAll('.time-slot');
-			let isDragging = false;
-			let firstSelected = null;
+			let startSlot = null;
+			let endSlot = null;
 			let selectedRoom = null;
-			let selectedSlots = [];
-			let startTime = null;
-			let endTime = null;
 
 			// Function to clear the selection and reset the variables 
 			// This is needed so that users can book more than one room or time-range
 			// This function is also called by updateDatePicker()
 			function clearSelection() {
 				timeSlots.forEach(slot => slot.classList.remove('selected'));
-				selectedSlots = [];
-				firstSelected = null;
+				startSlot = null;
+				endSlot = null;
 				selectedRoom = null;
+				timeslot_output.innerHTML = null;
 			}
 
-			// Add event listeners for mouse down and mouse over events
+			// Function for initialising the first time slot (used on odd clicks, 1, 3 etc...)
+			function selectFirstSlot(slot) {
+				clearSelection();
+				startSlot = slot;
+				selectedRoom = slot.dataset.room;
+				slot.classList.add('selected', 'grabbing');
+			}
+
+			// Function to select slots between start and end
+			function selectSlotsBetween(start, end) {
+				const startTime = parseInt(start.dataset.time, 10);
+				const endTime = parseInt(end.dataset.time, 10);
+				const room = start.dataset.room;
+
+				timeSlots.forEach(slot => {
+					const slotTime = parseInt(slot.dataset.time, 10);
+					if (
+						slot.dataset.room === room &&
+						slotTime >= Math.min(startTime, endTime) &&
+						slotTime <= Math.max(startTime, endTime)
+					) {
+						slot.classList.add('selected');
+					}
+            	});
+			}
+
+			// Add event listeners for clicking on time slots
 			timeSlots.forEach(slot => {
-				// On mouse down, get the room, and first selected slot and add to selectedSlots array
-				slot.addEventListener('mousedown', (event) => {
-					clearSelection()
-					isDragging = true;
-					selectedRoom = slot.dataset.room;;
-					firstSelected = slot;
-					slot.classList.add("selected", "grabbing");
-					selectedSlots.push(slot);
+				slot.addEventListener('click', () => {
+					if (!startSlot) {
+						// First click: set the start slot
+						selectFirstSlot(slot);
+					} else if (!endSlot && slot.dataset.room === selectedRoom) {
+						// Second click: set the end slot and select all in between
+						endSlot = slot;
+						selectSlotsBetween(startSlot, endSlot);
+
+						const startTimeValue = parseInt(startSlot.dataset.time, 10);
+						const endTimeValue = parseInt(endSlot.dataset.time, 10);
+						const formattedStartTime = formatHour(Math.min(startTimeValue, endTimeValue));
+						const formattedEndTime = formatHour(Math.max(startTimeValue, endTimeValue) + 1);
+						const formattedRoom = selectedRoom === 'room1' ? 'Room 1' : 'Room 2';
+
+						// Save the data to the hidden inputs
+						document.getElementById('start-time').value = formattedStartTime;
+                    	document.getElementById('end-time').value = formattedEndTime;
+						document.getElementById('room').value = formattedRoom;
+						document.getElementById('duration').value = Math.abs(startTimeValue - endTimeValue) + 1;
+
+						// Trigger the change event on the duration input to update the price
+						document.getElementById('duration').dispatchEvent(new Event('change'));
+
+						// print the selection for user to see room/time details
+						timeslot_output.innerHTML = `
+							<h2>YOUR SELECTION</h2>
+							<h2><strong>${formattedRoom}</strong>: ${formattedStartTime} - ${formattedEndTime} </h2>
+						`;
+
+						timeSlots.forEach(slot => slot.classList.remove('grabbing'));
+					} else {
+						// Third click: clear the selection and start again
+						selectFirstSlot(slot);
+					}
 				});
 
 				// On mouse over, if dragging, add the slots affected to the selectedSlots array
 				slot.addEventListener('mouseover', () => {
-					if (isDragging) {
+					if (startSlot && !endSlot) {
 						if (selectedRoom === slot.dataset.room) {
-							slot.classList.add('selected');
-							selectedSlots.push(slot);
+							slot.classList.add('grabbing');						
 						}
 					}
 				});
 			});
-
-			// On mouse up, save the selected slots to the hidden inputs and print the room/time selection
-			document.getElementById('time-slot-container').addEventListener('mouseup', () => {
-				isDragging = false;
-				data_cells = document.querySelectorAll('td');
-				[].forEach.call(data_cells, function(dc) {
-					dc.classList.remove("grabbing");
-				});
-				firstIndex = selectedSlots[0].dataset.time;
-				lastIndex = selectedSlots[selectedSlots.length - 1].dataset.time;
-				if (firstIndex < lastIndex) {
-					startTime = formatHour(firstIndex);
-					endTime = formatHour(parseInt(lastIndex,10) + 1);
-				} else {
-					startTime = formatHour(lastIndex);
-					endTime = formatHour(parseInt(firstIndex,10) + 1);
-				}
-
-				formattedRoom = selectedRoom === 'room1' ? 'Room 1' : 'Room 2';
-				
-				// save the data to the hidden inputs
-				document.getElementById('start-time').value = startTime;
-				document.getElementById('end-time').value = endTime ; // we might not need this if using duration?
-				document.getElementById('room').value = formattedRoom;
-				document.getElementById('duration').value = Math.abs(parseInt(firstIndex, 10) - parseInt(lastIndex, 10)) + 1; // calculate the duration
-
-				// trigger the change event on the duration input to update the price in UpdatePrice()
-				document.getElementById('duration').dispatchEvent(new Event('change'));
-
-				// print the selection for user to see room/time details
-				output.innerHTML = `
-					<h2>YOUR SELECTION</h2>
-					<h2><strong>${formattedRoom}</strong> ${startTime} - ${endTime} </h2>
-				`;
-			});
-
 		</script>
 	</div>
 
