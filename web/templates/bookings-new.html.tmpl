@@ -151,6 +151,11 @@
 						slot.classList.remove('selected');
 						if (isWeekday && slot.dataset.time < 12) {
 							slot.classList.add('unavailable');
+						} else if (
+							isWeekday && 
+							document.getElementById('session-type').value === "solo" && 
+							slot.dataset.time > 18) {
+							slot.classList.add('unavailable');
 						} else {
 							slot.classList.remove('unavailable');
 						}
@@ -287,6 +292,7 @@
 
 					// Save the selected value to type input
 					document.getElementById('session-type').value = button.getAttribute('data-value');
+					clearSelection(); // clear the time slot selection when session type changes
 				}
 
 				window.addEventListener('load', function () {
