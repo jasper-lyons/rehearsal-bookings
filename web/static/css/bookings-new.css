@@ -168,3 +168,13 @@ td.grabbing {
     color: white;
     border-color: black;
 }
+
+.customer-info {
+    margin: 16px 0px;
+}
+
+label {
+    display: inline-block;
+    width: 100px;
+    text-align: left;
+  }​
