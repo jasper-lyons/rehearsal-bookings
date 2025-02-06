@@ -58,10 +58,10 @@ func main() {
 	http.Handle("GET /", handlers.BookingsNew(br))
 
 	server := &http.Server {
-		Addr: EnvOrDefault("PORT", ":8080"),
+		Addr: ":" + EnvOrDefault("PORT", "8080"),
 		Handler: handlers.Logging(http.DefaultServeMux),
 	}
 
-	log.Printf("Listening on port %s\n", EnvOrDefault("PORT", ":8080"))
+	log.Printf("Listening on port %s\n", EnvOrDefault("PORT", "8080"))
 	log.Fatal(server.ListenAndServe())
 }
