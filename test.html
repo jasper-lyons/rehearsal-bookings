@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+	<div id="app">
+	</div>
+
+	<script>
+
+		function element(tagName, attributes, content) {
+			let tag = document.createElement(tagName)
+
+			for (let key in attributes) {
+				tag[key] = attributes[key]
+			}
+
+			if (Array.isArray(content)) {
+				for (let item of content) {
+					tag.appendChild(item)	
+				}
+			} else {
+				tag.textContent = content
+			}
+
+			return tag
+		}
+
+		function Sweet(sweet) {
+			return element('li', {}, sweet)
+		}
+
+		function Sweets(sweets) {
+			return element('ul', {},
+				sweets.map(Sweet)
+			)
+		}
+
+		function Form(sweets) {
+			var input = element('input', { type: 'text' })
+
+			return element('div', {}, [
+				input,
+				element('button', { onclick: function (e) {
+					sweets.push(input.value)
+					render()
+				} }, 'add')
+			])
+		}
+
+		function App(sweets) {
+			return element('div', {}, [
+				Form(sweets),
+				Sweets(sweets)
+			])
+		}
+
+		let sweets = ['Haribo', 'Mowam']
+
+		function render() {
+			let app = document
+				.getElementById('app')
+
+			while (app.firstChild)
+				app.removeChild(app.firstChild)
+
+			app.appendChild(App(sweets))
+		}
+
+		render()
+
+	</script>
+
+</body>
+</html>

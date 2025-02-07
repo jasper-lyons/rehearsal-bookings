@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"log"
-	"fmt"
 	"time"
 	"net/http"
 	templates "rehearsal-bookings/web/templates"
@@ -61,7 +60,6 @@ type LoggedResponseWriter struct {
 func (w *LoggedResponseWriter) WriteHeader(code int) {
 	w.status = code
 	w.ResponseWriter.WriteHeader(code)
-	fmt.Println("here %i", code)
 }
 
 func (w *LoggedResponseWriter) Status() int {

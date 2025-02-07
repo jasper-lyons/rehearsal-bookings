@@ -53,7 +53,7 @@ func BookingsConfirm(br *da.BookingsRepository[da.StorageDriver], sumupApi Api) 
 			return Error(fmt.Errorf("Cannot confirm booking"), http.StatusInternalServerError)
 		}
 
-		responseBody, err := sumupApi.Get(
+		response, err := sumupApi.Get(
 			"/v2.1/merchants/%s/transactions?id=%s",
 			os.Getenv("SUMUP_MERCHANT_CODE"),
 			form.TransactionId,
@@ -62,8 +62,12 @@ func BookingsConfirm(br *da.BookingsRepository[da.StorageDriver], sumupApi Api) 
 			return Error(err, http.StatusInternalServerError)
 		}
 
+		if response.Status != 200 {
+			return Error(fmt.Errorf("Error %d retrieving transcation %s", response.Status, form.TransactionId), http.StatusInternalServerError)
+		}
+
 		var sumupTransaction SumupTransaction
-		json.Unmarshal([]byte(responseBody), &sumupTransaction)
+		json.Unmarshal([]byte(response.Body), &sumupTransaction)
 
 		if sumupTransaction.Status != "SUCCESSFUL" {
 			return Error(fmt.Errorf("Cannot confirm booking, payment unsuccessful"), http.StatusInternalServerError)
