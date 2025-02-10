@@ -34,7 +34,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	driver := da.NewSqliteDriver("db/development.db")
+	var driver *da.SqliteDriver
+	if os.Getenv("APP_ENV") == "production" {
+		driver = da.NewSqliteDriver("db/production.db")
+	} else {
+		driver = da.NewSqliteDriver("db/development.db")
+	}
+
 	br := da.NewBookingsRepository(driver)
 	sumupApi := handlers.NewApi("https://api.sumup.com", map[string]string {
 		"Content-Type": "application/json",
@@ -52,10 +58,10 @@ func main() {
 	http.Handle("GET /", handlers.BookingsNew(br))
 
 	server := &http.Server {
-		Addr: EnvOrDefault("PORT", ":8080"),
+		Addr: ":" + EnvOrDefault("PORT", "8080"),
 		Handler: handlers.Logging(http.DefaultServeMux),
 	}
 
-	log.Printf("Listening on port %s\n", EnvOrDefault("PORT", ":8080"))
+	log.Printf("Listening on port %s\n", EnvOrDefault("PORT", "8080"))
 	log.Fatal(server.ListenAndServe())
 }
