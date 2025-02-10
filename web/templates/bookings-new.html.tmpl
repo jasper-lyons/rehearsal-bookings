@@ -3,145 +3,147 @@
 {{define "body"}}
 <script defer src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"></script>
 <h1>Create a new booking</h1>
-
-<form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
-	<!-- CSRF Protection -->
-	<input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
-	
-	<!-- Step 1: Rehearsal Type, Date & Timeslot Selection -->
-	<fieldset id="step-1" class="step">
-		<h1>YOUR BOOKING DETAILS</h1>
-
-		<!-- Session Type Selection -->
-		<div id="session-types">
-			<!--  Toggle buttons for selecting solo or band sessions -->
-			<div id="session-type-container">
-				<button type="button" class="toggle-button selected" data-value="band" onclick="selectButton(this)">Band</button>
-				<button type="button" class="toggle-button" data-value="solo" onclick="selectButton(this)">Solo</button>
-
-				<!-- Hidden input to store the selected session type -->
-				<input type="hidden" id="session-type" name="type" value="band">
-			</div>
+<div>
+	<form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
+		<!-- CSRF Protection -->
+		<input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 		
-			<!-- Session type information box -->
-			<div id="info-box" class="info-box">
-				<p>Rehearsal session for up to six people</p>
+		<!-- Step 1: Rehearsal Type, Date & Timeslot Selection -->
+		<fieldset id="step-1" class="step">
+			<h1>YOUR BOOKING DETAILS</h1>
+
+			<!-- Session Type Selection -->
+			<div id="session-types">
+				<!--  Toggle buttons for selecting solo or band sessions -->
+				<div id="session-type-container">
+					<button type="button" class="toggle-button selected" data-value="band" onclick="selectButton(this)">Band</button>
+					<button type="button" class="toggle-button" data-value="solo" onclick="selectButton(this)">Solo</button>
+
+					<!-- Hidden input to store the selected session type -->
+					<input type="hidden" id="session-type" name="type" value="band">
+				</div>
+			
+				<!-- Session type information box -->
+				<div id="info-box" class="info-box">
+					<p>Rehearsal session for up to six people</p>
+				</div>
 			</div>
-		</div>
 
-		<!--  Date picker for booking -->
-		<div class="date-picker-container">
-			<button type="button" id="prev-day">← Previous</button>
-			<input type="date" id="date-input" name="date">
-			<button type="button" id="next-day">Next →</button>
-			<script src="/static/js/date-picker.js"></script>
-		</div>
+			<!--  Date picker for booking -->
+			<div class="date-picker-container">
+				<button type="button" id="prev-day">← Previous</button>
+				<input type="date" id="date-input" name="date">
+				<button type="button" id="next-day">Next →</button>
+				<script src="/static/js/date-picker.js"></script>
+			</div>
 
-		<!-- Time & Room Selection -->
-		<div id="time-slot-container">
-			<table>
-				<thead>
-					<tr>
-						<th>Hour</th>
-						<th>Room 1</th>
-						<th>Room 2</th>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- Time slots are generated here -->
-					<script src="/static/js/timeslot-table.js"></script>
-				</tbody>
-			</table>
+			<!-- Time & Room Selection -->
+			<div id="time-slot-container">
+				<table>
+					<thead>
+						<tr>
+							<th>Hour</th>
+							<th>Room 1</th>
+							<th>Room 2</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- Time slots are generated here -->
+						<script src="/static/js/timeslot-table.js"></script>
+					</tbody>
+				</table>
 
-			<!-- Hidden input to store the room, time & durations -->
-			<input type="hidden" id="start-time" name="start-time">
-			<input type="hidden" id="end-time" name="end-time">
-			<input type="hidden" id="room" name="room">
-			<input type="hidden" id="duration" name="duration" value="1">
+				<!-- Hidden input to store the room, time & durations -->
+				<input type="hidden" id="start-time" name="start-time">
+				<input type="hidden" id="end-time" name="end-time">
+				<input type="hidden" id="room" name="room">
+				<input type="hidden" id="duration" name="duration" value="1">
 
-			<div id="timeslot_output"></div>
+				<div id="timeslot_output"></div>
 
-			<script src="/static/js/timeslot-selections.js"></script>
-		</div>
+				<script src="/static/js/timeslot-selections.js"></script>
+			</div>
 
-		<!-- Price Calculations-->
-		<div id="book-now" class="floating-box">
-			<script src="/static/js/price-calculator.js"></script>
-			<span>BOOK NOW:</span>
-			<span id="price">£0.00</span>
-		</div>
-	</fieldset>
+			<br>
+			<br>
+			<!-- Price Calculations-->
+			<div id="book-now" class="floating-box">
+				<script src="/static/js/price-calculator.js"></script>
+				<span>BOOK NOW:</span>
+				<span id="price">£0.00</span>
+			</div>
+		</fieldset>
 
-	<!-- Step 2 - Customer Details -->
-	<fieldset id="step-2" class="step hidden">
-        <h1>YOUR PERSONAL DETAILS</h1>
-		<h1>Enter your contact details</h1>
-		<div class="customer-info">
-			<label for="name">Full Name</label>
-			<input type="text" 
-					id="name"
-					name="name" 
-					pattern="[A-Za-z0-9 ]+">
-		</div>
+		<!-- Step 2 - Customer Details -->
+		<fieldset id="step-2" class="step hidden">
+			<h1>YOUR PERSONAL DETAILS</h1>
+			<h1>Enter your contact details</h1>
+			<div class="customer-info">
+				<label for="name">Full Name</label>
+				<input type="text" 
+						id="name"
+						name="name" 
+						pattern="[A-Za-z0-9 ]+">
+			</div>
 
-		<div class="customer-info">
-			<label for="email">Email</label>
-			<input type="email"
-					id="email" 
-					name="email">
-		</div>
+			<div class="customer-info">
+				<label for="email">Email</label>
+				<input type="email"
+						id="email" 
+						name="email">
+			</div>
 
-		<div class="customer-info">
-		<label for="phone">Phone</label>
-		<input type="tel"
-				id="phone"
-				name="phone"
-				pattern="[0-9]{11}">
-		</div>
+			<div class="customer-info">
+			<label for="phone">Phone</label>
+			<input type="tel"
+					id="phone"
+					name="phone"
+					pattern="[0-9]{11}">
+			</div>
 
-		<br>
-		<hr>
+			<br>
+			<hr>
 
-		<div id="booking-summary">
-			<!-- Display Booking Details -->
-			<h1>Your Booking:</h1>
-			<div class="summary-room customer-info"></div>
-			<div class="summary-time customer-info"></div>
-			<div class="summary-price customer-info"></div>
-		</div>
-		<!-- Back Button -->
-		<button type="button" id="back-step-1" >
-			BACK
-		</button>
+			<div id="booking-summary">
+				<!-- Display Booking Details -->
+				<h1>Your Booking:</h1>
+				<div class="summary-room customer-info"></div>
+				<div class="summary-time customer-info"></div>
+				<div class="summary-price customer-info"></div>
+			</div>
+			<!-- Back Button -->
+			<button type="button" id="back-step-1" >
+				BACK
+			</button>
 
-		<button type="button" id="pay-now">
-			PAY NOW
-		</button>
-	</fieldset>
+			<button type="button" id="pay-now">
+				PAY NOW
+			</button>
+		</fieldset>
 
-	<!-- Step 3: Final Confirmation & Payment -->
-	<fieldset id="step-3" class="step hidden">
-		<h1>CONFIRM & PAY</h1>
-		<div id="booking-summary">
-			<!-- Display Booking Details -->
-			<h1>Your Booking:</h1>
-			<div class="summary-room customer-info"></div>
-			<div class="summary-time customer-info"></div>
-			<div class="summary-price customer-info"></div>
-		</div>
-		<!-- Back Button -->
-		<button type="button" id="back-step-2">
-			Back
-		</button>
-		<button type="submit">
-			Confirm & Pay
-		</button>
-		<!-- SumUp Payment Gateway -->
-		<div id="sumup-card"></div>
-		
-	</fieldset>
-	<script src="/static/js/form-submission.js"></script>
-</form>
+		<!-- Step 3: Final Confirmation & Payment -->
+		<fieldset id="step-3" class="step hidden">
+			<h1>CONFIRM & PAY</h1>
+			<div id="booking-summary">
+				<!-- Display Booking Details -->
+				<h1>Your Booking:</h1>
+				<div class="summary-room customer-info"></div>
+				<div class="summary-time customer-info"></div>
+				<div class="summary-price customer-info"></div>
+			</div>
+			<!-- Back Button -->
+			<button type="button" id="back-step-2">
+				Back
+			</button>
+			<button type="submit">
+				Confirm & Pay
+			</button>
+			<!-- SumUp Payment Gateway -->
+			<div id="sumup-card"></div>
+			
+		</fieldset>
+		<script src="/static/js/form-submission.js"></script>
+	</form>
 <div id="success" style="display: none">
 	<h1>Booking Successful! You should recieve a text and email comfirming your booking shortly.</h1>
 </div>

@@ -34,6 +34,11 @@ function selectFirstSlot(slot) {
     startSlot = slot;
     selectedRoom = slot.dataset.room;
     slot.classList.add('selected', 'grabbing');
+
+    // Disable the book now button until a valid selection is made
+    document.getElementById('book-now').classList.remove('enabled');
+    document.getElementById('duration').value = 0;
+    document.getElementById('duration').dispatchEvent(new Event('change'));
 }
 
 // Function to select slots between start and end
@@ -80,7 +85,7 @@ timeSlots.forEach(slot => {
 
                 // Trigger the change event on the duration input to update the price
                 document.getElementById('duration').dispatchEvent(new Event('change'));
-
+                document.getElementById('book-now').classList.add('enabled')
                 // print the selection for user to see room/time details
                 timeslot_output.innerHTML = `
                     <h2>YOUR SELECTION</h2>
