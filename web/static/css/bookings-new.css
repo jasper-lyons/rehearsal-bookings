@@ -7,9 +7,13 @@ body {
     display: none;
 }
 
+@font-face {
+    font-family: impact_label_reveresed; /*a name to be used later*/
+    src: url('fonts/Impact_Label_Reversed-webfont.woff')  format('woff'); /*URL to font*/
+}
 /* BUTTONS */
 button {
-    font-family: 'Impact Label Reversed', sans-serif;
+    font-family: 'impact_label_reveresed', sans-serif;
     font-size: 20px;
     background-color: #f4f4f4;
     color: black;  
