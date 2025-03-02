@@ -57,17 +57,21 @@ window.addEventListener('load', function () {
                         break;
                     case "success":
                         // TODO: Confirm booking
-                        let confirmBookingResponse = await fetch(`/bookings/${booking.id}/confirm`, {
-                            method: 'POST',
-                            body: JSON.stringify(body),
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        })
+												if (body.status === 'SUCCESS') {
+													let confirmBookingResponse = await fetch(`/bookings/${booking.id}/confirm`, {
+														method: 'POST',
+														body: JSON.stringify(body),
+														headers: {
+															'Content-Type': 'application/json'
+														}
+													})
 
-                        // TODO: Display success, perhaps redirect?
-                        document.getElementById('sumup-card').style.display = "none"
-                        document.getElementById('success').style.display = "block"
+													// TODO: Display success, perhaps redirect?
+													document.getElementById('sumup-card').style.display = "none"
+													document.getElementById('success').style.display = "block"
+												} else {
+													// do nothing
+												}
                         break;
                     case "error":
                         // TODO: Handle error

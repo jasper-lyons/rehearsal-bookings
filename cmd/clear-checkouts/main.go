@@ -28,20 +28,17 @@ func main() {
 		"Authorization": fmt.Sprintf("Bearer %s", os.Getenv("SUMUP_API_KEY")),
 	})
 
-	response, err := sumupApi.Get("/v0.1/checkouts")
+	response, err := sumupApi.Get("/v0.1/checkouts?checkout_reference=booking-22")
 	if err != nil {
 		log.Fatal("error! can't list checkouts")
 	}
-
 
 	var checkouts []handlers.SumupCheckout
 	json.Unmarshal([]byte(response.Body), &checkouts)
 
 	for _, checkout := range checkouts {
-		if checkout.Status == "PENDING" || checkout.Status == "FAILED" {
-			fmt.Println("Clearing")
-			fmt.Println(checkout)
-			sumupApi.Delete("/v1.0/checkouts/%s", checkout.Id)
-		}
+		fmt.Println("Clearing")
+		fmt.Println(checkout)
+		sumupApi.Delete("/v1.0/checkouts/%s", checkout.Id)
 	}
 }
