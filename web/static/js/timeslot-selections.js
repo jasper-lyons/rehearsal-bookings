@@ -4,28 +4,52 @@ let startSlot = null;
 let endSlot = null;
 let selectedRoom = null;
 
-// Function to clear the selection and reset the variables 
-// This is needed so that users can book more than one room or time-range
-// This function is also called by updateDatePicker()
-function clearSelection() {
+// Function to set the availability of each timeslot. 
+// This function is called by updateDatePicker() and selectButton()
+function setAvailability() {
     timeSlots.forEach(slot => {
-        slot.classList.remove('selected');
+        // Reset the availability
+        slot.classList.remove('unavailable');
+        // If the selected date is today and the slot is in the past or within the next 2 hours, disable it
+        if (selectedDate.getDate() === new Date().getDate() && slot.dataset.time < new Date().getHours() + 2) {
+            slot.classList.add('unavailable');
+        }
+        // If the selected date is a weekday and the slot is before 12pm, disable it
         if (isWeekday && slot.dataset.time < 12) {
             slot.classList.add('unavailable');
-        } else if (
-            isWeekday && 
-            document.getElementById('session-type').value === "solo" && 
-            slot.dataset.time > 18) {
+        }
+        // If the selected date is a weekday and the session type is solo and the slot is after 5pm, disable it
+        if (isWeekday && document.getElementById('session-type').value === "solo" && slot.dataset.time > 17) {
             slot.classList.add('unavailable');
-        } else {
-            slot.classList.remove('unavailable');
         }
     });
+}
 
+// Function to clear the selection and reset the variables 
+// This is needed so that users can't book more than one room or time-range
+// This function is also called by updateDatePicker()
+function clearSelection() {
+    // Remove the selection class from all slots
+    timeSlots.forEach(slot => {
+        slot.classList.remove('selected');
+    });
+
+    // Reset the variables
     startSlot = null;
     endSlot = null;
     selectedRoom = null;
     timeslot_output.innerHTML = null;
+
+    // Reset hidden inputs
+    document.getElementById('start-time').value = null;
+    document.getElementById('end-time').value = null;
+    document.getElementById('room').value = null;
+    document.getElementById('duration').value = null;
+
+    // Trigger the change event on the duration input to update the price
+    document.getElementById('duration').dispatchEvent(new Event('change'));
+    // Remove the enabled class from the book now button
+    document.getElementById('book-now').classList.remove('enabled')
 }
 
 // Function for initialising the first time slot (used on odd clicks, 1, 3 etc...)
@@ -109,3 +133,6 @@ timeSlots.forEach(slot => {
         }
     });
 });
+
+// set the availability for the initial date
+setAvailability();

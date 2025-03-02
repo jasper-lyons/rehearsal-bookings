@@ -23,6 +23,9 @@ function updateDatePicker(animated = false) {
         datePicker.classList.add('animate');
         setTimeout(() => datePicker.classList.remove('animate'), 150); // Match the animation duration
     }
+
+    // Update the availability for the new date
+    setAvailability();
 }
 
 // Add event listeners for buttons

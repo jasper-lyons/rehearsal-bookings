@@ -41,6 +41,7 @@ function selectButton(button) {
 
     // Save the selected value to type input
     document.getElementById('session-type').value = button.getAttribute('data-value');
+    setAvailability(); // Update the availability for the new session type
     clearSelection(); // clear the time slot selection when session type changes
 }
 
