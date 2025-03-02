@@ -48,9 +48,11 @@ func main() {
 	})
 
 
+	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, sumupApi))
 	http.Handle("GET /bookings", handlers.BookingsIndex(br))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))
-	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, sumupApi))
+
+	http.Handle("GET /rooms", handlers.RoomsIndex(br))
 
 	http.Handle("POST /sumup/checkouts", handlers.SumupCheckoutCreate(sumupApi))
 

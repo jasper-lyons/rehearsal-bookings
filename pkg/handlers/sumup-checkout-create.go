@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"time"
 )
 
 type CreateCheckoutForm struct {
@@ -17,12 +18,14 @@ type CreateSumupCheckoutRequest struct {
 	CheckoutReference string `json:"checkout_reference"`
 	Currency string `json:"currency"`
 	MerchantCode string `json:"merchant_code"`
+	ValidUntil time.Time `json:"valid_until"`
 }
 
 type SumupCheckout struct {
 	Id string `json:"id"`
 	Amount float32 `json:"amount"`
 	CheckoutReference string `json:"checkout_reference"`
+	Status string `json:"status"`
 }
 
 // Actual handlers
@@ -33,20 +36,23 @@ func SumupCheckoutCreate(sumupApi Api) Handler {
 			return Error(err, http.StatusInternalServerError)
 		}
 
-		responseBody, err := sumupApi.Post("/v0.1/checkouts", CreateSumupCheckoutRequest {
+		response, err := sumupApi.Post("/v0.1/checkouts", CreateSumupCheckoutRequest {
 			Amount: form.Amount,
 			CheckoutReference: form.CheckoutReference,
 			Currency: "GBP",
 			MerchantCode: os.Getenv("SUMUP_MERCHANT_CODE"),
+			ValidUntil: time.Now().Add(time.Minute * time.Duration(20)),
 		})
 		if err != nil {
 			return Error(err, http.StatusInternalServerError)
 		}
 
-		fmt.Println(responseBody)
+		if response.Status != 200 {
+			return Error(fmt.Errorf("Error %d creating checkout with reference %s", response.Status, form.CheckoutReference), http.StatusInternalServerError)
+		}
 
 		var sumupCheckout SumupCheckout
-		json.Unmarshal([]byte(responseBody), &sumupCheckout)
+		json.Unmarshal([]byte(response.Body), &sumupCheckout)
 		return JSON(sumupCheckout)
 	})
 }

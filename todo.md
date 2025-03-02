@@ -29,9 +29,8 @@
 5.2. [ ] - As a Guest I can select a rehearsal room so that I know where I'm rehearsing.
 5.3. [ ] - As a Guest I can select a date so that the the rehearsal space stays available for me.
 5.4. [ ] - As a Guest I can select a time so that the the rehearsal space stays available for me on the selected date.
-5.4.1 [ ] - Ensure no one can book overlapping timeslots in the same room.
+5.4.1. [ ] - Ensure no one can book overlapping timeslots in the same room.
 5.5. [ ] - As a Guest I can enter my contact details (name, email, phone number) so that I can confirm that my booking was successful.
 5.6. [ ] - As a Guest I can pay for my booking to ensure that no one else books my slot!
-5.6.1 [ ] - We need a cart page to allow guests to check they are booking the correct slot.
-5.6.2 [ ] - We need a payment confirmation page so that Guests can trust they've paid for their rehearsal slot.
-
+5.6.1. [ ] - We need a cart page to allow guests to check they are booking the correct slot.
+5.6.2. [ ] - We need a payment confirmation page so that Guests can trust they've paid for their rehearsal slot.
