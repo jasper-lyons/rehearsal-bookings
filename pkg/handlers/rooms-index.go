@@ -5,6 +5,7 @@ import (
 	da "rehearsal-bookings/pkg/data_access"
 	"time"
 	"errors"
+	"fmt"
 )
 
 type RoomsIndexForm struct {
@@ -66,17 +67,22 @@ func RoomsIndex(br *da.BookingsRepository[da.StorageDriver]) Handler {
 
 		dayEnd := dayStart.Add(time.Hour * 24 * time.Duration(1))
 
-		bookings, err := br.Where("start_time > ? and end_time > ?", dayStart, dayEnd)
+		fmt.Println(dayStart)
+		fmt.Println(dayEnd)
+
+		bookings, err := br.Where("(status = 'paid' or status = 'hold') and start_time >= ? and end_time <= ?", dayStart, dayEnd)
 		if err != nil {
 			return Error(err, 500)
 		}
+
+		fmt.Println(bookings)
 
 		room1 := NewRoom("Room 1")
 		for _, booking := range bookings {
 			if booking.RoomName == "Room 1" {
 				startTime := booking.StartTime
 				// This truncates the float64 into an int so we're assuming accurate, whole hour maths...
-				hours := int(booking.EndTime.Sub(startTime).Hours())
+				hours := int(booking.EndTime.Sub(startTime).Hours()) - 1
 				for i := range hours {
 					bookedHour := startTime.Add(time.Hour * time.Duration(i))
 					room1.Availability[bookedHour.Format("15:04")] = false
@@ -89,7 +95,7 @@ func RoomsIndex(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			if booking.RoomName == "Room 2" {
 				startTime := booking.StartTime
 				// This truncates the float64 into an int so we're assuming accurate, whole hour maths...
-				hours := int(booking.EndTime.Sub(startTime).Hours())
+				hours := int(booking.EndTime.Sub(startTime).Hours()) - 1
 				for i := range hours {
 					bookedHour := startTime.Add(time.Hour * time.Duration(i))
 					room2.Availability[bookedHour.Format("15:04")] = false
