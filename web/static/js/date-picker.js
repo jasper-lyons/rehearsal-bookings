@@ -23,9 +23,6 @@ function updateDatePicker(animated = false) {
         datePicker.classList.add('animate');
         setTimeout(() => datePicker.classList.remove('animate'), 150); // Match the animation duration
     }
-
-    // Update the availability for the new date
-    setAvailability();
 }
 
 // Add event listeners for buttons
@@ -34,6 +31,7 @@ document.getElementById('prev-day').addEventListener('click', () => {
         selectedDate.setDate(selectedDate.getDate() - 1); // Move one day back
         updateDatePicker(animated = true);
         clearSelection(); // clear the time slot selection when date changes
+        setAvailability(); // Update the availability for the new date
     }
 });
 
@@ -42,6 +40,7 @@ document.getElementById('next-day').addEventListener('click', () => {
         selectedDate.setDate(selectedDate.getDate() + 1); // Move one day forward
         updateDatePicker(animated = true);
         clearSelection(); // clear the time slot selection when date changes
+        setAvailability(); // Update the availability for the new date
     }
 });
 
@@ -52,6 +51,7 @@ document.getElementById('date-input').addEventListener('change', (e) => {
         selectedDate = newDate;
         updateDatePicker();
         clearSelection(); // clear the time slot selection when date changes
+        setAvailability(); // Update the availability for the new date
     }
 });
 

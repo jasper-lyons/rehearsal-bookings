@@ -7,11 +7,12 @@ let selectedRoom = null;
 // Function to set the availability of each timeslot. 
 // This function is called by updateDatePicker() and selectButton()
 function setAvailability() {
+    const datePicker = document.getElementById('date-input');
     timeSlots.forEach(slot => {
         // Reset the availability
         slot.classList.remove('unavailable');
         // If the selected date is today and the slot is in the past or within the next 2 hours, disable it
-        if (selectedDate.getDate() === new Date().getDate() && slot.dataset.time < new Date().getHours() + 2) {
+        if (datePicker.value === datePicker.min && slot.dataset.time < new Date().getHours() + 2) {
             slot.classList.add('unavailable');
         }
         // If the selected date is a weekday and the slot is before 12pm, disable it
@@ -113,7 +114,7 @@ timeSlots.forEach(slot => {
                 // print the selection for user to see room/time details
                 timeslot_output.innerHTML = `
                     <h2>YOUR SELECTION</h2>
-                    <h2><strong>${formattedRoom}</strong>: ${formattedStartTime} - ${formattedEndTime} </h2>
+                    <h3><strong>${formattedRoom}</strong>: ${document.getElementById('date-input').value}, ${formattedStartTime} - ${formattedEndTime} </h3>
                 `;
 
                 timeSlots.forEach(slot => slot.classList.remove('grabbing'));

@@ -67,17 +67,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Populate Summary for Step 3
     const populateSummary = () => {
         const room = document.getElementById('room').value;
+        const date = document.getElementById('date-input').value;
         const startTime = document.getElementById('start-time').value;
         const endTime = document.getElementById('end-time').value;
         const price = document.getElementById('price').textContent;
 
         // Update both Step 2 and Step 3 summaries using classes
         const summaryRooms = document.querySelectorAll('.summary-room');
+        const summaryDate= document.querySelectorAll('.summary-date');
         const summaryTimes = document.querySelectorAll('.summary-time');
         const summaryPrices = document.querySelectorAll('.summary-price');
 
         // Update the summary content for all elements with these classes
         summaryRooms.forEach(element => element.textContent = `Room: ${room}`);
+        summaryDate.forEach(element => element.textContent = `Date: ${date}`);
         summaryTimes.forEach(element => element.textContent = `Time: ${startTime} - ${endTime}`);
         summaryPrices.forEach(element => element.textContent = `Price: ${price}`);
     };
