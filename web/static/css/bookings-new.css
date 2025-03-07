@@ -136,6 +136,14 @@ td.selected {
     background-color: grey;
 }
 
+td.start-slot {
+    background-color: #b7b7b7;
+}
+
+td.end-slot {
+    background-color: #636262;
+}
+
 td.unavailable {
     background-image: repeating-linear-gradient(45deg, white, white 2.5px, lightgray 2.5px, lightgray 5px);
     cursor: not-allowed; 

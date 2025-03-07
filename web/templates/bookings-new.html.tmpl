@@ -60,14 +60,6 @@
 				<input type="hidden" id="duration" name="duration" value="1">
 
 				<div id="timeslot_output"></div>
-				<div id="booking-summary">
-					<!-- Display Booking Details -->
-					<h1>Your Booking:</h1>
-					<div class="summary-room customer-info"></div>
-					<div class="summary-date customer-info"></div>
-					<div class="summary-time customer-info"></div>
-					<div class="summary-price customer-info"></div>
-				</div>
 				<script src="/static/js/timeslot-selections.js"></script>
 			</div>
 
@@ -90,14 +82,16 @@
 				<input type="text" 
 						id="name"
 						name="name" 
-						pattern="[A-Za-z0-9 ]+">
+						pattern="[A-Za-z0-9 ]+"
+						autocomplete="name">
 			</div>
 
 			<div class="customer-info">
 				<label for="email">Email</label>
 				<input type="email"
 						id="email" 
-						name="email">
+						name="email"
+						autocomplete="email">
 			</div>
 
 			<div class="customer-info">
@@ -105,7 +99,8 @@
 			<input type="tel"
 					id="phone"
 					name="phone"
-					pattern="[0-9]{11}">
+					pattern="[0-9]{11}"
+					autocomplete="tel">
 			</div>
 
 			<br>
