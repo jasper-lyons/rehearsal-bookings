@@ -34,3 +34,14 @@
 5.6. [ ] - As a Guest I can pay for my booking to ensure that no one else books my slot!
 5.6.1. [ ] - We need a cart page to allow guests to check they are booking the correct slot.
 5.6.2. [ ] - We need a payment confirmation page so that Guests can trust they've paid for their rehearsal slot.
+
+6. [ ] - Launch new Bookings
+6.1. [ ] - Email on successful booking
+6.2. [ ] - Booking Success Page
+6.3. [ ] - Test SumUp Details
+6.4. [ ] - Password protected Admin Interface
+6.5. [ ] - Additional Items on bookings 
+6.5.1 [ ] - Cymbals
+6.5.2 [ ] - Notes
+6.6. [ ] - Discount Codes
+6.7. [ ] - Speed up Sumup Widget Loading
