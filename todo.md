@@ -22,7 +22,7 @@
 
 4.1. [x] - Identify solution for handlers
 4.1.1. [x] - We'll have a big routes file and have each handler exist in it's own file. Each handler can then be tested.
-4.1.2. [ ] - Figure out middleware so that all handlers can have auth checks etc.
+4.1.2. [x] - Figure out middleware so that all handlers can have auth checks etc.
 
 5. [ ] - Booking Use Case: As a Guest I can book a rehearsal slot.
 5.1. [ ] - As a Guest I can select a rehearsal type so that I pay an appropriate ammount for my rehearsal slot.
@@ -36,9 +36,9 @@
 5.6.2. [ ] - We need a payment confirmation page so that Guests can trust they've paid for their rehearsal slot.
 
 6. [ ] - Launch new Bookings
+6.3. [x] - Test SumUp Details - No test details needed with test accounts 
 6.1. [ ] - Email on successful booking
 6.2. [ ] - Booking Success Page
-6.3. [ ] - Test SumUp Details
 6.4. [ ] - Password protected Admin Interface
 6.5. [ ] - Additional Items on bookings 
 6.5.1 [ ] - Cymbals
