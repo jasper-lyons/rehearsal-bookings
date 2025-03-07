@@ -1,26 +1,32 @@
 function updatePrice() {
     let price = document.getElementById('price')
     let session_type = document.getElementById('session-type')
-    let duration = document.getElementById('duration')
+    let duration = parseInt(document.getElementById('duration').value, 10)
+    let cymbals = document.getElementById('cymbals')
+    let priceValue = 0.00
 
     if (selectedRoom) {
         switch (session_type.value) {
         case 'solo':
-            price.textContent = `£${(parseInt(duration.value, 10) * 6.50).toFixed(2)}`
+            priceValue = 6.50 * duration
             break;
         case 'band':
-            if (duration.value > 9) {
-                price.textContent = `£100.00`
-            } else if (duration.value > 3) {
-                price.textContent = `£${(parseInt(duration.value, 10) * 10.00).toFixed(2)}`
+            if (duration > 9) {
+                priceValue = 100.00
+            } else if (duration > 3) {
+                priceValue = 10.00 * duration
             } else {
-                price.textContent = `£${(parseInt(duration.value, 10) * 12.00).toFixed(2)}`
+                priceValue = 12.00 * duration
             }
             break;
         }
-    } else {
-        price.textContent = '£0.00'
     }
+
+    if (cymbals.checked) {
+        priceValue += 3.00
+    }
+
+    price.textContent = `£${(priceValue).toFixed(2)}`
 }
 
 function selectButton(button) {
@@ -48,10 +54,12 @@ window.addEventListener('load', function () {
     let session_type = document.getElementById('session-type')
     let duration = document.getElementById('duration')
     let buttons = document.querySelectorAll('.toggle-button');
+    let cymbals = document.getElementById('cymbals')
 
     // event listeners for input changes
     session_type.addEventListener('change', updatePrice)
     duration.addEventListener('change', updatePrice)
+    cymbals.addEventListener('change', updatePrice)
 
     // event listeners for toggle buttons
     buttons.forEach(button => {

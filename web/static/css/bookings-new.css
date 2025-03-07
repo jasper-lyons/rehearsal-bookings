@@ -89,6 +89,11 @@ input[type="date"] {
     -webkit-appearance: none !important;
 }
 
+.cymbals {
+    display: inline;
+    width: auto;
+}
+
 #date-input {
     font-family: 'impact_label_reversed', sans-serif;
     font-size: 20px;
@@ -198,10 +203,10 @@ td.grabbing {
     margin: 16px 0px;
 }
 
-label {
-    display: inline-block;
-    width: 100px;
+input, label, textarea {
+    display: block;
     text-align: left;
+    width: 300px;
 }​
 
 form {
@@ -212,6 +217,23 @@ form {
 
 fieldset { 
     min-inline-size:inherit;
+}
+
+#timeslotinfo {
+    display: none;
+}
+
+.info-toggle-btn {
+    font-size: small;
+    padding: 2px;
+    height: min-content;
+    width: min-content;
+}
+
+.time-selection-header {
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
 }
 
 @media (max-width: 768px) {
