@@ -31,10 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
     toStep3Button.addEventListener('click', () => {
         if (validateStep2()) {
             populateSummary();
+            populateCustomerInfo();
             showStep(3);
-            
-        } else {
-            alert('Please fill in all details.');
         }
     });
 
@@ -61,6 +59,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = document.getElementById('name').value.trim();
         const email = document.getElementById('email').value.trim();
         const phone = document.getElementById('phone').value.trim();
+       
+        let nameRegex = /^[a-zA-Z]+([-' ][a-zA-Z]+)*\s+[a-zA-Z]+([-' ][a-zA-Z]+)*$/;
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let phoneRegex = /^\+?\d{11}$/;
+      
+        if (!nameRegex.test(name))  {
+            alert('Please provide your full name.');
+            return false;
+        }
+      
+        if (!emailRegex.test(email)) {
+            alert('Please enter a valid email address.');
+            return false;
+        }
+
+        if (!phoneRegex.test(phone)) {
+            alert('Please enter a valid phone number.');
+            return false;
+        }
+        
         return name && email && phone;
     };
 
@@ -79,9 +97,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const summaryPrices = document.querySelectorAll('.summary-price');
 
         // Update the summary content for all elements with these classes
-        summaryRooms.forEach(element => element.textContent = `Room: ${room}`);
-        summaryDate.forEach(element => element.textContent = `Date: ${date}`);
-        summaryTimes.forEach(element => element.textContent = `Time: ${startTime} - ${endTime}`);
-        summaryPrices.forEach(element => element.textContent = `Price: ${price}`);
+        summaryRooms.forEach(element => element.innerHTML = `<p>Room: <strong>${room}</strong></p>`);
+        summaryDate.forEach(element => element.innerHTML = `<p>Date: <strong>${date}</strong></p>`);
+        summaryTimes.forEach(element => element.innerHTML = `<p>Time: <strong>${startTime} - ${endTime}</strong></p>`);
+        summaryPrices.forEach(element => element.innerHTML = `<p>Price: <strong>${price}</strong></p>`);
     };
+
+    const populateCustomerInfo = () => {
+        // const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        // const summaryName = document.querySelectorAll('.');
+        const summaryEmail = document.getElementById('customer-email');
+        const summaryPhone = document.getElementById('customer-phone');
+
+        // summaryName.forEach(element => element.textContent = `Name: ${name}`);
+        summaryEmail.innerHTML = `<p>An email confirmation will be sent to: <strong>${email}</strong></p>`;
+        summaryPhone.innerHTML = `<p>On the day, an SMS with the access codes will be sent to: <strong>${phone}</strong></p>`;
+    }
 });		
