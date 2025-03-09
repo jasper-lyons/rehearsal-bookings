@@ -76,6 +76,7 @@
 						<tbody>
 							<!-- Time slots are generated here -->
 							<script src="/static/js/timeslot-table.js"></script>
+							<script src="/static/js/timeslot-selections.js"></script>
 						</tbody>
 					</table>
 
@@ -89,8 +90,14 @@
 						<input type="checkbox" class="cymbals" id="cymbals">
 						<label for="cymbals" class="cymbals">Cymbals - £3 Surcharge</label>
 					</div>
-					<div id="timeslot_output"></div>
-					<script src="/static/js/timeslot-selections.js"></script>
+					<div id="booking-summary">
+						<!-- Display Booking Details -->
+						<h3>Your Booking:</h3>
+						<div class="summary-room customer-info"></div>
+						<div class="summary-date customer-info"></div>
+						<div class="summary-time customer-info"></div>
+						<div class="summary-price customer-info"></div>
+					</div>
 				</div>
 			</div>
 

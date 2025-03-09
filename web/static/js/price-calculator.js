@@ -60,6 +60,7 @@ window.addEventListener('load', function () {
     session_type.addEventListener('change', updatePrice)
     duration.addEventListener('change', updatePrice)
     cymbals.addEventListener('change', updatePrice)
+    cymbals.addEventListener('change', populateSummary)
 
     // event listeners for toggle buttons
     buttons.forEach(button => {

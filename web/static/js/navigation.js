@@ -82,27 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return name && email && phone;
     };
 
-    // Populate Summary for Step 3
-    const populateSummary = () => {
-        const room = document.getElementById('room').value;
-        const date = document.getElementById('date-input').value;
-        const startTime = document.getElementById('start-time').value;
-        const endTime = document.getElementById('end-time').value;
-        const price = document.getElementById('price').textContent;
-
-        // Update both Step 2 and Step 3 summaries using classes
-        const summaryRooms = document.querySelectorAll('.summary-room');
-        const summaryDate= document.querySelectorAll('.summary-date');
-        const summaryTimes = document.querySelectorAll('.summary-time');
-        const summaryPrices = document.querySelectorAll('.summary-price');
-
-        // Update the summary content for all elements with these classes
-        summaryRooms.forEach(element => element.innerHTML = `<p>Room: <strong>${room}</strong></p>`);
-        summaryDate.forEach(element => element.innerHTML = `<p>Date: <strong>${date}</strong></p>`);
-        summaryTimes.forEach(element => element.innerHTML = `<p>Time: <strong>${startTime} - ${endTime}</strong></p>`);
-        summaryPrices.forEach(element => element.innerHTML = `<p>Price: <strong>${price}</strong></p>`);
-    };
-
     const populateCustomerInfo = () => {
         // const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
