@@ -14,10 +14,10 @@ import (
 	// "rehearsal-bookings/web/static"
 	da "rehearsal-bookings/pkg/data_access"
 	handlers "rehearsal-bookings/pkg/handlers"
+	admin "rehearsal-bookings/pkg/handlers/admin"
 	static "rehearsal-bookings/web/static"
 	"github.com/joho/godotenv"
 	"fmt"
-
 )
 
 func EnvOrDefault(key string, fallback string) string {
@@ -47,9 +47,9 @@ func main() {
 		"Authorization": fmt.Sprintf("Bearer %s", os.Getenv("SUMUP_API_KEY")),
 	})
 
+	http.Handle("GET /admin/bookings", admin.BookingsIndex(br))
 
 	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, sumupApi))
-	http.Handle("GET /bookings", handlers.BookingsIndex(br))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))
 
 	http.Handle("GET /rooms", handlers.RoomsIndex(br))
