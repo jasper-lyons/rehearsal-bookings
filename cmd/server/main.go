@@ -51,6 +51,7 @@ func main() {
 
 	http.Handle("GET /admin/bookings", handlers.AdminBookingsIndex(br))
 	http.Handle("GET /admin/bookings/new", handlers.AdminBookingsNew(br))
+	http.Handle("DELETE /admin/bookings/{id}", handlers.AdminBookingsDelete(br))
 
 	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, sumupApi))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))

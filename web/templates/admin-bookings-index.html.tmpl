@@ -7,10 +7,16 @@
 {{ range .Bookings }}
 	<li>
 		<h2>{{.CustomerName}}</h2>
-		<p><span>Room:</span> {{.RoomName}}</p>
-		<p><span>Start:</span> {{.StartTime}}</p>
-		<p><span>End:</span> {{.EndTime}}</p>
+		<form action="/admin/bookings/{{.Id}}" method="DELETE">
+			<button>Delete</button>
+		</form>
+		<div>
+			<p><span>Room:</span> {{.RoomName}}</p>
+			<p><span>Start:</span> {{.StartTime}}</p>
+			<p><span>End:</span> {{.EndTime}}</p>
+		</div>
 	</li>
 {{ end }}
 </ol>
 {{end}}
+
