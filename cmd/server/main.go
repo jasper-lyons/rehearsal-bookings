@@ -49,9 +49,14 @@ func main() {
 		"Authorization": fmt.Sprintf("Bearer %s", os.Getenv("SUMUP_API_KEY")),
 	})
 
-	http.Handle("GET /admin/bookings", handlers.AdminBookingsIndex(br))
-	http.Handle("GET /admin/bookings/new", handlers.AdminBookingsNew(br))
-	http.Handle("DELETE /admin/bookings/{id}", handlers.AdminBookingsDelete(br))
+	basicauth := handlers.CreateBasicAuthMiddleware(
+		os.Getenv("ADMIN_USERNAME"),
+		os.Getenv("ADMIN_PASSWORD"),
+	)
+
+	http.Handle("GET /admin/bookings", basicauth(handlers.AdminBookingsIndex(br)))
+	http.Handle("GET /admin/bookings/new", basicauth(handlers.AdminBookingsNew(br)))
+	http.Handle("DELETE /admin/bookings/{id}", basicauth(handlers.AdminBookingsDelete(br)))
 
 	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, sumupApi))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))
