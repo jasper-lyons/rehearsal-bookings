@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-//go:embed *.html.tmpl admin/*.html.tmpl admin/*/*.html.tmpl
+//go:embed *.html.tmpl
 var TemplateFiles embed.FS
 
 func Render(rw http.ResponseWriter, templateString string, context any) error {

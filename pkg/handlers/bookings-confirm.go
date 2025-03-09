@@ -31,10 +31,10 @@ type SumupTransaction struct {
 	Status string `json:"status"`
 }
 
-// Actual handlers
 func BookingsConfirm(br *da.BookingsRepository[da.StorageDriver], sumupApi Api) Handler {
 	return Handler(func (w http.ResponseWriter, r *http.Request) Handler {
 		form, err := ExtractForm[SumupCheckoutProcessSuccessForm](r)
+		fmt.Println(form)
 		if err != nil {
 			return Error(err, http.StatusInternalServerError)
 		}
@@ -47,10 +47,6 @@ func BookingsConfirm(br *da.BookingsRepository[da.StorageDriver], sumupApi Api) 
 		booking, err := br.Find(bookingId)
 		if err != nil {
 			return Error(err, http.StatusNotFound)
-		}
-
-		if fmt.Sprintf("booking-%d", booking.Id) != form.CheckoutReference {
-			return Error(fmt.Errorf("Cannot confirm booking"), http.StatusInternalServerError)
 		}
 
 		response, err := sumupApi.Get(

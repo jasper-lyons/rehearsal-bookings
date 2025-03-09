@@ -15,8 +15,6 @@ import (
 	// "rehearsal-bookings/web/static"
 	da "rehearsal-bookings/pkg/data_access"
 	handlers "rehearsal-bookings/pkg/handlers"
-	admin "rehearsal-bookings/pkg/handlers/admin"
-	bookings "rehearsal-bookings/pkg/handlers/admin/bookings"
 	static "rehearsal-bookings/web/static"
 
 	"fmt"
@@ -51,7 +49,8 @@ func main() {
 		"Authorization": fmt.Sprintf("Bearer %s", os.Getenv("SUMUP_API_KEY")),
 	})
 
-	http.Handle("GET /admin/bookings", admin.BookingsIndex(br))
+	http.Handle("GET /admin/bookings", handlers.AdminBookingsIndex(br))
+	http.Handle("GET /admin/bookings/new", handlers.AdminBookingsNew(br))
 
 	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, sumupApi))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))
@@ -62,7 +61,6 @@ func main() {
 
 	http.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.FS(static.StaticFiles))))
 	http.Handle("GET /", handlers.BookingsNew(br))
-	http.Handle("GET /admin/bookings/new", bookings.AdminBookingsNew(br))
 
 	server := &http.Server{
 		Addr:    ":" + EnvOrDefault("PORT", "8080"),

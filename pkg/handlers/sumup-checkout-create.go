@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"time"
+	// "time"
 )
 
 type CreateCheckoutForm struct {
@@ -18,7 +18,7 @@ type CreateSumupCheckoutRequest struct {
 	CheckoutReference string `json:"checkout_reference"`
 	Currency string `json:"currency"`
 	MerchantCode string `json:"merchant_code"`
-	ValidUntil time.Time `json:"valid_until"`
+	// ValidUntil time.Time `json:"valid_until"`
 }
 
 type SumupCheckout struct {
@@ -36,17 +36,12 @@ func SumupCheckoutCreate(sumupApi Api) Handler {
 			return Error(err, http.StatusInternalServerError)
 		}
 
-		checkoutReference := form.CheckoutReference
-		if os.Getenv("APP_ENV") != "production" {
-			checkoutReference = checkoutReference + "-dev"
-		}
-
 		response, err := sumupApi.Post("/v0.1/checkouts", CreateSumupCheckoutRequest {
 			Amount: form.Amount,
 			CheckoutReference: form.CheckoutReference,
 			Currency: "GBP",
 			MerchantCode: os.Getenv("SUMUP_MERCHANT_CODE"),
-			ValidUntil: time.Now().Add(time.Minute * time.Duration(20)),
+			// ValidUntil: time.Now().Add(time.Minute * time.Duration(20)),
 		})
 		fmt.Println(response)
 		if err != nil {

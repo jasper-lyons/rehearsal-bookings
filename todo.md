@@ -38,6 +38,7 @@
 6. [ ] - Launch new Bookings
 6.3. [x] - Test SumUp Details - No test details needed with test accounts 
 6.1. [ ] - Email on successful booking
+6.1.1 [ ] - Delete held booking on payment fail
 6.2. [ ] - Booking Success Page
 6.4. [ ] - Password protected Admin Interface
 6.5. [x] - Additional Items on bookings 
