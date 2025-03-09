@@ -43,6 +43,28 @@ button:disabled {
     cursor: not-allowed;  /* Not-allowed cursor for disabled state */
 }
 
+/* FORMS */
+input, label, textarea {
+    display: block;
+    text-align: left;
+    width: 300px;
+}​
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+fieldset { 
+    min-inline-size:inherit;
+}
+
+.customer-info {
+    margin: 16px 0px;
+}
+
+
 /* session selector buttons */
 #session-type-container {
     display: flex;
@@ -161,6 +183,7 @@ td.grabbing {
 /* Floating box */
 .floating-box {
     position: fixed;
+    margin: 5px 0px;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
@@ -199,26 +222,7 @@ td.grabbing {
     cursor: pointer;
 }
 
-.customer-info {
-    margin: 16px 0px;
-}
-
-input, label, textarea {
-    display: block;
-    text-align: left;
-    width: 300px;
-}​
-
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-fieldset { 
-    min-inline-size:inherit;
-}
-
+/* Time slot info */
 #timeslotinfo {
     display: none;
 }
@@ -236,6 +240,7 @@ fieldset {
     width: fit-content;
 }
 
+/* Responsive design */
 @media (max-width: 768px) {
     #session-type-container {
         flex-direction: column;
