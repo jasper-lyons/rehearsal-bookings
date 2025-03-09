@@ -34,6 +34,9 @@
 				<p><strong>Phone:</strong> {{.CustomerPhone}}</p>
 				<p><strong>Email:</strong> {{.CustomerEmail}}</p>
 			</div>
+			<form action="/admin/bookings/{{.Id}}" method="DELETE">
+				<button>Delete</button>
+			</form>
 		</div>
 	{{ end }}
 	</div>

@@ -6,6 +6,8 @@ import (
 	"net/http"
 	templates "rehearsal-bookings/web/templates"
 	"time"
+	"errors"
+	"fmt"
 )
 
 // Infrastructure Type for nicer handler writing
@@ -88,4 +90,19 @@ func Logging(next http.Handler) Handler {
 
 		return nil
 	})
+}
+
+func CreateBasicAuthMiddleware(username string, password string) func(Handler) Handler {
+	return func (next Handler) Handler {
+		return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
+			user, pass, ok := r.BasicAuth()
+			fmt.Println(user, pass, username, password)
+			if ok && user == username && pass == password {
+				return next	
+			} else {
+				w.Header().Set("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
+				return Error(errors.New("Auth Failed!"), http.StatusUnauthorized)
+			}
+		})
+	}
 }
