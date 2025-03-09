@@ -2,15 +2,42 @@
 
 {{define "body"}}
 <h1>Bookings</h1>
+<!-- Date Selection -->
+<div class="date-selection">
+	<h3>Pick your date:</h3>
+	<!--  Date picker for booking -->
+	<div class="date-picker-container">
+		<button type="button" id="prev-day">← Previous Day</button>
+		<input type="date" id="date-input" name="date">
+		<button type="button" id="next-day">Next Day →</button>
+		<script src="/static/js/admin/date-picker.js"></script>
+	</div>
+</div>
 
-<ol>
-{{ range .Bookings }}
-	<li>
-		<h2>{{.CustomerName}}</h2>
-		<p><span>Room:</span> {{.RoomName}}</p>
-		<p><span>Start:</span> {{.StartTime}}</p>
-		<p><span>End:</span> {{.EndTime}}</p>
-	</li>
+<div id="bookings-container">
+{{ range .GroupedBookings }}
+	<div class="date-group" data-date="{{.Date}}">
+    <h2>{{.Date}}</h2>
+		{{ range .Bookings }}
+		<div class='bookings-panel {{if eq .Status "held"}}unpaid{{else if eq .Status "paid"}}paid{{end}}'>
+			<div class="admin-panel">
+				<h3>Booking Details</h3>
+				<p><strong>Room:</strong> {{.RoomName}}</p>
+				<p><strong>Booking Time:</strong> {{.StartTime.Format "15:04"}}-{{.EndTime.Format "15:04"}}</p>
+				<p><strong>Session Type:</strong> {{.Type}}</p>
+				<p><strong>Price:</strong> £{{.Price}}</p>
+				<p><strong>Status:</strong> {{.Status}}</p>
+			</div>
+			<div class="admin-panel">
+				<h3>Customer Details</h3>
+				<p><strong>Name:</strong> {{.CustomerName}}</p>
+				<p><strong>Phone:</strong> {{.CustomerPhone}}</p>
+				<p><strong>Email:</strong> {{.CustomerEmail}}</p>
+			</div>
+		</div>
+	{{ end }}
+	</div>
 {{ end }}
-</ol>
-{{end}}
+</div>	
+
+{{ end }}
