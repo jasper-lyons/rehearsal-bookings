@@ -1,11 +1,11 @@
 package handlers
 
 import (
+	"encoding/json"
 	"log"
-	"time"
 	"net/http"
 	templates "rehearsal-bookings/web/templates"
-	"encoding/json"
+	"time"
 )
 
 // Infrastructure Type for nicer handler writing
@@ -19,7 +19,7 @@ func (handle Handler) ServeHTTP(response http.ResponseWriter, request *http.Requ
 
 // Handlers that represent values
 func Error(err error, code int) Handler {
-	return Handler(func (w http.ResponseWriter, r* http.Request) Handler {
+	return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
 		if err != nil {
 			http.Error(w, err.Error(), code)
 		} else {
@@ -30,21 +30,21 @@ func Error(err error, code int) Handler {
 }
 
 func Template(name string, data any) Handler {
-	return Handler(func (w http.ResponseWriter, r* http.Request) Handler {
+	return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
 		templates.Render(w, name, data)
 		return nil
 	})
 }
 
 func Redirect(url string) Handler {
-	return Handler(func (w http.ResponseWriter, r* http.Request) Handler {
+	return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
 		http.Redirect(w, r, url, http.StatusSeeOther)
 		return nil
 	})
 }
 
 func JSON[T any](object T) Handler {
-	return Handler(func (w http.ResponseWriter, r* http.Request) Handler {
+	return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(object)
 		return nil
@@ -70,8 +70,8 @@ func (w *LoggedResponseWriter) Status() int {
 }
 
 func Logging(next http.Handler) Handler {
-	return Handler(func (w http.ResponseWriter, r* http.Request) Handler {
-		loggedWriter := &LoggedResponseWriter {
+	return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
+		loggedWriter := &LoggedResponseWriter{
 			ResponseWriter: w,
 		}
 

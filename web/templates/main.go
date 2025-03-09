@@ -2,13 +2,13 @@ package templates
 
 import (
 	"embed"
-	"net/http"
-	"log"
 	"html/template"
+	"log"
+	"net/http"
 	"path/filepath"
 )
 
-//go:embed *.html.tmpl admin/*.html.tmpl
+//go:embed *.html.tmpl admin/*.html.tmpl admin/*/*.html.tmpl
 var TemplateFiles embed.FS
 
 func Render(rw http.ResponseWriter, templateString string, context any) error {

@@ -1,23 +1,27 @@
 package main
 
 import (
-	"net/http"
-	"log"
-	"os"
 	_ "fmt"
+	"log"
+	"net/http"
+	"os"
+
 	// GO Embed doesn't support embedding files from outside the module boundary
 	// (in this case, anything outside of this directory) but we want to store
 	// templates and static files at the route directory so we need to treat them
 	// as their own go modules (you'll see the main.go files in the web/static and
-	// web/templates directories) so that we can import them here and access the 
+	// web/templates directories) so that we can import them here and access the
 	// embedded static files!
 	// "rehearsal-bookings/web/static"
 	da "rehearsal-bookings/pkg/data_access"
 	handlers "rehearsal-bookings/pkg/handlers"
 	admin "rehearsal-bookings/pkg/handlers/admin"
+	bookings "rehearsal-bookings/pkg/handlers/admin/bookings"
 	static "rehearsal-bookings/web/static"
-	"github.com/joho/godotenv"
+
 	"fmt"
+
+	"github.com/joho/godotenv"
 )
 
 func EnvOrDefault(key string, fallback string) string {
@@ -42,8 +46,8 @@ func main() {
 	}
 
 	br := da.NewBookingsRepository(driver)
-	sumupApi := handlers.NewApi("https://api.sumup.com", map[string]string {
-		"Content-Type": "application/json",
+	sumupApi := handlers.NewApi("https://api.sumup.com", map[string]string{
+		"Content-Type":  "application/json",
 		"Authorization": fmt.Sprintf("Bearer %s", os.Getenv("SUMUP_API_KEY")),
 	})
 
@@ -58,9 +62,10 @@ func main() {
 
 	http.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.FS(static.StaticFiles))))
 	http.Handle("GET /", handlers.BookingsNew(br))
+	http.Handle("GET /admin/bookings/new", bookings.AdminBookingsNew(br))
 
-	server := &http.Server {
-		Addr: ":" + EnvOrDefault("PORT", "8080"),
+	server := &http.Server{
+		Addr:    ":" + EnvOrDefault("PORT", "8080"),
 		Handler: handlers.Logging(http.DefaultServeMux),
 	}
 
