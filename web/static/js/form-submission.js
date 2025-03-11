@@ -1,39 +1,43 @@
-window.addEventListener('load', function () {
+async function formSubmission(admin=false) {
 	let form = document.getElementById('form')
 	form.addEventListener('submit', async function (e) {
 		e.preventDefault()
 
-		let sumup = SumUpCard.mount({
-			id: 'sumup-card',
-			email: document.getElementById('email').value,
-			onResponse: async function (type, body) {
-				switch (type) {
-					case "sent":
-						break;
-					case "success":
-						let confirmBookingResponse = await fetch(`/bookings/${booking.id}/confirm`, {
-							method: 'POST',
-							body: JSON.stringify(body),
-							headers: {
-								'Content-Type': 'application/json'
-							}
-						})
-
-						if (200 <= confirmBookingResponse.status && confirmBookingResponse.status < 300) {
-							// TODO: Display success, perhaps redirect?
-							document.getElementById('sumup-card').style.display = "none"
-							document.getElementById('success').style.display = "block"
-						} else {
-							alert("Payment failed!")
-						}
-						break;
-					case "error":
-						// TODO: Handle error
-						break;
-				}
+		if (admin) {
+			// check if all fields are filled
+			const name = document.getElementById('name').value.trim();
+			const email = document.getElementById('email').value.trim();
+			const phone = document.getElementById('phone').value.trim();
+		
+			let nameRegex = /^[a-zA-Z]+([-' ][a-zA-Z]+)*\s+[a-zA-Z]+([-' ][a-zA-Z]+)*$/;
+			let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			let phoneRegex = /^\+?\d{11}$/;
+		
+			if (!nameRegex.test(name))  {
+				alert('Please provide your full name.');
+				return false;
 			}
-		})
+		
+			if (!emailRegex.test(email)) {
+				alert('Please enter a valid email address.');
+				return false;
+			}
 
+			if (!phoneRegex.test(phone)) {
+				alert('Please enter a valid phone number.');
+				return false;
+			}
+
+			// check if all fields are filled
+			let requiredFields = ['session-type', 'name','email', 'phone', 'room', 'date-input', 'start-time', 'duration']
+			for (let field of requiredFields) {
+				if (!document.getElementById(field).value) {
+					alert('Please fill out all fields')
+					return
+				}
+				console.log(document.getElementById(field).value)
+			}
+		}
 		// create held booking
 		let bookingResponse = await fetch('/bookings', {
 			method: 'POST',
@@ -45,7 +49,9 @@ window.addEventListener('load', function () {
 				room: document.getElementById('room').value,
 				date: document.getElementById('date-input').value,
 				start_time: document.getElementById('start-time').value,
+				end_time: document.getElementById('end-time').value,
 				duration: parseInt(document.getElementById('duration').value, 10),
+				cymbals: document.getElementById('cymbals').checked,
 			}),
 			headers: {
 				'Content-Type': 'application/json'
@@ -59,28 +65,6 @@ window.addEventListener('load', function () {
 
 		let booking = await bookingResponse.json()
 
-		// create charge
-		let checkoutResponse = await fetch('/sumup/checkouts', {
-			method: 'POST',
-			body: JSON.stringify({
-				amount: parseFloat(document.getElementById('price').textContent.replace('£', '')),
-				checkout_reference: `booking-${booking.id}`
-			}),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-
-		if (!checkoutResponse.ok) {
-			alert("Payment provider failed, please reach out!")
-			return
-		}
-
-		let checkout = await checkoutResponse.json()
-
-		// open sumup UI
-		sumup.update({
-			checkoutId: checkout.id
-		})
+		return booking
 	})
-})
+}

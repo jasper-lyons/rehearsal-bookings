@@ -111,10 +111,7 @@ timeSlots.forEach(slot => {
 
 // Populate Summary function
 function populateSummary() {
-    console.log("Populating summary");
-    updatePrice();
-    console.log(document.getElementById('price').textContent);
-
+    // Get the values from the form
     const room = document.getElementById('room').value;
     const date = document.getElementById('date-input').value;
     const startTime = document.getElementById('start-time').value;

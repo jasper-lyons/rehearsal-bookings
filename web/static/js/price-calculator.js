@@ -5,27 +5,29 @@ async function fetchPrice() {
     let end_time = date + " " + document.getElementById('end-time').value
     let cymbals = document.getElementById('cymbals').checked
 
-    console.log(`/price-calculator?startTime=${start_time}&endTime=${end_time}&type=${session_type}&cymbals=${cymbals}`)
-    try {
-        const response = await fetch(`/price-calculator?startTime=${start_time}&endTime=${end_time}&type=${session_type}&cymbals=${cymbals}`);
-        if (!response.ok) throw new Error('Failed to fetch availability');
-        const data = await response.json();
-        console.log('API response:', data); // ✅ Check the full shape
-        return data.price; // Return the rooms array
-    } catch (error) {
-        console.error(error);
-        return [];
+    if (document.getElementById('end-time').value != "" ) {
+        try {
+            const response = await fetch(`/price-calculator?startTime=${start_time}&endTime=${end_time}&type=${session_type}&cymbals=${cymbals}`);
+            if (!response.ok) throw new Error('Failed to fetch availability');
+            const data = await response.json();
+            console.log('API response:', data); // ✅ Check the full shape
+            return data.price; // Return the rooms array
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
     }
+
+    return 0;
 }
 
 function updatePrice() {
-    console.log("Updating price")
     let price = document.getElementById('price')
     fetchPrice().then(data => {
-        console.log(data)
         price.textContent = `£${(data).toFixed(2)}`
     })
 }
+
 window.addEventListener('load', function () {
     let session_type = document.getElementById('session-type')
     let duration = document.getElementById('duration')

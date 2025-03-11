@@ -1,14 +1,15 @@
 package data_access
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
-	"database/sql"
+	"reflect"
+	"strings"
+	"time"
+
 	_ "github.com/ncruces/go-sqlite3/driver"
 	_ "github.com/ncruces/go-sqlite3/embed"
-	"reflect"
-	"time"
-	"strings"
 )
 
 func fieldsFor[T any]() []reflect.StructField {
@@ -51,14 +52,14 @@ func NewSqliteDriver(url string) *SqliteDriver {
 		log.Fatal(err)
 	}
 
-	return &SqliteDriver { db: db }
+	return &SqliteDriver{db: db}
 }
 
-func (d* SqliteDriver) Query(query string, params ...any) (*sql.Rows, error) {
+func (d *SqliteDriver) Query(query string, params ...any) (*sql.Rows, error) {
 	return d.db.Query(query, params...)
 }
 
-func (d* SqliteDriver) Insert(statement string, records [][]interface{}) ([]int64, error) {
+func (d *SqliteDriver) Insert(statement string, records [][]interface{}) ([]int64, error) {
 	tx, err := d.db.Begin()
 	if err != nil {
 		return nil, err
@@ -75,7 +76,7 @@ func (d* SqliteDriver) Insert(statement string, records [][]interface{}) ([]int6
 	for i, record := range records {
 		result, err := compiled.Exec(record...)
 		if err != nil {
-			return  nil, err
+			return nil, err
 		}
 		id, err := result.LastInsertId()
 		if err == nil {
@@ -112,15 +113,14 @@ func (d *SqliteDriver) Update(statement string, records [][]interface{}) error {
 	for _, record := range records {
 		_, err := compiled.Exec(record...)
 		if err != nil {
-			return  err
+			return err
 		}
 	}
 
 	return tx.Commit()
 }
 
-
-func RowsToType[T any](rows* sql.Rows) ([]T, error) {
+func RowsToType[T any](rows *sql.Rows) ([]T, error) {
 	columns, err := rows.Columns()
 	if err != nil {
 		return nil, err
@@ -190,7 +190,7 @@ func ObjectsToUpdateParams(objects []interface{}) [][]interface{} {
 				params = append(params, value.Field(i).Interface())
 			}
 		}
-		
+
 		// id will be the last param
 		params = append(params, value.FieldByName("Id").Interface())
 
@@ -209,21 +209,21 @@ func ToInterfaceSlice[T any](slice []T) []interface{} {
 }
 
 type StorageDriver interface {
-	Query(query string, params ...any) (*sql.Rows, error);
-	Insert(statement string, records [][]interface{}) ([]int64, error);
-	Delete(statement string, ids []int64) (int64, error);
-	Update(statement string, records [][]interface{}) error;
+	Query(query string, params ...any) (*sql.Rows, error)
+	Insert(statement string, records [][]interface{}) ([]int64, error)
+	Delete(statement string, ids []int64) (int64, error)
+	Update(statement string, records [][]interface{}) error
 }
 
 type BookingsRepository[D StorageDriver] struct {
 	driver D
 }
 
-func NewBookingsRepository(sd StorageDriver) (*BookingsRepository[StorageDriver]) {
-	return &BookingsRepository[StorageDriver] { driver: sd }
+func NewBookingsRepository(sd StorageDriver) *BookingsRepository[StorageDriver] {
+	return &BookingsRepository[StorageDriver]{driver: sd}
 }
 
-func (br* BookingsRepository[StorageDriver]) Find(id int) (*Booking, error) {
+func (br *BookingsRepository[StorageDriver]) Find(id int) (*Booking, error) {
 	rows, err := br.driver.Query("select * from bookings where id = ? limit 1", id)
 	if err != nil {
 		return nil, err
@@ -232,7 +232,7 @@ func (br* BookingsRepository[StorageDriver]) Find(id int) (*Booking, error) {
 	return &bookings[0], err
 }
 
-func (br* BookingsRepository[StorageDriver]) All() ([]Booking, error) {
+func (br *BookingsRepository[StorageDriver]) All() ([]Booking, error) {
 	rows, err := br.driver.Query("select * from bookings")
 	if err != nil {
 		return nil, err
@@ -240,8 +240,8 @@ func (br* BookingsRepository[StorageDriver]) All() ([]Booking, error) {
 	return RowsToType[Booking](rows)
 }
 
-func (br* BookingsRepository[StorageDriver]) Where(query string, params ...any) ([]Booking, error) {
-	rows, err := br.driver.Query("select * from bookings where " + query, params...)
+func (br *BookingsRepository[StorageDriver]) Where(query string, params ...any) ([]Booking, error) {
+	rows, err := br.driver.Query("select * from bookings where "+query, params...)
 	if err != nil {
 		return nil, err
 	}
@@ -263,7 +263,7 @@ func generateCreateStatement[T any](tableName string) string {
 	)
 }
 
-func (br* BookingsRepository[StorageDriver]) Create(bookings []Booking) ([]Booking, error) {
+func (br *BookingsRepository[StorageDriver]) Create(bookings []Booking) ([]Booking, error) {
 	query := generateCreateStatement[Booking]("bookings")
 	ids, err := br.driver.Insert(
 		query,
@@ -304,7 +304,6 @@ func (br *BookingsRepository[StorageDriver]) Delete(bookings []Booking) ([]Booki
 	return bookings, err
 }
 
-
 func generateUpdateStatement[T any](tableName string) string {
 	columns := settableSqlColumnNames(fieldsFor[T]())
 
@@ -314,13 +313,13 @@ func generateUpdateStatement[T any](tableName string) string {
 	}
 
 	return fmt.Sprintf(
-		"update %s set %s, updated_at = current_time_stamp where id = ?", 
-		tableName, 
+		"update %s set %s, updated_at = current_time_stamp where id = ?",
+		tableName,
 		strings.Join(sets, ", "),
 	)
 }
 
-func (br* BookingsRepository[StorageDriver]) Update(bookings []Booking) ([]Booking, error) {
+func (br *BookingsRepository[StorageDriver]) Update(bookings []Booking) ([]Booking, error) {
 	statement := generateUpdateStatement[Booking]("bookings")
 	err := br.driver.Update(
 		statement,
@@ -333,18 +332,19 @@ func (br* BookingsRepository[StorageDriver]) Update(bookings []Booking) ([]Booki
 }
 
 type Booking struct {
-	Id int64 `sql:"id" generated:"true" json:"id"`
-	Type string `sql:"type" json:"type"`
-	CustomerName string `sql:"customer_name" json:"cutomer_name"`
-	CustomerEmail string `sql:"customer_email" json:"customer_email"`
-	CustomerPhone string `sql:"customer_phone" json:"customer_phone"`
-	RoomName string `sql:"room_name" json:"room_name"`
-	StartTime time.Time `sql:"start_time" json:"start_time"`
-	EndTime time.Time `sql:"end_time" json:"end_time"`
-	Status string `sql:"status" json:"status"`
-	Expiration time.Time `sql:"expiration" json:"expiration"`
-	Price float64 `sql:"price" json:"price"`
-	TransactionId string `sql:"transaction_id" json:"transaction_id"`
+	Id            int64     `sql:"id" generated:"true" json:"id"`
+	Type          string    `sql:"type" json:"type"`
+	CustomerName  string    `sql:"customer_name" json:"cutomer_name"`
+	CustomerEmail string    `sql:"customer_email" json:"customer_email"`
+	CustomerPhone string    `sql:"customer_phone" json:"customer_phone"`
+	RoomName      string    `sql:"room_name" json:"room_name"`
+	StartTime     time.Time `sql:"start_time" json:"start_time"`
+	EndTime       time.Time `sql:"end_time" json:"end_time"`
+	Status        string    `sql:"status" json:"status"`
+	Expiration    time.Time `sql:"expiration" json:"expiration"`
+	Price         float64   `sql:"price" json:"price"`
+	Cymbals       bool      `sql:"cymbals" json:"cymbals"`
+	TransactionId string    `sql:"transaction_id" json:"transaction_id"`
 }
 
 func FuckTheError[T any](result T, err error) T {

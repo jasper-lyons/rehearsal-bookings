@@ -8,6 +8,7 @@
 		<input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 		<script src="/static/js/select-button.js"></script>
 		<script src="/static/js/price-calculator.js"></script>
+		<script src="/static/js/form-submission.js"></script>
 		
 		<!-- Step 1: Rehearsal Type, Date & Timeslot Selection -->
 		<h1>YOUR BOOKING DETAILS</h1>
@@ -127,14 +128,14 @@
 			<div class="summary-room customer-info"></div>
 			<div class="summary-date customer-info"></div>
 			<div class="summary-time customer-info"></div>
-			<div class="summary-price customer-info price"></div>
-			<span></span>
 		</div>
 
 		<button type="submit" id="book-now">
 			CONFIRM & BOOK FOR: <span id="price" class="price">£0.00</span>
 		</button>
-		<script src="/static/js/admin/form-submission.js"></script>
+		<script>
+			window.addEventListener('load', formSubmission(admin=true));
+		</script>
 	</form>
 <div id="success" style="display: none">
 	<h1>Booking Successful! You should recieve a text and email comfirming your booking shortly.</h1>
