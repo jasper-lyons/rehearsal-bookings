@@ -21,6 +21,7 @@
 	{{ range .Bookings }}
 	<div class='bookings-panel {{if eq .Status "held"}}unpaid{{else if eq .Status "paid"}}paid{{end}}'>
 		<div class="admin-panel">
+			<h3>{{.Id}}</h3>
 			<h3>Booking Details</h3>
 			<p><strong>Room:</strong> {{.RoomName}}</p>
 			<p><strong>Booking Time:</strong> {{.StartTime.Format "15:04"}}-{{.EndTime.Format "15:04"}}</p>

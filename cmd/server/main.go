@@ -57,11 +57,15 @@ func main() {
 	http.Handle("GET /admin/bookings", basicauth(handlers.AdminBookingsIndex(br)))
 	http.Handle("GET /admin/bookings/new", basicauth(handlers.AdminBookingsNew(br)))
 	http.Handle("DELETE /admin/bookings/{id}", basicauth(handlers.AdminBookingsDelete(br)))
+	http.Handle("GET /admin/bookings/{id}/edit", basicauth(handlers.AdminBookingsUpdate(br)))
+
+	// http.Handle("PUT /bookings/{id}/edit", basicauth(handlers.AdminBookingsSendUpdate(br)))
 
 	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, sumupApi))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))
 
 	http.Handle("GET /rooms", handlers.RoomsIndex(br))
+	http.Handle("GET /price-calculator", handlers.CalculatePrice(br))
 
 	http.Handle("POST /sumup/checkouts", handlers.SumupCheckoutCreate(sumupApi))
 

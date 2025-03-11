@@ -76,6 +76,7 @@
 						<tbody>
 							<!-- Time slots are generated here -->
 							<script src="/static/js/timeslot-table.js"></script>
+							<script src="/static/js/timeslot-availability.js"></script>
 							<script src="/static/js/timeslot-selections.js"></script>
 						</tbody>
 					</table>
@@ -96,7 +97,6 @@
 						<div class="summary-room customer-info"></div>
 						<div class="summary-date customer-info"></div>
 						<div class="summary-time customer-info"></div>
-						<div class="summary-price customer-info"></div>
 					</div>
 				</div>
 			</div>
@@ -111,7 +111,7 @@
 			<div id="book-now" class="floating-box">
 				<script src="/static/js/price-calculator.js"></script>
 				<span>BOOK NOW:</span>
-				<span id="price">£0.00</span>
+				<span id="price" class="price">£0.00</span>
 			</div>
 		</fieldset>
 
@@ -168,7 +168,7 @@
 				<div class="summary-room customer-info"></div>
 				<div class="summary-date customer-info"></div>
 				<div class="summary-time customer-info"></div>
-				<div class="summary-price customer-info"></div>
+				<div class="summary-price customer-info price"></div>
 			</div>
 			<!-- Back Button -->
 			<button type="button" id="back-step-1" >
@@ -189,7 +189,7 @@
 				<div class="summary-room customer-info"></div>
 				<div class="summary-date customer-info"></div>
 				<div class="summary-time customer-info"></div>
-				<div class="summary-price customer-info"></div>
+				<div class="summary-price customer-info price"></div>
 			</div>
 			<br>
 			<hr>

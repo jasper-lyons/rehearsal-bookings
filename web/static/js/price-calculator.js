@@ -1,55 +1,31 @@
+async function fetchPrice() {
+    let session_type = document.getElementById('session-type').value
+    let date = document.getElementById('date-input').value
+    let start_time = date + " " + document.getElementById('start-time').value
+    let end_time = date + " " + document.getElementById('end-time').value
+    let cymbals = document.getElementById('cymbals').checked
+
+    console.log(`/price-calculator?startTime=${start_time}&endTime=${end_time}&type=${session_type}&cymbals=${cymbals}`)
+    try {
+        const response = await fetch(`/price-calculator?startTime=${start_time}&endTime=${end_time}&type=${session_type}&cymbals=${cymbals}`);
+        if (!response.ok) throw new Error('Failed to fetch availability');
+        const data = await response.json();
+        console.log('API response:', data); // ✅ Check the full shape
+        return data.price; // Return the rooms array
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
+
 function updatePrice() {
+    console.log("Updating price")
     let price = document.getElementById('price')
-    let session_type = document.getElementById('session-type')
-    let duration = parseInt(document.getElementById('duration').value, 10)
-    let cymbals = document.getElementById('cymbals')
-    let priceValue = 0.00
-
-    if (selectedRoom) {
-        switch (session_type.value) {
-        case 'solo':
-            priceValue = 6.50 * duration
-            break;
-        case 'band':
-            if (duration > 9) {
-                priceValue = 100.00
-            } else if (duration > 3) {
-                priceValue = 10.00 * duration
-            } else {
-                priceValue = 12.00 * duration
-            }
-            break;
-        }
-    }
-
-    if (cymbals.checked) {
-        priceValue += 3.00
-    }
-
-    price.textContent = `£${(priceValue).toFixed(2)}`
+    fetchPrice().then(data => {
+        console.log(data)
+        price.textContent = `£${(data).toFixed(2)}`
+    })
 }
-
-function selectButton(button) {
-    // Deselect all buttons
-    const buttons = document.querySelectorAll('.toggle-button');
-    const infoBox = document.getElementById('info-box');
-    buttons.forEach(btn => btn.classList.remove('selected'));
-
-    // Select the clicked button
-    button.classList.add('selected');
-
-    // Update and show the information box content
-    if (button.dataset.value === 'band') {
-        infoBox.innerHTML = '<p>Rehearsal session for up to six people</p>';
-    } else if (button.dataset.value === 'solo') {
-        infoBox.innerHTML = '<p align=right>Rehearsal session for one person</p>';
-    }
-
-    // Save the selected value to type input
-    document.getElementById('session-type').value = button.getAttribute('data-value');
-    clearSelection(); // clear the time slot selection when session type changes
-}
-
 window.addEventListener('load', function () {
     let session_type = document.getElementById('session-type')
     let duration = document.getElementById('duration')

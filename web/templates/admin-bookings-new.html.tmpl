@@ -6,6 +6,7 @@
 	<form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
 		<!-- CSRF Protection -->
 		<input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+		<script src="/static/js/select-button.js"></script>
 		<script src="/static/js/price-calculator.js"></script>
 		
 		<!-- Step 1: Rehearsal Type, Date & Timeslot Selection -->
@@ -56,6 +57,7 @@
 					<tbody>
 						<!-- Time slots are generated here -->
 						<script src="/static/js/timeslot-table.js"></script>
+						<script src="/static/js/timeslot-availability.js"></script>
 						<script src="/static/js/timeslot-selections.js"></script>
 					</tbody>
 				</table>
@@ -125,12 +127,12 @@
 			<div class="summary-room customer-info"></div>
 			<div class="summary-date customer-info"></div>
 			<div class="summary-time customer-info"></div>
-			<div class="summary-price customer-info"></div>
+			<div class="summary-price customer-info price"></div>
 			<span></span>
 		</div>
 
 		<button type="submit" id="book-now">
-			CONFIRM & BOOK FOR: <span id="price">£0.00</span>
+			CONFIRM & BOOK FOR: <span id="price" class="price">£0.00</span>
 		</button>
 		<script src="/static/js/admin/form-submission.js"></script>
 	</form>
