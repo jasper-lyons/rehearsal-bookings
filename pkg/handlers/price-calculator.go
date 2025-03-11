@@ -13,7 +13,7 @@ type PriceRequest struct {
 	Type      string `json:"type"`
 	StartTime string `json:"start_time"`
 	EndTime   string `json:"end_time"`
-	Cymbals   bool   `json:"cymbals"`
+	Cymbals   int    `json:"cymbals"`
 }
 
 type PriceResponse struct {
@@ -21,7 +21,7 @@ type PriceResponse struct {
 	Error string  `json:"error,omitempty"`
 }
 
-func BookingPrice(_type string, startTime time.Time, endTime time.Time, cymbals bool) (float64, error) {
+func BookingPrice(_type string, startTime time.Time, endTime time.Time, cymbals int) (float64, error) {
 	duration := endTime.Sub(startTime).Hours()
 	var price float64
 
@@ -40,7 +40,7 @@ func BookingPrice(_type string, startTime time.Time, endTime time.Time, cymbals 
 		return -1.0, fmt.Errorf("Unknown rehearsal type: %s", _type)
 	}
 
-	if cymbals {
+	if cymbals == 1 {
 		price += 3.0
 	}
 
@@ -64,7 +64,7 @@ func CalculatePrice(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			return Error(errors.New("Missing 'Type' query parameter."), http.StatusBadRequest)
 		}
 
-		cymbals, err := strconv.ParseBool(r.URL.Query().Get("cymbals"))
+		cymbals64, err := strconv.ParseInt(r.URL.Query().Get("cymbals"), 10, 64)
 		if err != nil {
 			return Error(errors.New("Invalid 'cymbals' query parameter."), http.StatusBadRequest)
 		}
@@ -72,9 +72,9 @@ func CalculatePrice(br *da.BookingsRepository[da.StorageDriver]) Handler {
 		fmt.Println(SessionType)
 		fmt.Println(startTime)
 		fmt.Println(endTime)
-		fmt.Println(cymbals)
+		fmt.Println(cymbals64)
 
-		price, err := BookingPrice(SessionType, startTime, endTime, cymbals)
+		price, err := BookingPrice(SessionType, startTime, endTime, int(cymbals64))
 		if err != nil {
 			return Error(err, http.StatusBadRequest)
 		}

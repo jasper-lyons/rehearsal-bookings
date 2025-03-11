@@ -3,7 +3,7 @@ async function fetchPrice() {
     let date = document.getElementById('date-input').value
     let start_time = date + " " + document.getElementById('start-time').value
     let end_time = date + " " + document.getElementById('end-time').value
-    let cymbals = document.getElementById('cymbals').checked
+    let cymbals = document.getElementById('cymbals').checked ? 1 : 0
 
     if (document.getElementById('end-time').value != "" ) {
         try {

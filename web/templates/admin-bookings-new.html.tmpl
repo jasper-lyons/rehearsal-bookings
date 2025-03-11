@@ -134,7 +134,9 @@
 			CONFIRM & BOOK FOR: <span id="price" class="price">£0.00</span>
 		</button>
 		<script>
-			window.addEventListener('load', formSubmission(admin=true));
+			window.addEventListener('load', function() {
+				formSubmission(admin=true);
+			});
 		</script>
 	</form>
 <div id="success" style="display: none">

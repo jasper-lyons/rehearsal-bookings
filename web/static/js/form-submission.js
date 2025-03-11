@@ -4,6 +4,7 @@ async function formSubmission(admin=false) {
 		e.preventDefault()
 
 		if (admin) {
+			console.log("admin mode")
 			// check if all fields are filled
 			const name = document.getElementById('name').value.trim();
 			const email = document.getElementById('email').value.trim();
@@ -38,6 +39,12 @@ async function formSubmission(admin=false) {
 				console.log(document.getElementById(field).value)
 			}
 		}
+
+		cymbals = 0
+		if (document.getElementById('cymbals').checked) {
+			cymbals = 1
+		}
+		
 		// create held booking
 		let bookingResponse = await fetch('/bookings', {
 			method: 'POST',
@@ -51,7 +58,7 @@ async function formSubmission(admin=false) {
 				start_time: document.getElementById('start-time').value,
 				end_time: document.getElementById('end-time').value,
 				duration: parseInt(document.getElementById('duration').value, 10),
-				cymbals: document.getElementById('cymbals').checked,
+				cymbals: cymbals,
 			}),
 			headers: {
 				'Content-Type': 'application/json'

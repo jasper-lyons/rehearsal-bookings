@@ -17,7 +17,7 @@ type CreateBookingsForm struct {
 	StartTime string `json:"start_time"`
 	EndTime   string `json:"end_time"`
 	Duration  int    `json:"duration"`
-	Cymbals   bool   `json:"cymbals"`
+	Cymbals   int64  `json:"cymbals"`
 }
 
 // All bookings are created with a "hold" status
@@ -38,7 +38,7 @@ func BookingsCreate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			return Error(err, http.StatusBadRequest)
 		}
 
-		price, err := BookingPrice(form.Type, startTime, endTime, form.Cymbals)
+		price, err := BookingPrice(form.Type, startTime, endTime, int(form.Cymbals))
 		if err != nil {
 			return Error(err, http.StatusBadRequest)
 		}
