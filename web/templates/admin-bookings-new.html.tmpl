@@ -2,7 +2,7 @@
 
 {{define "body"}}
 <h1>ADMIN: Create a new booking</h1>
-<div>
+<div id="form-container">
 	<form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
 		<!-- CSRF Protection -->
 		<input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
@@ -136,9 +136,11 @@
 		<script>
 			window.addEventListener('load', function() {
 				formSubmission(admin=true);
+
 			});
 		</script>
 	</form>
+</div>
 <div id="success" style="display: none">
 	<h1>Booking Successful! You should recieve a text and email comfirming your booking shortly.</h1>
 </div>

@@ -1,11 +1,11 @@
 package handlers
 
 import (
+	"errors"
+	"fmt"
 	"net/http"
 	da "rehearsal-bookings/pkg/data_access"
 	"time"
-	"errors"
-	"fmt"
 )
 
 type RoomsIndexForm struct {
@@ -13,14 +13,14 @@ type RoomsIndexForm struct {
 }
 
 type Room struct {
-	Name string `json:"name"`
+	Name         string          `json:"name"`
 	Availability map[string]bool `json:"availability"`
 }
 
 func NewRoom(name string) Room {
-	return Room {
+	return Room{
 		Name: name,
-		Availability: map[string]bool {
+		Availability: map[string]bool{
 			"00:00": true,
 			"01:00": true,
 			"02:00": true,
@@ -54,7 +54,7 @@ type RoomsIndexView struct {
 }
 
 func RoomsIndex(br *da.BookingsRepository[da.StorageDriver]) Handler {
-	return Handler(func (w http.ResponseWriter, r *http.Request) Handler {
+	return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
 		day := r.URL.Query().Get("day")
 		if day == "" {
 			return Error(errors.New("Missing 'day' query parameter."), http.StatusBadRequest)
@@ -82,7 +82,7 @@ func RoomsIndex(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			if booking.RoomName == "Room 1" {
 				startTime := booking.StartTime
 				// This truncates the float64 into an int so we're assuming accurate, whole hour maths...
-				hours := int(booking.EndTime.Sub(startTime).Hours()) - 1
+				hours := int(booking.EndTime.Sub(startTime).Hours())
 				for i := range hours {
 					bookedHour := startTime.Add(time.Hour * time.Duration(i))
 					room1.Availability[bookedHour.Format("15:04")] = false
@@ -95,7 +95,7 @@ func RoomsIndex(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			if booking.RoomName == "Room 2" {
 				startTime := booking.StartTime
 				// This truncates the float64 into an int so we're assuming accurate, whole hour maths...
-				hours := int(booking.EndTime.Sub(startTime).Hours()) - 1
+				hours := int(booking.EndTime.Sub(startTime).Hours())
 				for i := range hours {
 					bookedHour := startTime.Add(time.Hour * time.Duration(i))
 					room2.Availability[bookedHour.Format("15:04")] = false

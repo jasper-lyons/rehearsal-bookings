@@ -70,6 +70,14 @@ async function formSubmission(admin=false) {
 			return
 		}
 
+		if (bookingResponse.ok && admin) {
+			document.getElementById('form-container').style.display = 'none';
+			document.getElementById('success').style.display = 'block';
+			setTimeout(() => {
+				location.reload();
+			}, 1500);
+		}
+
 		let booking = await bookingResponse.json()
 
 		return booking
