@@ -6,12 +6,10 @@ maxDate.setDate(maxDate.getDate() + 90);
 
 // define the selectedDate - by default this is the current date
 let selectedDate = new Date(currentDate);
-let isWeekday = selectedDate.getDay() >= 1 && selectedDate.getDay() <= 5; // Monday = 1, Friday = 5
 
 // Update the displayed date and button states
 function updateDatePicker(animated = false) {
     const datePicker = document.getElementById('date-input');
-    isWeekday = selectedDate.getDay() >= 1 && selectedDate.getDay() <= 5; // Monday = 1, Friday = 5
     datePicker.min = minDate.toLocaleDateString('en-CA');
     datePicker.max = maxDate.toLocaleDateString('en-CA');
     datePicker.value = selectedDate.toLocaleDateString('en-CA');

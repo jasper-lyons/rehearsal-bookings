@@ -21,12 +21,14 @@ function clearSelection() {
     document.getElementById('start-time').value = null;
     document.getElementById('end-time').value = null;
     document.getElementById('room').value = null;
-    document.getElementById('duration').value = null;
 
-    // Trigger the change event on the duration input to update the price
-    document.getElementById('duration').dispatchEvent(new Event('change'));
-    // Remove the enabled class from the book now button
-    document.getElementById('book-now').classList.remove('enabled')
+    // Trigger the change event on the end-time input to update the price
+    document.getElementById('end-time').dispatchEvent(new Event('change'));
+    // Remove the enabled class from the book now button if exists
+    const bookNowButton = document.getElementById('book-now');
+    if (bookNowButton) {
+        bookNowButton.classList.remove('enabled');
+    }
     setAvailability();
 }
 
@@ -36,9 +38,6 @@ function selectFirstSlot(slot) {
     startSlot = slot;
     selectedRoom = slot.dataset.room;
     slot.classList.add('selected', 'grabbing', 'start-slot');
-
-    document.getElementById('duration').value = 0;
-    document.getElementById('duration').dispatchEvent(new Event('change'));
 }
 
 // Function to select slots between start and end
@@ -82,12 +81,14 @@ timeSlots.forEach(slot => {
                 document.getElementById('start-time').value = formattedStartTime;
                 document.getElementById('end-time').value = formattedEndTime;
                 document.getElementById('room').value = formattedRoom;
-                document.getElementById('duration').value = Math.abs(startTimeValue - endTimeValue) + 1;
 
-                // Trigger the change event on the duration input to update the price
-                document.getElementById('duration').dispatchEvent(new Event('change'));
-                document.getElementById('book-now').classList.add('enabled')
-                // print the selection for user to see room/time details
+                // Trigger the change event on the end-time input to update the price
+                document.getElementById('end-time').dispatchEvent(new Event('change'));
+                // Enable book now button if exists
+                const bookNowButton = document.getElementById('book-now');
+                if (bookNowButton) {
+                    bookNowButton.classList.add('enabled');
+                }                // print the selection for user to see room/time details
                 updatePrice();
                 populateSummary();
 

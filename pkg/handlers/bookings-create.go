@@ -16,7 +16,6 @@ type CreateBookingsForm struct {
 	Date      string `json:"date"`
 	StartTime string `json:"start_time"`
 	EndTime   string `json:"end_time"`
-	Duration  int    `json:"duration"`
 	Cymbals   int64  `json:"cymbals"`
 }
 

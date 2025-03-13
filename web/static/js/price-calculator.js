@@ -30,13 +30,13 @@ function updatePrice() {
 
 window.addEventListener('load', function () {
     let session_type = document.getElementById('session-type')
-    let duration = document.getElementById('duration')
+    let end_time = document.getElementById('end-time')
     let buttons = document.querySelectorAll('.toggle-button');
     let cymbals = document.getElementById('cymbals')
 
     // event listeners for input changes
     session_type.addEventListener('change', updatePrice)
-    duration.addEventListener('change', updatePrice)
+    end_time.addEventListener('change', updatePrice)
     cymbals.addEventListener('change', updatePrice)
     cymbals.addEventListener('change', populateSummary)
 

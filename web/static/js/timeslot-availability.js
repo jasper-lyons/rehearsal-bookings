@@ -13,8 +13,11 @@ async function fetchAvailability(date) {
 
 // Function to set the availability of each timeslot. 
 // This function is called by updateDatePicker() and selectButton()
-async function setAvailability(weekday_exclude = true) {
+async function setAvailability() {
     const datePicker = document.getElementById('date-input');
+
+    let date = new Date(datePicker.value);
+    let isWeekday = date.getDay() >= 1 && date.getDay() <= 5; // Monday = 1, Friday = 5
     const rooms = await fetchAvailability(datePicker.value); // ✅ Await the result
     console.log('Rooms:', rooms); // ✅ Check what rooms we have
 
@@ -51,16 +54,16 @@ async function setAvailability(weekday_exclude = true) {
         if (datePicker.value === datePicker.min && slotTime < new Date().getHours() + 2) {
             slot.classList.add('unavailable');
         }
-        if (weekday_exclude) {
-            // If the selected date is a weekday and the slot is before 12pm, disable it
-            if (isWeekday && slotTime < 12) {
-                slot.classList.add('unavailable');
-            }
 
-            // If the selected date is a weekday and the session type is solo and the slot is after 5pm, disable it
-            if (isWeekday && document.getElementById('session-type').value === "solo" && slotTime > 17) {
-                slot.classList.add('unavailable');
-            }
+        // If the selected date is a weekday and the slot is before 12pm, disable it
+        if (isWeekday && slotTime < 12) {
+            slot.classList.add('unavailable');
         }
+
+        // If the selected date is a weekday and the session type is solo and the slot is after 5pm, disable it
+        if (isWeekday && document.getElementById('session-type').value === "solo" && slotTime > 17) {
+            slot.classList.add('unavailable');
+        }
+
     });
 }

@@ -30,7 +30,7 @@ async function formSubmission(admin=false) {
 			}
 
 			// check if all fields are filled
-			let requiredFields = ['session-type', 'name','email', 'phone', 'room', 'date-input', 'start-time', 'duration']
+			let requiredFields = ['session-type', 'name','email', 'phone', 'room', 'date-input', 'start-time']
 			for (let field of requiredFields) {
 				if (!document.getElementById(field).value) {
 					alert('Please fill out all fields')
@@ -57,7 +57,6 @@ async function formSubmission(admin=false) {
 				date: document.getElementById('date-input').value,
 				start_time: document.getElementById('start-time').value,
 				end_time: document.getElementById('end-time').value,
-				duration: parseInt(document.getElementById('duration').value, 10),
 				cymbals: cymbals,
 			}),
 			headers: {
