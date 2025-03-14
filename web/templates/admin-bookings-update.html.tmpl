@@ -1,0 +1,99 @@
+{{template "layout.html.tmpl" .}}
+
+{{define "body"}}
+	{{range .Bookings}}
+	<h1>ADMIN: Update Booking {{.Id}}</h1>
+	<p>Update the booking details below:</p>
+	<p><strong>Room:</strong> {{.RoomName}}</p>
+	<p><strong>Booking Time:</strong> {{.StartTime.Format "15:04"}}-{{.EndTime.Format "15:04"}}</p>
+	<p><strong>Session Type:</strong> {{.Type}}</p>
+	<p><strong>Price:</strong> £{{.Price}}</p>
+	<p><strong>Status:</strong> {{.Status}}</p>
+	<p><strong>Customer Name:</strong> {{.CustomerName}}</p>
+	<p><strong>Customer Phone:</strong> {{.CustomerPhone}}</p>
+	<p><strong>Customer Email:</strong> {{.CustomerEmail}}</p>	
+	<p><strong>Cymbals:</strong> {{.Cymbals}}</p>	
+	<p>{{.StartTime.Format "2006-01-02"}}</p>
+
+
+	<form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
+		<!-- <script src="/static/js/price-calculator.js"></script> -->
+		<script src="/static/js/select-button.js"></script>
+		<script src="/static/js/price-calculator.js"></script>
+
+		<!-- Session Type Selection -->
+		<div id="session-types">
+			<h3>Session type:</h3>
+			<!--  Toggle buttons for selecting solo or band sessions -->
+			<div id="session-type-container">
+				<button type="button" class='toggle-button {{if eq .Type "band"}} selected {{ else }} {{end}}' data-value="band" onclick="selectButton(this)">Band</button>
+				<button type="button" class='toggle-button {{if eq .Type "solo"}} selected {{ else }} {{end}}' data-value="solo" onclick="selectButton(this)">Solo</button>
+				<!-- Hidden input to store the selected session type -->
+				<input id="session-type" name="type" value="band">
+			</div>
+			<!-- Session type information box -->
+			<div id="info-box" class="info-box">
+				<p>Rehearsal session for up to six people</p>
+			</div>
+		</div>
+
+		<!-- Date  Selection -->
+		<div class="date-selection">
+			<h3>Date:</h3>
+			<input type="date" id="date-input" name="date" value='{{.StartTime.Format "2006-01-02"}}'>
+		</div>
+	
+		<!-- Time & Room Selection -->
+		<div class="time-selection">
+			<div id="time-slot-container">
+				<!-- Hidden input to store the room, start time & end time -->
+				<input id="start-time" name="start-time" value='{{.StartTime.Format "15:04"}}'>
+				<input id="end-time" name="end-time" value='{{.EndTime.Format "15:04"}}'>
+				<input id="room" name="room" value="{{.RoomName}}">
+				<h3>Select your timeslot</h3>
+				<table>
+					<thead>
+						<tr>
+							<th>Hour</th>
+							<th>Room 1</th>
+							<th>Room 2</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- Time slots are generated here -->
+						<script src="/static/js/timeslot-table.js"></script>
+						<script src="/static/js/timeslot-availability.js"></script>
+						<script src="/static/js/timeslot-selections.js"></script>
+						<script src="/static/js/admin/timeslot-existing.js"></script>
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+		<h3>Additional Equipment</h3>
+		<div>
+			<input type="checkbox" class="cymbals" id="cymbals" {{if .Cymbals}}checked{{end}}>
+			<label for="cymbals" class="cymbals">Cymbals - £3 Surcharge</label>
+		</div>
+		<!-- Customer Details -->
+		<div class="customer-details">
+			<h3>Customer Details:</h3>
+			<!--  Customer details form -->
+			<div class="customer-details-container">
+				<label for="customer-name">Name:</label>
+				<input type="text" id="customer-name" name="customer-name" value="{{.CustomerName}}">
+				<label for="customer-phone">Phone:</label>
+				<input type="tel" id="customer-phone" name="customer-phone" value="{{.CustomerPhone}}">
+				<label for="customer-email">Email:</label>
+				<input type="email" id="customer-email" name="customer-email" value="{{.CustomerEmail}}">
+			</div>
+		</div>
+
+		<!-- Submit Button -->
+		<div class="submit-button">
+			<button type="submit" id="submit-button">Update Booking  <span id="price" class="price">£0.00</span></button>
+		</div>
+	</form>
+
+	{{ end }}
+{{end}}
