@@ -70,7 +70,7 @@ async function formSubmission(admin=false, update=false) {
 			}
 		} else {
 			content = {
-				method: 'PUT',
+				method: 'POST',
 				body: JSON.stringify({
 					type: document.getElementById('session-type').value,
 					name: document.getElementById('name').value,

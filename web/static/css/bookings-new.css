@@ -300,6 +300,11 @@ td.end-slot {
     background-color: lightseagreen;
 }
 
+.bookings-panel.update {
+    background-color: gold;
+}
+
+
 .admin-panel {
     border-radius: 10px;
     border: 2px solid black;
@@ -307,3 +312,5 @@ td.end-slot {
     margin: 10px;
     width: 50%;
 }
+
+
