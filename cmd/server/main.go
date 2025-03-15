@@ -57,7 +57,8 @@ func main() {
 	http.Handle("GET /admin/bookings", basicauth(handlers.AdminBookingsIndex(br)))
 	http.Handle("GET /admin/bookings/new", basicauth(handlers.AdminBookingsNew(br)))
 	http.Handle("DELETE /admin/bookings/{id}", basicauth(handlers.AdminBookingsDelete(br)))
-	http.Handle("GET /admin/bookings/{id}/edit", basicauth(handlers.AdminBookingsUpdate(br)))
+	http.Handle("GET /admin/bookings/{id}/edit", basicauth(handlers.AdminBookingsUpdateView(br)))
+	http.Handle("PUT /admin/bookings/{id}/update", handlers.AdminBookingsUpdate(br))
 
 	// http.Handle("PUT /bookings/{id}/edit", basicauth(handlers.AdminBookingsSendUpdate(br)))
 

@@ -10,17 +10,25 @@ let selectedRoom = null;
 function clearSelection() {
     // Remove the selection class from all slots
     timeSlots.forEach(slot => {
-        slot.classList.remove('selected','start-slot','end-slot');
+        slot.classList.remove('selected','start-slot','end-slot','current-booking');
     });
 
     // Reset the variables
     startSlot = null;
     endSlot = null;
     selectedRoom = null;
+
+
     // Reset hidden inputs
-    document.getElementById('start-time').value = null;
-    document.getElementById('end-time').value = null;
-    document.getElementById('room').value = null;
+    if (document.getElementById('original-booking-date')) {
+        document.getElementById('start-time').value = document.getElementById('original-start-time').textContent;
+        document.getElementById('end-time').value = document.getElementById('original-end-time').textContent;
+        document.getElementById('room').value = document.getElementById('original-room').textContent;
+    } else {
+        document.getElementById('start-time').value = null;
+        document.getElementById('end-time').value = null;
+        document.getElementById('room').value = null;
+    }
 
     // Trigger the change event on the end-time input to update the price
     document.getElementById('end-time').dispatchEvent(new Event('change'));
@@ -29,7 +37,14 @@ function clearSelection() {
     if (bookNowButton) {
         bookNowButton.classList.remove('enabled');
     }
-    setAvailability();
+
+    
+    // set the availability for the initial date
+    setAvailability().then(() => {
+        if (document.getElementById('original-booking-date')) {
+            selectedSlots();
+        }
+    });
 }
 
 // Function for initialising the first time slot (used on odd clicks, 1, 3 etc...)
@@ -61,7 +76,7 @@ function selectSlotsBetween(start, end) {
 // Add event listeners for clicking on time slots
 timeSlots.forEach(slot => {
     slot.addEventListener('click', () => {
-        if (!slot.classList.contains('unavailable')) {
+        if (!slot.classList.contains('unavailable') || slot.classList.contains('current-booking')) {
             if (!startSlot) {
                 // First click: set the start slot
                 selectFirstSlot(slot);

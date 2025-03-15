@@ -159,6 +159,21 @@ th {
     text-transform: uppercase;
 }
 
+td.unavailable {
+    background-image: repeating-linear-gradient(45deg, white, white 2.5px, lightgray 2.5px, lightgray 5px);
+    cursor: not-allowed; 
+}
+
+td.current-booking {
+    background-color: goldenrod;
+    background-image: none;
+    cursor: pointer; 
+}
+
+td.grabbing {
+    cursor: grabbing;
+}
+
 td.selected {
     background-color: grey;
 }
@@ -169,15 +184,6 @@ td.start-slot {
 
 td.end-slot {
     background-color: #636262;
-}
-
-td.unavailable {
-    background-image: repeating-linear-gradient(45deg, white, white 2.5px, lightgray 2.5px, lightgray 5px);
-    cursor: not-allowed; 
-}
-
-td.grabbing {
-    cursor: grabbing;
 }
 
 /* Floating box */

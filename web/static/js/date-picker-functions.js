@@ -32,7 +32,7 @@ async function updateDatePicker(animated = false, timebound = true) {
 
 
 // function to show the correct date group based on selectedDate
-function showDateGroup(date) {
+function showDateGroup() {
     const datePicker = document.getElementById('date-input');
     const dateGroups = document.querySelectorAll(".date-group");
 

@@ -44,26 +44,52 @@ async function formSubmission(admin=false) {
 		if (document.getElementById('cymbals').checked) {
 			cymbals = 1
 		}
-		
-		// create held booking
-		let bookingResponse = await fetch('/bookings', {
-			method: 'POST',
-			body: JSON.stringify({
-				type: document.getElementById('session-type').value,
-				name: document.getElementById('name').value,
-				email: document.getElementById('email').value,
-				phone: document.getElementById('phone').value,
-				room: document.getElementById('room').value,
-				date: document.getElementById('date-input').value,
-				start_time: document.getElementById('start-time').value,
-				end_time: document.getElementById('end-time').value,
-				cymbals: cymbals,
-			}),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
 
+		let endPoint = '/bookings'
+		if (admin) {
+			bookingId = document.getElementById('booking-id').textContent
+			endPoint = `/admin/bookings/${bookingId}/update`
+			content = {
+				method: 'PUT',
+				body: JSON.stringify({
+					type: document.getElementById('session-type').value,
+					name: document.getElementById('name').value,
+					email: document.getElementById('email').value,
+					phone: document.getElementById('phone').value,
+					room: document.getElementById('room').value,
+					date: document.getElementById('date-input').value,
+					start_time: document.getElementById('start-time').value,
+					end_time: document.getElementById('end-time').value,
+					cymbals: cymbals,
+					price: document.getElementById('revised-price').value,
+					status: document.getElementById('status').value,
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}
+		} else {
+			content = {
+				method: 'PUT',
+				body: JSON.stringify({
+					type: document.getElementById('session-type').value,
+					name: document.getElementById('name').value,
+					email: document.getElementById('email').value,
+					phone: document.getElementById('phone').value,
+					room: document.getElementById('room').value,
+					date: document.getElementById('date-input').value,
+					start_time: document.getElementById('start-time').value,
+					end_time: document.getElementById('end-time').value,
+					cymbals: cymbals,
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}
+		}
+		
+		let bookingResponse = await fetch(endPoint, content)
+		fmt.println(bookingResponse)
 		if (!bookingResponse.ok) {
 			alert("Can't book ", document.getElementById('room').value, " at that time!")
 			return

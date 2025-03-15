@@ -19,7 +19,6 @@ async function setAvailability() {
     let date = new Date(datePicker.value);
     let isWeekday = date.getDay() >= 1 && date.getDay() <= 5; // Monday = 1, Friday = 5
     const rooms = await fetchAvailability(datePicker.value); // ✅ Await the result
-    console.log('Rooms:', rooms); // ✅ Check what rooms we have
 
     const room1 = rooms.find(r => r.name === "Room 1"); // ✅ Find Room 1
     if (!room1) {

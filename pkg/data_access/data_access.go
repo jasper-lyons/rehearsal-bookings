@@ -321,6 +321,7 @@ func generateUpdateStatement[T any](tableName string) string {
 
 func (br *BookingsRepository[StorageDriver]) Update(bookings []Booking) ([]Booking, error) {
 	statement := generateUpdateStatement[Booking]("bookings")
+	fmt.Println(statement)
 	err := br.driver.Update(
 		statement,
 		ObjectsToUpdateParams(ToInterfaceSlice(bookings)),
