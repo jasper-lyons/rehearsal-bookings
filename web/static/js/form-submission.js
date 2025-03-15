@@ -1,4 +1,4 @@
-async function formSubmission(admin=false) {
+async function formSubmission(admin=false, update=false) {
 	let form = document.getElementById('form')
 	form.addEventListener('submit', async function (e) {
 		e.preventDefault()
@@ -46,7 +46,7 @@ async function formSubmission(admin=false) {
 		}
 
 		let endPoint = '/bookings'
-		if (admin) {
+		if (update) {
 			bookingId = document.getElementById('booking-id').textContent
 			endPoint = `/admin/bookings/${bookingId}/update`
 			content = {

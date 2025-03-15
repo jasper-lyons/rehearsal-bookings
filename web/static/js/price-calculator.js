@@ -10,7 +10,7 @@ async function fetchPrice() {
             const response = await fetch(`/price-calculator?startTime=${start_time}&endTime=${end_time}&type=${session_type}&cymbals=${cymbals}`);
             if (!response.ok) throw new Error('Failed to fetch availability');
             const data = await response.json();
-            console.log('API response:', data); // ✅ Check the full shape
+            // console.log('API response:', data); // ✅ Check the full shape
             return data.price; // Return the rooms array
         } catch (error) {
             console.error(error);
