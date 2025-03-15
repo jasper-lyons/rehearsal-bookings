@@ -19,6 +19,7 @@
 3.4. [x] - Create
 3.5. [x] - Update
 3.6. [x] - Delete
+3.7. [ ] - Handle converting between ints in sqlite to bools in go
 
 4.1. [x] - Identify solution for handlers
 4.1.1. [x] - We'll have a big routes file and have each handler exist in it's own file. Each handler can then be tested.
@@ -40,9 +41,9 @@
 6.1. [ ] - Email on successful booking
 6.1.1 [ ] - Delete held booking on payment fail
 6.2. [ ] - Booking Success Page
-6.4. [ ] - Password protected Admin Interface
+6.4. [x] - Password protected Admin Interface
 6.5. [x] - Additional Items on bookings 
 6.5.1 [x] - Cymbals
 6.5.2 [x] - Notes
 6.6. [ ] - Discount Codes
-6.7. [ ] - Speed up Sumup Widget Loading
+6.7. [x] - Speed up Sumup Widget Loading

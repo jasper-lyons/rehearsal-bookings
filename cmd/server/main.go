@@ -54,13 +54,13 @@ func main() {
 		os.Getenv("ADMIN_PASSWORD"),
 	)
 
-	http.Handle("GET /admin/bookings", basicauth(handlers.AdminBookingsIndex(br)))
-	http.Handle("GET /admin/bookings/new", basicauth(handlers.AdminBookingsNew(br)))
 	http.Handle("DELETE /admin/bookings/{id}", basicauth(handlers.AdminBookingsDelete(br)))
 	http.Handle("GET /admin/bookings/{id}/edit", basicauth(handlers.AdminBookingsUpdateView(br)))
 	http.Handle("PUT /admin/bookings/{id}/update", handlers.AdminBookingsUpdate(br))
 
-	// http.Handle("PUT /bookings/{id}/edit", basicauth(handlers.AdminBookingsSendUpdate(br)))
+	http.Handle("GET /admin/bookings/new", basicauth(handlers.AdminBookingsNew(br)))
+	http.Handle("GET /admin/bookings", basicauth(handlers.AdminBookingsIndex(br)))
+	http.Handle("GET /admin", handlers.Redirect("/admin/bookings"))
 
 	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, sumupApi))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))
@@ -70,7 +70,8 @@ func main() {
 
 	http.Handle("POST /sumup/checkouts", handlers.SumupCheckoutCreate(sumupApi))
 
-	http.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.FS(static.StaticFiles))))
+	http.Handle("GET /static/",
+		http.StripPrefix("/static/", http.FileServer(http.FS(static.StaticFiles))))
 	http.Handle("GET /", handlers.BookingsNew(br))
 
 	server := &http.Server{
