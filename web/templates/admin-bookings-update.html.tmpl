@@ -99,31 +99,33 @@
 				<input type="email" id="email" name="customer-email" value="{{.CustomerEmail}}">
 			</div>
 		</div>
-		<h3>Price, Status & Notes</h3>
 		<div>
+		<h3>Price, Status & Notes</h3>
 			<label for="status">Status:</label>
 			<select id="status" name="status">
 			  <option value="hold" {{if eq .Status "hold"}}selected{{end}}>Hold</option>
 			  <option value="paid" {{if eq .Status "paid"}}selected{{end}}>Paid</option>
 			  <option value="cancelled" {{if eq .Status "cancelled"}}selected{{end}}>Cancelled</option>
 			</select>
-			
-			<p>Price for the session: <strong><span id="price" class="price">£0.00</span></strong></p>
-			<label for="revised-price">Revised price:</label>
-			<input type="number" id="revised-price" step="0.01">
 			<label for="booking-notes">Booking Notes:</label>
 			<textarea id="booking-notes" rows="6" maxlength="500">{{.BookingNotes}}</textarea>
+			<br>	
+			<p style="margin: 5px">Price for the session: <strong><span id="price" class="price">£0.00</span></strong></p>
+			<label for="revised-price">Revised price:</label>
+			<input type="number" id="revised-price" step="0.01">
+			<br>	
 		</div>
-		<br>
 		<!-- Updated details summary-->
-		<button type="button" onclick="updatedDetails()">Update</button>
+		<div class="submit-button"> 
+		<button type="button" onclick="updatedDetails()">Review Changes</button>
+		</div>
 		<h3>Updated Booking Details:</h3>
 		<span class='bookings-panel update' id="updated-details"></span>
 		<script src="/static/js/admin/update-details-summary.js"></script>
 
 		<!-- Submit Button -->
 		<div class="submit-button">
-			<button type="submit" id="submit-button">Confirm Changes</button>
+			<button type="submit" id="submit-button">Confirm</button>
 			<script>
 				window.addEventListener('load', function() {
 					formSubmission(admin=true, update=true);

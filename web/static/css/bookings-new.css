@@ -44,10 +44,31 @@ button:disabled {
 }
 
 /* FORMS */
-input, label, textarea {
+select{
+    display: block;
+    text-align: left;
+    width: 150px;
+    border: #b0b0b0 solid 1.5px;
+    border-radius: 2px;
+    margin: 5px;
+    padding: 8px;
+}
+
+label {
     display: block;
     text-align: left;
     width: 300px;
+    margin: 5px;
+}
+
+input, textarea {
+    display: block;
+    text-align: left;
+    width: 300px;
+    border: #b0b0b0 solid 1.5px;
+    border-radius: 2px;
+    margin: 5px;
+    padding: 8px;
 }​
 
 form {
