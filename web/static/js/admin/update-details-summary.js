@@ -14,7 +14,7 @@ function updatedDetails() {
 
     summary.innerHTML = `
         <div class="admin-panel">
-            <h3>Booking Details:</h3>
+            <h2>Booking Details:</h2>
             <p><strong>Room: </strong>${room}</p>
             <p><strong>Date: </strong>${date}</p>
             <p><strong>Booking Time: </strong>${startTime} - ${endTime}</p>
@@ -24,7 +24,7 @@ function updatedDetails() {
             <p><strong>Status: </strong>${rev_status}</p>
         </div>
         <div class="admin-panel">
-            <h3>Customer Details:</h3>
+            <h2>Customer Details:</h2>
             <p><strong>Name: </strong>${customerName}</p>
             <p><strong>Phone: </strong>${customerPhone}</p>
             <p><strong>Email: </strong>${customerEmail}</p>

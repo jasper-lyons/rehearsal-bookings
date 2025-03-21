@@ -8,15 +8,16 @@ import (
 )
 
 type CreateBookingsForm struct {
-	Type      string `json:"type"`
-	Name      string `json:"name"`
-	Email     string `json:"email"`
-	Phone     string `json:"phone"`
-	Room      string `json:"room"`
-	Date      string `json:"date"`
-	StartTime string `json:"start_time"`
-	EndTime   string `json:"end_time"`
-	Cymbals   int64  `json:"cymbals"`
+	Type         string `json:"type"`
+	Name         string `json:"name"`
+	Email        string `json:"email"`
+	Phone        string `json:"phone"`
+	Room         string `json:"room"`
+	Date         string `json:"date"`
+	StartTime    string `json:"start_time"`
+	EndTime      string `json:"end_time"`
+	Cymbals      int64  `json:"cymbals"`
+	BookingNotes string `json:"booking_notes"`
 }
 
 // All bookings are created with a "hold" status
@@ -54,6 +55,7 @@ func BookingsCreate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			Expiration:    time.Now().Add(time.Minute * 15),
 			Price:         price,
 			Cymbals:       form.Cymbals,
+			BookingNotes:  form.BookingNotes,
 		}
 
 		bookings, err := br.Create([]da.Booking{booking})

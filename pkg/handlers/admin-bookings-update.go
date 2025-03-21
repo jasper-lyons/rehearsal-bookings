@@ -20,6 +20,7 @@ type UpdateBookingsForm struct {
 	Cymbals      int64  `json:"cymbals"`
 	RevisedPrice string `json:"revised_price"`
 	Status       string `json:"status"`
+	BookingNotes string `json:"booking_notes"`
 }
 
 // All bookings are created with a "hold" status
@@ -84,6 +85,7 @@ func AdminBookingsUpdate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 		booking.Price = price
 		booking.DiscountAmount = discount_amount
 		booking.Cymbals = form.Cymbals
+		booking.BookingNotes = form.BookingNotes
 
 		bookings, err := br.Update([]da.Booking{*booking})
 		if err != nil {

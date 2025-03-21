@@ -63,6 +63,7 @@ async function formSubmission(admin=false, update=false) {
 					cymbals: cymbals,
 					revised_price: document.getElementById('revised-price').value,
 					status: document.getElementById('status').value,
+					booking_notes: document.getElementById('booking-notes').value,
 				}),
 				headers: {
 					'Content-Type': 'application/json'
@@ -81,6 +82,7 @@ async function formSubmission(admin=false, update=false) {
 					start_time: document.getElementById('start-time').value,
 					end_time: document.getElementById('end-time').value,
 					cymbals: cymbals,
+					booking_notes: document.getElementById('booking-notes').value,
 				}),
 				headers: {
 					'Content-Type': 'application/json'

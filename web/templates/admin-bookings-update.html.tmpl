@@ -7,7 +7,7 @@
 	<p>Existing Booking Details:</p>
 	<div class='bookings-panel {{if eq .Status "cancelled"}}cancelled{{else if eq .Status "paid"}}paid{{else}}unpaid{{end}}'>
 		<div class="admin-panel">
-			<h3>Booking Details: #<span id="booking-id">{{.Id}}</span></h3>
+			<h2>Booking Details: #<span id="booking-id">{{.Id}}</span></h2>
 			<p><strong>Room: </strong><span id="original-room">{{.RoomName}}</span></p>
 			<p><strong>Booking Date: </strong><span id="original-booking-date">{{.StartTime.Format "2006-01-02"}}</span></p>
 			<p><strong>Booking Time: </strong><span id="original-start-time">{{.StartTime.Format "15:04"}}</span>-<span id="original-end-time">{{.EndTime.Format "15:04"}}</span></p>
@@ -15,9 +15,10 @@
 			<p><strong>Cymbals: </strong>{{if .Cymbals}}Yes{{else}}No{{end}}</p>
 			<p><strong>Price: </strong>£{{.Price}} (+ Discount £{{.DiscountAmount}})</p>
 			<p><strong>Status: </strong>{{.Status}}</p>
+			<p><strong>Booking Notes: </strong>{{.BookingNotes}}</p>
 		</div>
 		<div class="admin-panel">
-			<h3>Customer Details:</h3>
+			<h2>Customer Details:</h2>
 			<p><strong>Name: </strong>{{.CustomerName}}</p>
 			<p><strong>Phone: </strong>{{.CustomerPhone}}</p>
 			<p><strong>Email: </strong>{{.CustomerEmail}}</p>
@@ -110,6 +111,8 @@
 			<p>Price for the session: <strong><span id="price" class="price">£0.00</span></strong></p>
 			<label for="revised-price">Revised price:</label>
 			<input type="number" id="revised-price" step="0.01">
+			<label for="booking-notes">Booking Notes:</label>
+			<textarea id="booking-notes" rows="6" maxlength="500">{{.BookingNotes}}</textarea>
 		</div>
 		<br>
 		<!-- Updated details summary-->

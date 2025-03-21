@@ -21,13 +21,14 @@
 	{{ range .Bookings }}
 	<div class='bookings-panel {{if eq .Status "cancelled"}}cancelled{{else if eq .Status "paid"}}paid{{else}}unpaid{{end}}'>
 		<div class="admin-panel">
-			<h3>Booking #{{.Id}}</h3>
+			<h3>Booking ID: #{{.Id}}</h3>
 			<p><strong>Room: </strong>{{.RoomName}}</p>
 			<p><strong>Booking Time: </strong>{{.StartTime.Format "15:04"}}-{{.EndTime.Format "15:04"}}</p>
 			<p><strong>Session Type: </strong>{{.Type}}</p>
 			<p><strong>Cymbals: </strong>{{if .Cymbals}}Yes{{else}}No{{end}}</p>
 			<p><strong>Price: </strong>£{{.Price}} (+ Discount £{{.DiscountAmount}})</p>
 			<p><strong>Status: </strong>{{.Status}}</p>
+			<p><strong>Booking Notes: </strong>{{.BookingNotes}}</p>
 		</div>
 		<div class="admin-panel">
 			<h3>Customer Details</h3>

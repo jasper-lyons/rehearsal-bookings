@@ -345,6 +345,7 @@ type Booking struct {
 	Price          float64   `sql:"price" json:"price"`
 	DiscountAmount float64   `sql:"discount_amount" json:"discount_amount"`
 	Cymbals        int64     `sql:"cymbals" json:"cymbals"`
+	BookingNotes   string    `sql:"booking_notes" json:"booking_notes"`
 	TransactionId  string    `sql:"transaction_id" json:"transaction_id"`
 }
 

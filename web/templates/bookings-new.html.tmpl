@@ -5,6 +5,7 @@
 <h1>Create a new booking</h1>
 <div>
 	<form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
+		<script src="/static/js/select-button.js"></script>
 		<!-- CSRF Protection -->
 		<input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 		
@@ -154,8 +155,8 @@
 				<!-- Display Booking Details -->
 				<h3>Additional booking details:</h3>
 				<div class="customer-info">
-					<label for="bookingnotes">Booking Notes:</label>
-					<textarea id="bookingnotes" rows="6" placeholder="Type your message here..."></textarea>
+					<label for="booking-notes">Booking Notes:</label>
+					<textarea id="booking-notes" rows="6" placeholder="Type your message here..."></textarea>
 				</div>
 			</div>
 
