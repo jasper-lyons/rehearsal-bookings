@@ -77,8 +77,6 @@ func AdminBookingsUpdate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 
 		}
 
-		fmt.Println(bookings)
-
 		return JSON(bookings[0])
 	})
 }

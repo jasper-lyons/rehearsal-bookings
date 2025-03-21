@@ -89,7 +89,6 @@ async function formSubmission(admin=false, update=false) {
 		}
 		
 		let bookingResponse = await fetch(endPoint, content)
-		fmt.println(bookingResponse)
 		if (!bookingResponse.ok) {
 			alert("Can't book ", document.getElementById('room').value, " at that time!")
 			return

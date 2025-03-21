@@ -313,7 +313,7 @@ func generateUpdateStatement[T any](tableName string) string {
 	}
 
 	return fmt.Sprintf(
-		"update %s set %s, updated_at = current_time_stamp where id = ?",
+		"update %s set %s, updated_at = current_timestamp where id = ?",
 		tableName,
 		strings.Join(sets, ", "),
 	)
@@ -321,7 +321,6 @@ func generateUpdateStatement[T any](tableName string) string {
 
 func (br *BookingsRepository[StorageDriver]) Update(bookings []Booking) ([]Booking, error) {
 	statement := generateUpdateStatement[Booking]("bookings")
-	fmt.Println(statement)
 	err := br.driver.Update(
 		statement,
 		ObjectsToUpdateParams(ToInterfaceSlice(bookings)),

@@ -297,13 +297,17 @@ td.end-slot {
 }
 
 .bookings-panel.paid {
-    background-color: lightseagreen;
+    background-color: #7AFFA0;
 }
 
 .bookings-panel.update {
-    background-color: gold;
+    background-color: #FFE37A;
 }
 
+.bookings-panel.cancelled {
+    background-color: #A07AFF
+    ;
+}
 
 .admin-panel {
     border-radius: 10px;
