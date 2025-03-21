@@ -325,7 +325,6 @@ func (br *BookingsRepository[StorageDriver]) Update(bookings []Booking) ([]Booki
 		statement,
 		ObjectsToUpdateParams(ToInterfaceSlice(bookings)),
 	)
-	fmt.Println(err)
 	if err != nil {
 		return nil, err
 	}

@@ -2,25 +2,25 @@
 
 {{define "body"}}
 	{{range .Bookings}}
-	<h1>ADMIN: Update Booking {{.Id}}</h1>
+	<h1>ADMIN: Update Booking #{{.Id}}</h1>
 	<div id="form-container">
 	<p>Existing Booking Details:</p>
-	<div class='bookings-panel {{if eq .Status "held"}}unpaid{{else if eq .Status "paid"}}paid{{end}}'>
+	<div class='bookings-panel {{if eq .Status "cancelled"}}cancelled{{else if eq .Status "paid"}}paid{{else}}unpaid{{end}}'>
 		<div class="admin-panel">
-			<h3>Booking Details: <span id="booking-id">{{.Id}}</span></h3>
-			<p><strong>Room:</strong><span id="original-room">{{.RoomName}}</span></p>
-			<p><strong>Booking Date:</strong> <span id="original-booking-date">{{.StartTime.Format "2006-01-02"}}</span></p>
-			<p><strong>Booking Time:</strong> <span id="original-start-time">{{.StartTime.Format "15:04"}}</span>-<span id="original-end-time">{{.EndTime.Format "15:04"}}</span></p>
-			<p><strong>Session Type:</strong> {{.Type}}</p>
-			<p><strong>Cymbals:</strong> {{.Cymbals}}</p>	
-			<p><strong>Price:</strong> £{{.Price}} (+ Discount £{{.DiscountAmount}})</p>
-			<p><strong>Status:</strong> {{.Status}}</p>
+			<h3>Booking Details: #<span id="booking-id">{{.Id}}</span></h3>
+			<p><strong>Room: </strong><span id="original-room">{{.RoomName}}</span></p>
+			<p><strong>Booking Date: </strong><span id="original-booking-date">{{.StartTime.Format "2006-01-02"}}</span></p>
+			<p><strong>Booking Time: </strong><span id="original-start-time">{{.StartTime.Format "15:04"}}</span>-<span id="original-end-time">{{.EndTime.Format "15:04"}}</span></p>
+			<p><strong>Session Type: </strong>{{.Type}}</p>
+			<p><strong>Cymbals: </strong>{{if .Cymbals}}Yes{{else}}No{{end}}</p>
+			<p><strong>Price: </strong>£{{.Price}} (+ Discount £{{.DiscountAmount}})</p>
+			<p><strong>Status: </strong>{{.Status}}</p>
 		</div>
 		<div class="admin-panel">
 			<h3>Customer Details:</h3>
-			<p><strong>Name:</strong> {{.CustomerName}}</p>
-			<p><strong>Phone:</strong> {{.CustomerPhone}}</p>
-			<p><strong>Email:</strong> {{.CustomerEmail}}</p>
+			<p><strong>Name: </strong>{{.CustomerName}}</p>
+			<p><strong>Phone: </strong>{{.CustomerPhone}}</p>
+			<p><strong>Email: </strong>{{.CustomerEmail}}</p>
 		</div>
 	</div>
 	<form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
@@ -109,7 +109,7 @@
 			
 			<p>Price for the session: <strong><span id="price" class="price">£0.00</span></strong></p>
 			<label for="revised-price">Revised price:</label>
-			<input type="number" id="revised-price">
+			<input type="number" id="revised-price" step="0.01">
 		</div>
 		<br>
 		<!-- Updated details summary-->
@@ -120,7 +120,7 @@
 
 		<!-- Submit Button -->
 		<div class="submit-button">
-			<button type="submit" id="submit-button">Update Booking</button>
+			<button type="submit" id="submit-button">Confirm Changes</button>
 			<script>
 				window.addEventListener('load', function() {
 					formSubmission(admin=true, update=true);

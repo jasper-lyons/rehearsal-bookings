@@ -69,16 +69,10 @@ func CalculatePrice(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			return Error(errors.New("Invalid 'cymbals' query parameter."), http.StatusBadRequest)
 		}
 
-		fmt.Println(SessionType)
-		fmt.Println(startTime)
-		fmt.Println(endTime)
-		fmt.Println(cymbals64)
-
 		price, err := BookingPrice(SessionType, startTime, endTime, int(cymbals64))
 		if err != nil {
 			return Error(err, http.StatusBadRequest)
 		}
-		fmt.Println(price)
 
 		return JSON(PriceResponse{Price: price})
 	})
