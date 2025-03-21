@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"github.com/joho/godotenv"
+	"github.com/stripe/stripe-go/v81"
 )
 
 func EnvOrDefault(key string, fallback string) string {
@@ -43,16 +44,26 @@ func main() {
 		driver = da.NewSqliteDriver("db/development.db")
 	}
 
-	br := da.NewBookingsRepository(driver)
-	sumupApi := handlers.NewApi("https://api.sumup.com", map[string]string{
-		"Content-Type":  "application/json",
-		"Authorization": fmt.Sprintf("Bearer %s", os.Getenv("SUMUP_API_KEY")),
-	})
+	var paymentsApi handlers.Api
+	if os.Getenv("FEATURE_FLAG_PAYMENTS_PROVIDER") == "sumup" {
+		paymentsApi = handlers.NewApi("https://api.sumup.com", map[string]string{
+			"Content-Type":  "application/json",
+			"Authorization": fmt.Sprintf("Bearer %s", os.Getenv("SUMUP_API_KEY")),
+		})
+	} else if os.Getenv("FEATURE_FLAG_PAYMENTS_PROVIDER") == "stripe" {
+		stripe.Key = os.Getenv("STRIPE_SECRET_KEY")
+		paymentsApi = handlers.NewApi("todo: stripe api url", map[string]string{
+			"Content-Type":  "application/json",
+			"Authorization": fmt.Sprintf("Bearer %s", os.Getenv("STRIPE_API_KEY")),
+		})
+	}
 
 	basicauth := handlers.CreateBasicAuthMiddleware(
 		os.Getenv("ADMIN_USERNAME"),
 		os.Getenv("ADMIN_PASSWORD"),
 	)
+
+	br := da.NewBookingsRepository(driver)
 
 	http.Handle("DELETE /admin/bookings/{id}", basicauth(handlers.AdminBookingsDelete(br)))
 	http.Handle("GET /admin/bookings/{id}/edit", basicauth(handlers.AdminBookingsUpdateView(br)))
@@ -65,13 +76,18 @@ func main() {
 
 	http.Handle("GET /admin", handlers.Redirect("/admin/bookings"))
 
-	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, sumupApi))
+	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, paymentsApi))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))
 
 	http.Handle("GET /rooms", handlers.RoomsIndex(br))
 	http.Handle("GET /price-calculator", handlers.CalculatePrice(br))
 
-	http.Handle("POST /sumup/checkouts", handlers.SumupCheckoutCreate(sumupApi))
+	if os.Getenv("FEATURE_FLAG_PAYMENTS_PROVIDER") == "sumup" {
+		http.Handle("POST /sumup/checkouts", handlers.SumupCheckoutCreate(paymentsApi))
+	}	else if os.Getenv("FEATURE_FLAG_PAYMENTS_PROVIDER") == "stripe" {
+		// stripe api endpoints
+		http.Handle("POST /stripe/payment-intents", handlers.StripePaymentIntentCreate(br))
+	}
 
 	http.Handle("GET /static/",
 		http.StripPrefix("/static/", http.FileServer(http.FS(static.StaticFiles))))

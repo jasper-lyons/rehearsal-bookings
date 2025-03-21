@@ -1,7 +1,6 @@
 {{template "layout.html.tmpl" .}}
 
 {{define "body"}}
-<script defer src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"></script>
 <h1>Create a new booking</h1>
 <div>
 	<form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
@@ -205,15 +204,33 @@
 			<button type="button" id="back-step-2">
 				Back
 			</button>
-			<button type="submit">
-				Confirm & Pay
+			<button type="submit" id="confirm">
+				Confirm
 			</button>
-			<!-- SumUp Payment Gateway -->
-			<div id="sumup-card"></div>
+			<!-- Payment Gateway -->
+
+			{{ $provider := Getenv "FEATURE_FLAG_PAYMENTS_PROVIDER" }}
+			{{ if eq $provider  "sumup" }}
+				<div id="payment-gateway" style="display: none;"></div>
+				<script src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"></script>
+				<script src="/static/js/sumup-form-submission.js"></script>
+			{{ else if eq $provider "stripe" }}
+				<div id="stripe-form" style="display: none;">
+					<div>
+						<div id="payment-gateway" style="margin-top: 2em; margin-bottom: 1em;"></div>
+						<button id="stripe-submit">Pay: </button>
+					</div>
+				</div>
+				<script src="https://js.stripe.com/v3/"></script>
+				<script>
+					window.env = {
+						STRIPE_PUBLISHABLE_KEY: '{{ Getenv "STRIPE_PUBLISHABLE_KEY" }}',
+					}
+				</script>
+				<script src="/static/js/stripe-form-submission.js"></script>
+			{{ end }}
 			
 		</fieldset>
-		<script src="/static/js/form-submission.js"></script>
-		<script src="/static/js/payment-submission.js"></script>
 	</form>
 <div id="success" style="display: none">
 	<h1>Booking Successful! You should recieve a text and email comfirming your booking shortly.</h1>
