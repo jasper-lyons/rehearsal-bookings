@@ -7,6 +7,10 @@ maxDate.setDate(maxDate.getDate() + 90);
 // define the selectedDate - by default this is the current date
 let selectedDate = new Date(currentDate);
 
+if (document.getElementById('original-booking-date')) {
+    selectedDate = new Date(document.getElementById('original-booking-date').textContent);
+}
+
 // Update the displayed date and button states
 async function updateDatePicker(animated = false, timebound = true) {
     const datePicker = document.getElementById('date-input');

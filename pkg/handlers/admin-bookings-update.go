@@ -9,17 +9,17 @@ import (
 )
 
 type UpdateBookingsForm struct {
-	Type      string `json:"type"`
-	Name      string `json:"name"`
-	Email     string `json:"email"`
-	Phone     string `json:"phone"`
-	Room      string `json:"room"`
-	Date      string `json:"date"`
-	StartTime string `json:"start_time"`
-	EndTime   string `json:"end_time"`
-	Cymbals   int64  `json:"cymbals"`
-	Price     string `json:"price"`
-	Status    string `json:"status"`
+	Type         string `json:"type"`
+	Name         string `json:"name"`
+	Email        string `json:"email"`
+	Phone        string `json:"phone"`
+	Room         string `json:"room"`
+	Date         string `json:"date"`
+	StartTime    string `json:"start_time"`
+	EndTime      string `json:"end_time"`
+	Cymbals      int64  `json:"cymbals"`
+	RevisedPrice string `json:"revised_price"`
+	Status       string `json:"status"`
 }
 
 // All bookings are created with a "hold" status
@@ -53,10 +53,22 @@ func AdminBookingsUpdate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			return Error(err, http.StatusBadRequest)
 		}
 
-		price, err := strconv.ParseFloat(form.Price, 64)
+		price, err := BookingPrice(form.Type, startTime, endTime, int(form.Cymbals))
 		if err != nil {
 			fmt.Println("price")
 			return Error(err, http.StatusBadRequest)
+		}
+
+		var discount_amount float64 = 0
+		if form.RevisedPrice != "" {
+			revised_price, err := strconv.ParseFloat(form.RevisedPrice, 64)
+			if err != nil {
+				fmt.Println("discount price")
+				return Error(err, http.StatusBadRequest)
+			}
+			discount_amount = float64(price - revised_price)
+			price = revised_price
+
 		}
 
 		booking.Type = form.Type
@@ -69,6 +81,7 @@ func AdminBookingsUpdate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 		booking.Status = form.Status
 		booking.Expiration = time.Now().Add(time.Minute * 15)
 		booking.Price = price
+		booking.DiscountAmount = discount_amount
 		booking.Cymbals = form.Cymbals
 
 		bookings, err := br.Update([]da.Booking{*booking})

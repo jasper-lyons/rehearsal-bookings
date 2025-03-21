@@ -325,6 +325,7 @@ func (br *BookingsRepository[StorageDriver]) Update(bookings []Booking) ([]Booki
 		statement,
 		ObjectsToUpdateParams(ToInterfaceSlice(bookings)),
 	)
+	fmt.Println(err)
 	if err != nil {
 		return nil, err
 	}
@@ -332,19 +333,20 @@ func (br *BookingsRepository[StorageDriver]) Update(bookings []Booking) ([]Booki
 }
 
 type Booking struct {
-	Id            int64     `sql:"id" generated:"true" json:"id"`
-	Type          string    `sql:"type" json:"type"`
-	CustomerName  string    `sql:"customer_name" json:"cutomer_name"`
-	CustomerEmail string    `sql:"customer_email" json:"customer_email"`
-	CustomerPhone string    `sql:"customer_phone" json:"customer_phone"`
-	RoomName      string    `sql:"room_name" json:"room_name"`
-	StartTime     time.Time `sql:"start_time" json:"start_time"`
-	EndTime       time.Time `sql:"end_time" json:"end_time"`
-	Status        string    `sql:"status" json:"status"`
-	Expiration    time.Time `sql:"expiration" json:"expiration"`
-	Price         float64   `sql:"price" json:"price"`
-	Cymbals       int64     `sql:"cymbals" json:"cymbals"`
-	TransactionId string    `sql:"transaction_id" json:"transaction_id"`
+	Id             int64     `sql:"id" generated:"true" json:"id"`
+	Type           string    `sql:"type" json:"type"`
+	CustomerName   string    `sql:"customer_name" json:"cutomer_name"`
+	CustomerEmail  string    `sql:"customer_email" json:"customer_email"`
+	CustomerPhone  string    `sql:"customer_phone" json:"customer_phone"`
+	RoomName       string    `sql:"room_name" json:"room_name"`
+	StartTime      time.Time `sql:"start_time" json:"start_time"`
+	EndTime        time.Time `sql:"end_time" json:"end_time"`
+	Status         string    `sql:"status" json:"status"`
+	Expiration     time.Time `sql:"expiration" json:"expiration"`
+	Price          float64   `sql:"price" json:"price"`
+	DiscountAmount float64   `sql:"discount_amount" json:"discount_amount"`
+	Cymbals        int64     `sql:"cymbals" json:"cymbals"`
+	TransactionId  string    `sql:"transaction_id" json:"transaction_id"`
 }
 
 func FuckTheError[T any](result T, err error) T {

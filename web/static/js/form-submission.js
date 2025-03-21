@@ -43,7 +43,7 @@ async function formSubmission(admin=false, update=false) {
 		cymbals = 0
 		if (document.getElementById('cymbals').checked) {
 			cymbals = 1
-		}
+		}				
 
 		let endPoint = '/bookings'
 		if (update) {
@@ -61,7 +61,7 @@ async function formSubmission(admin=false, update=false) {
 					start_time: document.getElementById('start-time').value,
 					end_time: document.getElementById('end-time').value,
 					cymbals: cymbals,
-					price: document.getElementById('revised-price').value,
+					revised_price: document.getElementById('revised-price').value,
 					status: document.getElementById('status').value,
 				}),
 				headers: {
