@@ -6,7 +6,7 @@ import (
 	"sort"
 )
 
-type AdminBookingsIndexView struct {
+type AdminBookingsDailyView struct {
 	GroupedBookings []GroupedBookings
 }
 
@@ -15,7 +15,7 @@ type GroupedBookings struct {
 	Bookings []da.Booking
 }
 
-func AdminBookingsIndex(br *da.BookingsRepository[da.StorageDriver]) Handler {
+func AdminBookingsDaily(br *da.BookingsRepository[da.StorageDriver]) Handler {
 	return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
 		bookings, err := br.All()
 		if err != nil {
@@ -29,7 +29,7 @@ func AdminBookingsIndex(br *da.BookingsRepository[da.StorageDriver]) Handler {
 		// Group bookings by date
 		groupedBookings := groupBookingsByDate(bookings)
 
-		return Template("admin-bookings-index.html.tmpl", AdminBookingsIndexView{GroupedBookings: groupedBookings})
+		return Template("admin-bookings-daily-view.html.tmpl", AdminBookingsDailyView{GroupedBookings: groupedBookings})
 	})
 }
 

@@ -334,7 +334,7 @@ func (br *BookingsRepository[StorageDriver]) Update(bookings []Booking) ([]Booki
 type Booking struct {
 	Id             int64     `sql:"id" generated:"true" json:"id"`
 	Type           string    `sql:"type" json:"type"`
-	CustomerName   string    `sql:"customer_name" json:"cutomer_name"`
+	CustomerName   string    `sql:"customer_name" json:"customer_name"`
 	CustomerEmail  string    `sql:"customer_email" json:"customer_email"`
 	CustomerPhone  string    `sql:"customer_phone" json:"customer_phone"`
 	RoomName       string    `sql:"room_name" json:"room_name"`

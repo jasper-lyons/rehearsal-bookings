@@ -59,7 +59,10 @@ func main() {
 	http.Handle("PUT /admin/bookings/{id}/update", handlers.AdminBookingsUpdate(br))
 
 	http.Handle("GET /admin/bookings/new", basicauth(handlers.AdminBookingsNew(br)))
-	http.Handle("GET /admin/bookings", basicauth(handlers.AdminBookingsIndex(br)))
+	http.Handle("GET /admin/bookings", basicauth(handlers.AdminBookingsDaily(br)))
+	http.Handle("GET /admin/bookings/daily", basicauth(handlers.AdminBookingsDaily(br)))
+	http.Handle("GET /admin/bookings/search", basicauth(handlers.AdminBookingsSearch(br)))
+
 	http.Handle("GET /admin", handlers.Redirect("/admin/bookings"))
 
 	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, sumupApi))

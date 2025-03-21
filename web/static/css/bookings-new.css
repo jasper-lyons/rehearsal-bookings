@@ -338,4 +338,7 @@ td.end-slot {
     width: 50%;
 }
 
-
+.bookings-table {
+    padding: 2px;
+    text-transform: uppercase;
+}
