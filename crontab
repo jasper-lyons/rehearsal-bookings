@@ -1,0 +1,5 @@
+# Check for abandonned bookings every 5 minutes
+*/5 * * * * /app/bin/mark-abandonned-bookings
+
+# Send access codes every hours
+0 * * * * /app/bin/send-access-codes
