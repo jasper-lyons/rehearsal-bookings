@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	da "rehearsal-bookings/pkg/data_access"
 	"time"
