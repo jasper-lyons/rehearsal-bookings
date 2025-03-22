@@ -9,3 +9,7 @@ clear-checkouts: cmd/clear-checkouts/main.go
 
 mark-abandoned-bookings: cmd/mark-abandoned-bookings/main.go
 	go build -o bin/mark-abandoned-bookings /mark-abandoned-bookings/main.go
+
+send-access-codes: cmd/send-access-codes/main.go
+	go build -o bin/send-access-codes cmd/send-access-codes/main.go
+
