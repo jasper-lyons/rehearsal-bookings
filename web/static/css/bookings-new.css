@@ -117,7 +117,7 @@ fieldset {
 }
 
  /* date selectors */
-.date-picker-container {
+.flex-container {
     display: flex;
     flex-direction: row;
     flex-grow: 1; /* Allows children to grow and take up available space */
@@ -279,10 +279,10 @@ td.end-slot {
     .info-box {
         margin-top: 5px;
     }
-    .date-picker-container {
+    .flex-container {
         flex-direction: column;
     }
-    .date-picker-container > * {
+    .flex-container > * {
         flex: 1;
         width: 100%;
         margin: 5px 0;

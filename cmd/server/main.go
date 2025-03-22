@@ -60,8 +60,9 @@ func main() {
 
 	http.Handle("GET /admin/bookings/new", basicauth(handlers.AdminBookingsNew(br)))
 	http.Handle("GET /admin/bookings", basicauth(handlers.AdminBookingsDaily(br)))
-	http.Handle("GET /admin/bookings/daily", basicauth(handlers.AdminBookingsDaily(br)))
-	http.Handle("GET /admin/bookings/search", basicauth(handlers.AdminBookingsSearch(br)))
+	http.Handle("GET /admin/bookings/all", basicauth(handlers.AdminBookingsSearchAll(br)))
+	http.Handle("GET /admin/bookings/future", basicauth(handlers.AdminBookingsSearchFuture(br)))
+	http.Handle("GET /admin/bookings/past", basicauth(handlers.AdminBookingsSearchPast(br)))
 
 	http.Handle("GET /admin", handlers.Redirect("/admin/bookings"))
 

@@ -6,11 +6,11 @@ import (
 	"sort"
 )
 
-type AdminBookingsSearchView struct {
+type AdminBookingsSearch struct {
 	Bookings []da.Booking
 }
 
-func AdminBookingsSearch(br *da.BookingsRepository[da.StorageDriver]) Handler {
+func AdminBookingsSearchAll(br *da.BookingsRepository[da.StorageDriver]) Handler {
 	return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
 		bookings, err := br.All()
 		if err != nil {
@@ -21,6 +21,6 @@ func AdminBookingsSearch(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			return bookings[i].StartTime.Before(bookings[j].StartTime)
 		})
 
-		return Template("admin-bookings-search-view.html.tmpl", AdminBookingsSearchView{Bookings: bookings})
+		return Template("admin-bookings-search-view.html.tmpl", AdminBookingsSearch{Bookings: bookings})
 	})
 }
