@@ -342,3 +342,11 @@ td.end-slot {
     padding: 2px;
     text-transform: uppercase;
 }
+
+#payment-gateway {
+	margin-top: .5em;
+}
+
+#stripe-express {
+	margin-top: .5em;
+}

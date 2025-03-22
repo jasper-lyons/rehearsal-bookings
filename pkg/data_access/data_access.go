@@ -136,15 +136,42 @@ func RowsToType[T any](rows *sql.Rows) ([]T, error) {
 	var results []T
 
 	for rows.Next() {
-		rows.Scan(pointers...)
+		err :=	rows.Scan(pointers...)
+		if err != nil {
+			return nil, err
+		}
+
 		// create a new object of type
 		instance := reflect.New(reflect.TypeFor[T]()).Elem()
 		for _, field := range fields {
+			sqlTag := field.Tag.Get("sql")
+			if sqlTag == "" {
+				continue
+			}
+
 			// identify the position of the column with a matching sql name
 			for j, column := range columns {
-				if column == field.Tag.Get("sql") {
-					// set the value on the object to the column value from the row in values
-					instance.FieldByName(field.Name).Set(reflect.ValueOf(values[j]))
+				if column == sqlTag {
+					fieldValue := instance.FieldByName(field.Name)
+					if !fieldValue.IsValid() || !fieldValue.CanSet() {
+						// we can't set this field
+						continue
+					}
+
+					if values[j] == nil {
+						// There is no value to set
+						continue
+					}
+
+					dbValue := reflect.ValueOf(values[j])
+
+					if dbValue.Type().AssignableTo(fieldValue.Type()) {
+						fieldValue.Set(dbValue)
+					} else {
+						if err:= convertAndSet(fieldValue, values[j]); err != nil {
+							return nil, fmt.Errorf("failed to set field %s: %w", field.Name, err)
+						}
+					}
 				}
 			}
 		}
@@ -153,6 +180,23 @@ func RowsToType[T any](rows *sql.Rows) ([]T, error) {
 	}
 
 	return results, nil
+}
+
+func convertAndSet(fieldValue reflect.Value, value interface{}) error {
+    switch fieldValue.Kind() {
+    case reflect.Bool:
+        // Convert SQLite integer to boolean (0 = false, non-zero = true)
+        switch v := value.(type) {
+        case int64:
+            fieldValue.SetBool(v != 0)
+        default:
+            return fmt.Errorf("cannot convert %T to bool", value)
+        }
+    default:
+        return fmt.Errorf("unsupported field type: %s", fieldValue.Type())
+    }
+    
+    return nil
 }
 
 func ObjectsToInsertParams(objects []interface{}) [][]interface{} {
@@ -215,38 +259,6 @@ type StorageDriver interface {
 	Update(statement string, records [][]interface{}) error
 }
 
-type BookingsRepository[D StorageDriver] struct {
-	driver D
-}
-
-func NewBookingsRepository(sd StorageDriver) *BookingsRepository[StorageDriver] {
-	return &BookingsRepository[StorageDriver]{driver: sd}
-}
-
-func (br *BookingsRepository[StorageDriver]) Find(id int) (*Booking, error) {
-	rows, err := br.driver.Query("select * from bookings where id = ? limit 1", id)
-	if err != nil {
-		return nil, err
-	}
-	bookings, err := RowsToType[Booking](rows)
-	return &bookings[0], err
-}
-
-func (br *BookingsRepository[StorageDriver]) All() ([]Booking, error) {
-	rows, err := br.driver.Query("select * from bookings")
-	if err != nil {
-		return nil, err
-	}
-	return RowsToType[Booking](rows)
-}
-
-func (br *BookingsRepository[StorageDriver]) Where(query string, params ...any) ([]Booking, error) {
-	rows, err := br.driver.Query("select * from bookings where "+query, params...)
-	if err != nil {
-		return nil, err
-	}
-	return RowsToType[Booking](rows)
-}
 
 func generateCreateStatement[T any](tableName string) string {
 	columns := settableSqlColumnNames(fieldsFor[T]())
@@ -263,23 +275,6 @@ func generateCreateStatement[T any](tableName string) string {
 	)
 }
 
-func (br *BookingsRepository[StorageDriver]) Create(bookings []Booking) ([]Booking, error) {
-	query := generateCreateStatement[Booking]("bookings")
-	ids, err := br.driver.Insert(
-		query,
-		ObjectsToInsertParams(ToInterfaceSlice(bookings)),
-	)
-	if err != nil {
-		return nil, err
-	}
-	for i := range bookings {
-		if ids[i] > 0 {
-			bookings[i].Id = ids[i]
-		}
-	}
-	return bookings, nil
-}
-
 func generateDeleteStatement(tableName string, count int) string {
 	placeholders := strings.Repeat("?,", count-1) + "?"
 	return fmt.Sprintf(
@@ -288,20 +283,6 @@ func generateDeleteStatement(tableName string, count int) string {
 		tableName,
 		placeholders,
 	)
-}
-
-func (br *BookingsRepository[StorageDriver]) Delete(bookings []Booking) ([]Booking, error) {
-	ids := make([]int64, len(bookings))
-	for i, booking := range bookings {
-		ids[i] = booking.Id
-	}
-
-	_, err := br.driver.Delete(
-		generateDeleteStatement("bookings", len(ids)),
-		ids,
-	)
-
-	return bookings, err
 }
 
 func generateUpdateStatement[T any](tableName string) string {
@@ -317,43 +298,6 @@ func generateUpdateStatement[T any](tableName string) string {
 		tableName,
 		strings.Join(sets, ", "),
 	)
-}
-
-func (br *BookingsRepository[StorageDriver]) Update(bookings []Booking) ([]Booking, error) {
-	statement := generateUpdateStatement[Booking]("bookings")
-	err := br.driver.Update(
-		statement,
-		ObjectsToUpdateParams(ToInterfaceSlice(bookings)),
-	)
-	if err != nil {
-		return nil, err
-	}
-	return bookings, nil
-}
-
-type Booking struct {
-	Id             int64     `sql:"id" generated:"true" json:"id"`
-	Type           string    `sql:"type" json:"type"`
-	CustomerName   string    `sql:"customer_name" json:"customer_name"`
-	CustomerEmail  string    `sql:"customer_email" json:"customer_email"`
-	CustomerPhone  string    `sql:"customer_phone" json:"customer_phone"`
-	RoomName       string    `sql:"room_name" json:"room_name"`
-	StartTime      time.Time `sql:"start_time" json:"start_time"`
-	EndTime        time.Time `sql:"end_time" json:"end_time"`
-	Status         string    `sql:"status" json:"status"`
-	Expiration     time.Time `sql:"expiration" json:"expiration"`
-	Price          float64   `sql:"price" json:"price"`
-	DiscountAmount float64   `sql:"discount_amount" json:"discount_amount"`
-	Cymbals        int64     `sql:"cymbals" json:"cymbals"`
-	BookingNotes   string    `sql:"booking_notes" json:"booking_notes"`
-	TransactionId  string    `sql:"transaction_id" json:"transaction_id"`
-}
-
-func FuckTheError[T any](result T, err error) T {
-	if err != nil {
-		fmt.Println(err)
-	}
-	return result
 }
 
 const TimeFormat = "2006-01-02 15:04:00"

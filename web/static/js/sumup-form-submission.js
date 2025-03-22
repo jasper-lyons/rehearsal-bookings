@@ -3,8 +3,10 @@ window.addEventListener('load', function () {
 	form.addEventListener('submit', async function (e) {
 		e.preventDefault()
 
+		document.getElementById('payment-gateway').style.display = 'block'
+
 		let sumup = SumUpCard.mount({
-			id: 'sumup-card',
+			id: 'payment-gateway',
 			email: document.getElementById('email').value,
 			onResponse: async function (type, body) {
 				switch (type) {
@@ -21,7 +23,7 @@ window.addEventListener('load', function () {
 
 						if (200 <= confirmBookingResponse.status && confirmBookingResponse.status < 300) {
 							// TODO: Display success, perhaps redirect?
-							document.getElementById('sumup-card').style.display = "none"
+							document.getElementById('payment-gateway').style.display = "none"
 							document.getElementById('success').style.display = "block"
 						} else {
 							alert("Payment failed!")
@@ -34,7 +36,30 @@ window.addEventListener('load', function () {
 			}
 		})
 
-		let booking = formSubmission();
+		// create held booking
+		let bookingResponse = await fetch('/bookings', {
+			method: 'POST',
+			body: JSON.stringify({
+				type: document.getElementById('session-type').value,
+				name: document.getElementById('name').value,
+				email: document.getElementById('email').value,
+				phone: document.getElementById('phone').value,
+				room: document.getElementById('room').value,
+				date: document.getElementById('date-input').value,
+				start_time: document.getElementById('start-time').value,
+				duration: parseInt(document.getElementById('duration').value, 10),
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+
+		if (!bookingResponse.ok) {
+			alert("Can't book ", document.getElementById('room').value, " at that time!")
+			return
+		}
+
+		let booking = await bookingResponse.json()
 
 		// create charge
 		let checkoutResponse = await fetch('/sumup/checkouts', {

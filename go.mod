@@ -15,6 +15,7 @@ require (
 	github.com/sendgrid/rest v2.6.9+incompatible // indirect
 	github.com/sendgrid/sendgrid-go v3.16.0+incompatible // indirect
 	github.com/sergi/go-diff v1.3.1 // indirect
+	github.com/stripe/stripe-go/v81 v81.4.0 // indirect
 	github.com/tetratelabs/wazero v1.8.2 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
