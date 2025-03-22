@@ -56,14 +56,13 @@ func BookingsCreate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			Price:         price,
 			Cymbals:       form.Cymbals,
 			BookingNotes:  form.BookingNotes,
+			PaymentMethod: "online",
 		}
 
 		bookings, err := br.Create([]da.Booking{booking})
 		if err != nil {
 			return Error(err, http.StatusInternalServerError)
 		}
-
-		fmt.Println(bookings)
 
 		return JSON(bookings[0])
 	})
