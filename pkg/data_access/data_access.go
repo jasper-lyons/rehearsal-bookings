@@ -136,15 +136,42 @@ func RowsToType[T any](rows *sql.Rows) ([]T, error) {
 	var results []T
 
 	for rows.Next() {
-		rows.Scan(pointers...)
+		err :=	rows.Scan(pointers...)
+		if err != nil {
+			return nil, err
+		}
+
 		// create a new object of type
 		instance := reflect.New(reflect.TypeFor[T]()).Elem()
 		for _, field := range fields {
+			sqlTag := field.Tag.Get("sql")
+			if sqlTag == "" {
+				continue
+			}
+
 			// identify the position of the column with a matching sql name
 			for j, column := range columns {
-				if column == field.Tag.Get("sql") {
-					// set the value on the object to the column value from the row in values
-					instance.FieldByName(field.Name).Set(reflect.ValueOf(values[j]))
+				if column == sqlTag {
+					fieldValue := instance.FieldByName(field.Name)
+					if !fieldValue.IsValid() || !fieldValue.CanSet() {
+						// we can't set this field
+						continue
+					}
+
+					if values[j] == nil {
+						// There is no value to set
+						continue
+					}
+
+					dbValue := reflect.ValueOf(values[j])
+
+					if dbValue.Type().AssignableTo(fieldValue.Type()) {
+						fieldValue.Set(dbValue)
+					} else {
+						if err:= convertAndSet(fieldValue, values[j]); err != nil {
+							return nil, fmt.Errorf("failed to set field %s: %w", field.Name, err)
+						}
+					}
 				}
 			}
 		}
@@ -153,6 +180,23 @@ func RowsToType[T any](rows *sql.Rows) ([]T, error) {
 	}
 
 	return results, nil
+}
+
+func convertAndSet(fieldValue reflect.Value, value interface{}) error {
+    switch fieldValue.Kind() {
+    case reflect.Bool:
+        // Convert SQLite integer to boolean (0 = false, non-zero = true)
+        switch v := value.(type) {
+        case int64:
+            fieldValue.SetBool(v != 0)
+        default:
+            return fmt.Errorf("cannot convert %T to bool", value)
+        }
+    default:
+        return fmt.Errorf("unsupported field type: %s", fieldValue.Type())
+    }
+    
+    return nil
 }
 
 func ObjectsToInsertParams(objects []interface{}) [][]interface{} {
