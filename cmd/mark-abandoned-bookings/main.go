@@ -3,10 +3,7 @@ package main
 import (
 	"log"
 	"os"
-	"fmt"
 	"github.com/joho/godotenv"
-	"encoding/json"
-	"time"
 
 	da "rehearsal-bookings/pkg/data_access"
 )
@@ -34,7 +31,10 @@ func main() {
 
 	br := da.NewBookingsRepository(driver)
 
-	heldBookings := br.Where(`status = "held" and expiration < current_timestamp`)
+	heldBookings, err := br.Where(`status = "held" and expiration < current_timestamp`)
+	if err != nil {
+		log.Fatal(err)
+	}
 	for _, booking := range heldBookings {
 		booking.Status = "abandoned"
 	}

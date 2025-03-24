@@ -5,8 +5,6 @@ import (
 	"os"
 	"fmt"
 	"github.com/joho/godotenv"
-	"encoding/json"
-	"time"
 
 	da "rehearsal-bookings/pkg/data_access"
 )
@@ -34,10 +32,12 @@ func main() {
 
 	br := da.NewBookingsRepository(driver)
 
-	imminentBookings := br.Where(`start_time <= datetime(current_timestamp, '+1 hours')`)
-	for _, booking := range imminentBookings {
-		fmt.Println("Sending Access Codes to booking %s", bookings.id)
+	imminentBookings, err := br.Where(`start_time <= datetime(current_timestamp, '+1 hours')`)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	br.Update(heldBookings)
+	for _, booking := range imminentBookings {
+		fmt.Println("Sending Access Codes to booking %s", booking.Id)
+	}
 }
