@@ -85,7 +85,7 @@
 					id="name"
 					name="name" 
 					pattern="[A-Za-z0-9 ]+"
-					autocomplete="name">
+					required>
 		</div>
 
 		<div class="customer-info">
@@ -93,7 +93,6 @@
 			<input type="email"
 					id="email" 
 					name="email"
-					autocomplete="email" 
 					required>
 		</div>
 
@@ -102,8 +101,7 @@
 		<input type="tel"
 				id="phone"
 				name="phone"
-				pattern="[0-9]{11}"
-				autocomplete="tel"
+				pattern="(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}"
 				required>
 		</div>
 
@@ -134,9 +132,10 @@
 			CONFIRM & BOOK FOR: <span id="price" class="price">£0.00</span>
 		</button>
 		<script>
-			window.addEventListener('load', function() {
-				formSubmission(admin=true);
-
+			let form = document.getElementById('form')
+			form.addEventListener('submit', async function (e) {
+				e.preventDefault()
+				adminCreateBooking();
 			});
 		</script>
 	</form>

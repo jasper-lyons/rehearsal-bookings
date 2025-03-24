@@ -20,7 +20,7 @@ type Booking struct {
 	Cymbals        int64     `sql:"cymbals" json:"cymbals"`
 	BookingNotes   string    `sql:"booking_notes" json:"booking_notes"`
 	TransactionId  string    `sql:"transaction_id" json:"transaction_id"`
-	PaymentMethod	 string		 `sql:"payment_method" json:"payment_method"`
+	PaymentMethod  string    `sql:"payment_method" json:"payment_method"`
 }
 
 type BookingsRepository[D StorageDriver] struct {

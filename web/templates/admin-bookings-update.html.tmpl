@@ -92,11 +92,25 @@
 			<!--  Customer details form -->
 			<div class="customer-details-container">
 				<label for="customer-name">Name:</label>
-				<input type="text" id="name" name="customer-name" value="{{.CustomerName}}">
+				<input type="text" 
+						id="customer-name"
+						name="name"
+						value="{{.CustomerName}}"
+						pattern="[A-Za-z0-9 ]+"
+						required>
 				<label for="customer-phone">Phone:</label>
-				<input type="tel" id="phone" name="customer-phone" value="{{.CustomerPhone}}">
+				<input type="tel"
+						id="customer-phone"
+						name="phone"
+						value="{{.CustomerPhone}}"
+						pattern="(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}"
+						required>
 				<label for="customer-email">Email:</label>
-				<input type="email" id="email" name="customer-email" value="{{.CustomerEmail}}">
+				<input type="email"
+						id="customer-email" 
+						name="email"
+						value="{{.CustomerEmail}}"
+						required>
 			</div>
 		</div>
 		<div>
@@ -127,8 +141,10 @@
 		<div class="submit-button">
 			<button type="submit" id="submit-button">Confirm</button>
 			<script>
-				window.addEventListener('load', function() {
-					formSubmission(admin=true, update=true);
+				let form = document.getElementById('form')
+				form.addEventListener('submit', async function (e) {
+					e.preventDefault()
+					adminUpdateBooking();
 				});
 			</script>
 		</div>

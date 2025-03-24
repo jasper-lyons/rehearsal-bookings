@@ -1,111 +1,102 @@
-async function formSubmission(admin=false, update=false) {
-	let form = document.getElementById('form')
-	form.addEventListener('submit', async function (e) {
-		e.preventDefault()
+async function sendForm(endPoint, content) {
+	let bookingResponse = await fetch(endPoint, content)
+	if (!bookingResponse.ok) {
+		alert("Can't book ", document.getElementById('room').value, " at that time!")
+		return
+	}
 
-		if (admin) {
-			console.log("admin mode")
-			// check if all fields are filled
-			const name = document.getElementById('name').value.trim();
-			const email = document.getElementById('email').value.trim();
-			const phone = document.getElementById('phone').value.trim();
-		
-			let nameRegex = /^[a-zA-Z]+([-' ][a-zA-Z]+)*\s+[a-zA-Z]+([-' ][a-zA-Z]+)*$/;
-			let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-			let phoneRegex = /^\+?\d{11}$/;
-		
-			if (!nameRegex.test(name))  {
-				alert('Please provide your full name.');
-				return false;
-			}
-		
-			if (!emailRegex.test(email)) {
-				alert('Please enter a valid email address.');
-				return false;
-			}
+	if (bookingResponse.ok) {
+		document.getElementById('form-container').style.display = 'none';
+		document.getElementById('success').style.display = 'block';
+		setTimeout(() => {
+			location.reload();
+		}, 1500);
+	}
 
-			if (!phoneRegex.test(phone)) {
-				alert('Please enter a valid phone number.');
-				return false;
-			}
+	let booking = await bookingResponse.json()
 
-			// check if all fields are filled
-			let requiredFields = ['session-type', 'name','email', 'phone', 'room', 'date-input', 'start-time']
-			for (let field of requiredFields) {
-				if (!document.getElementById(field).value) {
-					alert('Please fill out all fields')
-					return
-				}
-				console.log(document.getElementById(field).value)
-			}
-		}
+	return booking
+}
 
-		cymbals = 0
-		if (document.getElementById('cymbals').checked) {
-			cymbals = 1
-		}				
 
-		let endPoint = '/bookings'
-		if (update) {
-			bookingId = document.getElementById('booking-id').textContent
-			endPoint = `/admin/bookings/${bookingId}/update`
-			content = {
-				method: 'PUT',
-				body: JSON.stringify({
-					type: document.getElementById('session-type').value,
-					name: document.getElementById('name').value,
-					email: document.getElementById('email').value,
-					phone: document.getElementById('phone').value,
-					room: document.getElementById('room').value,
-					date: document.getElementById('date-input').value,
-					start_time: document.getElementById('start-time').value,
-					end_time: document.getElementById('end-time').value,
-					cymbals: cymbals,
-					revised_price: document.getElementById('revised-price').value,
-					status: document.getElementById('status').value,
-					booking_notes: document.getElementById('booking-notes').value,
-				}),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			}
-		} else {
-			content = {
-				method: 'POST',
-				body: JSON.stringify({
-					type: document.getElementById('session-type').value,
-					name: document.getElementById('name').value,
-					email: document.getElementById('email').value,
-					phone: document.getElementById('phone').value,
-					room: document.getElementById('room').value,
-					date: document.getElementById('date-input').value,
-					start_time: document.getElementById('start-time').value,
-					end_time: document.getElementById('end-time').value,
-					cymbals: cymbals,
-					booking_notes: document.getElementById('booking-notes').value,
-				}),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			}
-		}
-		
-		let bookingResponse = await fetch(endPoint, content)
-		if (!bookingResponse.ok) {
-			alert("Can't book ", document.getElementById('room').value, " at that time!")
+function adminCreateBooking() {
+	// check if all fields are filled
+	let requiredFields = ['session-type', 'name','email', 'phone', 'room', 'date-input', 'start-time']
+	for (let field of requiredFields) {
+		if (!document.getElementById(field).value) {
+			alert('Please fill out all fields')
 			return
 		}
+	}
 
-		if (bookingResponse.ok && admin) {
-			document.getElementById('form-container').style.display = 'none';
-			document.getElementById('success').style.display = 'block';
-			setTimeout(() => {
-				location.reload();
-			}, 1500);
+	cymbals = 0
+	if (document.getElementById('cymbals').checked) {
+		cymbals = 1
+	}		
+
+	content = {
+		method: 'POST',
+		body: JSON.stringify({
+			type: document.getElementById('session-type').value,
+			name: document.getElementById('name').value,
+			email: document.getElementById('email').value,
+			phone: document.getElementById('phone').value,
+			room: document.getElementById('room').value,
+			date: document.getElementById('date-input').value,
+			start_time: document.getElementById('start-time').value,
+			end_time: document.getElementById('end-time').value,
+			cymbals: cymbals,
+			booking_notes: document.getElementById('booking-notes').value,
+		}),
+		headers: {
+			'Content-Type': 'application/json'
 		}
+	}
+	
+	let endPoint = '/bookings'
 
-		let booking = await bookingResponse.json()
+	return sendForm(endPoint, content)
+}
 
-		return booking
-	})
+function adminUpdateBooking() {
+	// check if all fields are filled
+	let requiredFields = ['session-type', 'customer-name','customer-email', 'customer-phone', 'room',
+						 'date-input', 'start-time', 'end-time', 'status']
+	for (let field of requiredFields) {
+		if (!document.getElementById(field).value) {
+			alert('Please fill out all fields')
+			return
+		}
+	}
+
+	cymbals = 0
+	if (document.getElementById('cymbals').checked) {
+		cymbals = 1
+	}
+
+	content = {
+		method: 'PUT',
+		body: JSON.stringify({
+			type: document.getElementById('session-type').value,
+			name: document.getElementById('customer-name').value,
+			email: document.getElementById('customer-email').value,
+			phone: document.getElementById('customer-phone').value,
+			room: document.getElementById('room').value,
+			date: document.getElementById('date-input').value,
+			start_time: document.getElementById('start-time').value,
+			end_time: document.getElementById('end-time').value,
+			cymbals: cymbals,
+			revised_price: document.getElementById('revised-price').value,
+			status: document.getElementById('status').value,
+			booking_notes: document.getElementById('booking-notes').value,
+		}),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	}
+
+	bookingId = document.getElementById('booking-id').textContent
+	endPoint = `/admin/bookings/${bookingId}/update`
+
+	return sendForm(endPoint, content)
 }

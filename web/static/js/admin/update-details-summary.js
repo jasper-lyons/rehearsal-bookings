@@ -8,9 +8,9 @@ function updatedDetails() {
     const cymbals = document.getElementById('cymbals').checked? 'Yes' : 'No';
     const rev_price = document.getElementById('revised-price').value || document.getElementById('price').textContent.replace('£','');
     const rev_status = document.getElementById('status').value;
-    const customerName = document.getElementById('name').value;
-    const customerPhone = document.getElementById('phone').value;
-    const customerEmail = document.getElementById('email').value;
+    const customerName = document.getElementById('customer-name').value;
+    const customerPhone = document.getElementById('customer-phone').value;
+    const customerEmail = document.getElementById('customer-email').value;
 
     summary.innerHTML = `
         <div class="admin-panel">
