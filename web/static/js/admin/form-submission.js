@@ -21,7 +21,8 @@ async function sendForm(endPoint, content) {
 
 function adminCreateBooking() {
 	// check if all fields are filled
-	let requiredFields = ['session-type', 'name','email', 'phone', 'room', 'date-input', 'start-time']
+	let requiredFields = ['session-type', 'name','email', 'phone', 'room', 'date-input', 'start-time', 
+						'status', 'payment-method']
 	for (let field of requiredFields) {
 		if (!document.getElementById(field).value) {
 			alert('Please fill out all fields')
@@ -46,14 +47,17 @@ function adminCreateBooking() {
 			start_time: document.getElementById('start-time').value,
 			end_time: document.getElementById('end-time').value,
 			cymbals: cymbals,
+			revised_price: document.getElementById('revised-price').value,
+			status: document.getElementById('status').value,
+			payment_method: document.getElementById('payment-method').value,
 			booking_notes: document.getElementById('booking-notes').value,
 		}),
 		headers: {
 			'Content-Type': 'application/json'
 		}
 	}
-	
-	let endPoint = '/bookings'
+
+	let endPoint = '/admin/bookings'
 
 	return sendForm(endPoint, content)
 }
@@ -61,7 +65,7 @@ function adminCreateBooking() {
 function adminUpdateBooking() {
 	// check if all fields are filled
 	let requiredFields = ['session-type', 'customer-name','customer-email', 'customer-phone', 'room',
-						 'date-input', 'start-time', 'end-time', 'status']
+						 'date-input', 'start-time', 'end-time', 'status', 'payment-method']
 	for (let field of requiredFields) {
 		if (!document.getElementById(field).value) {
 			alert('Please fill out all fields')
@@ -88,6 +92,7 @@ function adminUpdateBooking() {
 			cymbals: cymbals,
 			revised_price: document.getElementById('revised-price').value,
 			status: document.getElementById('status').value,
+			payment_method: document.getElementById('payment-method').value,
 			booking_notes: document.getElementById('booking-notes').value,
 		}),
 		headers: {

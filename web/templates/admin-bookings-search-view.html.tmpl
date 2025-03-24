@@ -34,6 +34,7 @@
                 <th>Cymbals</th>
                 <th>Price</th>
                 <th>Discount Amount</th>
+                <th>Payment Method</th>
                 <th>Status</th>
                 <th>Booking Notes</th>
                 <th>Actions</th>
@@ -52,6 +53,7 @@
                     <td class="bookings-table">{{if .Cymbals}}Yes{{else}}No{{end}}</td>
                     <td class="bookings-table">£{{.Price}}</td>
                     <td class="bookings-table">£{{.DiscountAmount}}</td>
+                    <td class="bookings-table">{{.PaymentMethod}}</td>
                     <td class="bookings-table">{{.Status}}</td>
                     <td class="bookings-table">{{.BookingNotes}}</td>
                     <td class="bookings-table" style="display: flex;">

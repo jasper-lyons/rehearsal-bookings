@@ -65,11 +65,12 @@ func main() {
 
 	br := da.NewBookingsRepository(driver)
 
-	http.Handle("DELETE /admin/bookings/{id}", basicauth(handlers.AdminBookingsDelete(br)))
-	http.Handle("GET /admin/bookings/{id}/edit", basicauth(handlers.AdminBookingsUpdateView(br)))
+	http.Handle("POST /admin/bookings", handlers.AdminBookingsCreate(br))
 	http.Handle("PUT /admin/bookings/{id}/update", handlers.AdminBookingsUpdate(br))
+	http.Handle("DELETE /admin/bookings/{id}", basicauth(handlers.AdminBookingsDelete(br)))
 
 	http.Handle("GET /admin/bookings/new", basicauth(handlers.AdminBookingsNew(br)))
+	http.Handle("GET /admin/bookings/{id}/edit", basicauth(handlers.AdminBookingsUpdateView(br)))
 	http.Handle("GET /admin/bookings", basicauth(handlers.AdminBookingsDaily(br)))
 	http.Handle("GET /admin/bookings/all", basicauth(handlers.AdminBookingsSearchAll(br)))
 	http.Handle("GET /admin/bookings/future", basicauth(handlers.AdminBookingsSearchFuture(br)))
@@ -85,7 +86,7 @@ func main() {
 
 	if os.Getenv("FEATURE_FLAG_PAYMENTS_PROVIDER") == "sumup" {
 		http.Handle("POST /sumup/checkouts", handlers.SumupCheckoutCreate(paymentsApi))
-	}	else if os.Getenv("FEATURE_FLAG_PAYMENTS_PROVIDER") == "stripe" {
+	} else if os.Getenv("FEATURE_FLAG_PAYMENTS_PROVIDER") == "stripe" {
 		// stripe api endpoints
 		http.Handle("POST /stripe/payment-intents", handlers.StripePaymentIntentCreate(br))
 	}

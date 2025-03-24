@@ -25,31 +25,52 @@
 	<div class="date-group" data-date="{{.Date}}">
     <h2>{{.Date}}</h2>
 	{{ range .Bookings }}
-	<div class='bookings-panel {{if eq .Status "cancelled"}}cancelled{{else if eq .Status "paid"}}paid{{else}}unpaid{{end}}'>
-		<div class="admin-panel">
-			<h3>Booking ID: #{{.Id}}</h3>
-			<p><strong>Room: </strong>{{.RoomName}}</p>
-			<p><strong>Booking Time: </strong>{{.StartTime.Format "15:04"}}-{{.EndTime.Format "15:04"}}</p>
-			<p><strong>Session Type: </strong>{{.Type}}</p>
-			<p><strong>Cymbals: </strong>{{if .Cymbals}}Yes{{else}}No{{end}}</p>
-			<p><strong>Price: </strong>£{{.Price}} (+ Discount £{{.DiscountAmount}})</p>
-			<p><strong>Status: </strong>{{.Status}}</p>
-			<p><strong>Booking Notes: </strong>{{.BookingNotes}}</p>
+		{{ if eq .Status "cancelled" }}
+		<div class='bookings-panel {{if eq .Status "cancelled"}}cancelled{{else if eq .Status "paid"}}paid{{else}}unpaid{{end}}'>
+			<div class="admin-panel">
+				<h3>Booking ID: #{{.Id}}</h3>
+				<p><strong>Room: </strong>{{.RoomName}}</p>
+				<p><strong>Booking Time: </strong>{{.StartTime.Format "15:04"}}-{{.EndTime.Format "15:04"}}</p>
+			</div>
+			<div class="admin-panel">
+				<h3>BOOKING CANCELLED</h3>
+			</div>
+			<div>
+				<button onclick="window.location.href='/admin/bookings/{{.Id}}/edit'">Update</button>
+				<form action="/admin/bookings/{{.Id}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this booking?');">
+					<input type="hidden" name="_method" value="DELETE">
+					<button>Delete</button>
+				</form>
+			</div>
+		</div>	
+		{{ else }}
+		<div class='bookings-panel {{if eq .Status "cancelled"}}cancelled{{else if eq .Status "paid"}}paid{{else}}unpaid{{end}}'>
+			<div class="admin-panel">
+				<h3>Booking ID: #{{.Id}}</h3>
+				<p><strong>Room: </strong>{{.RoomName}}</p>
+				<p><strong>Booking Time: </strong>{{.StartTime.Format "15:04"}}-{{.EndTime.Format "15:04"}}</p>
+				<p><strong>Session Type: </strong>{{.Type}}</p>
+				<p><strong>Cymbals: </strong>{{if .Cymbals}}Yes{{else}}No{{end}}</p>
+				<p><strong>Price: </strong>£{{.Price}} (+ Discount £{{.DiscountAmount}})</p>
+				<p><strong>Payment Method: </strong>{{.PaymentMethod}}</p>
+				<p><strong>Status: </strong>{{.Status}}</p>
+				<p><strong>Booking Notes: </strong>{{.BookingNotes}}</p>
+			</div>
+			<div class="admin-panel">
+				<h3>Customer Details</h3>
+				<p><strong>Name: </strong>{{.CustomerName}}</p>
+				<p><strong>Phone: </strong>{{.CustomerPhone}}</p>
+				<p><strong>Email: </strong>{{.CustomerEmail}}</p>
+			</div>
+			<div>
+				<button onclick="window.location.href='/admin/bookings/{{.Id}}/edit'">Update</button>
+				<form action="/admin/bookings/{{.Id}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this booking?');">
+					<input type="hidden" name="_method" value="DELETE">
+					<button>Delete</button>
+				</form>
+			</div>
 		</div>
-		<div class="admin-panel">
-			<h3>Customer Details</h3>
-			<p><strong>Name: </strong>{{.CustomerName}}</p>
-			<p><strong>Phone: </strong>{{.CustomerPhone}}</p>
-			<p><strong>Email: </strong>{{.CustomerEmail}}</p>
-		</div>
-		<div>
-			<button onclick="window.location.href='/admin/bookings/{{.Id}}/edit'">Update</button>
-			<form action="/admin/bookings/{{.Id}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this booking?');">
-				<input type="hidden" name="_method" value="DELETE">
-				<button>Delete</button>
-			</form>
-		</div>
-	</div>
+		{{ end }}
 	{{ end }}
 	</div>
 {{ end }}

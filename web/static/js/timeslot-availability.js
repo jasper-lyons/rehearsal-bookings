@@ -3,7 +3,6 @@ async function fetchAvailability(date) {
         const response = await fetch(`/rooms?day=${date}`);
         if (!response.ok) throw new Error('Failed to fetch availability');
         const data = await response.json();
-        // console.log('API response:', data); // ✅ Check the full shape
         return data.rooms; // Return the rooms array
     } catch (error) {
         console.error(error);

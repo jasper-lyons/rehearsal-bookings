@@ -14,6 +14,7 @@
 			<p><strong>Session Type: </strong>{{.Type}}</p>
 			<p><strong>Cymbals: </strong>{{if .Cymbals}}Yes{{else}}No{{end}}</p>
 			<p><strong>Price: </strong>£{{.Price}} (+ Discount £{{.DiscountAmount}})</p>
+			<p><strong>Payment Method: </strong>{{.PaymentMethod}}</p>
 			<p><strong>Status: </strong>{{.Status}}</p>
 			<p><strong>Booking Notes: </strong>{{.BookingNotes}}</p>
 		</div>
@@ -117,7 +118,7 @@
 		<h3>Price, Status & Notes</h3>
 			<label for="status">Status:</label>
 			<select id="status" name="status">
-			  <option value="hold" {{if eq .Status "hold"}}selected{{end}}>Hold</option>
+			  <option value="unpaid" {{if eq .Status "unpaid"}}selected{{end}}>Unpaid</option>
 			  <option value="paid" {{if eq .Status "paid"}}selected{{end}}>Paid</option>
 			  <option value="cancelled" {{if eq .Status "cancelled"}}selected{{end}}>Cancelled</option>
 			</select>
@@ -127,7 +128,13 @@
 			<p style="margin: 5px">Price for the session: <strong><span id="price" class="price">£0.00</span></strong></p>
 			<label for="revised-price">Revised price:</label>
 			<input type="number" id="revised-price" step="0.01">
-			<br>	
+			<br>
+			<label for="payment-method">Payment Method:</label>
+			<select id="payment-method" name="payment-method">
+			  <option value="online" {{if eq .PaymentMethod "online"}}selected{{end}}>Online</option>
+			  <option value="in_studio" {{if eq .PaymentMethod "in_studio"}}selected{{end}}>Pay At Studio</option>
+			  <option value="regulars" {{if eq .PaymentMethod "regulars"}}selected{{end}}>Weekly Regulars</option>
+			</select>
 		</div>
 		<!-- Updated details summary-->
 		<div class="submit-button"> 

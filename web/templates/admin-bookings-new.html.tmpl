@@ -110,10 +110,27 @@
 
 		<div id="booking-details">
 			<!-- Display Booking Details -->
-			<h3>Additional booking details:</h3>
+			<h3>Price, Status & Notes</h3>
 			<div class="customer-info">
+				<label for="status">Status:</label>
+				<select id="status" name="status" required>
+				  <option value="" disabled selected>Select the status of the booking</option>
+				  <option value="unpaid">Unpaid</option>
+				  <option value="paid">Paid</option>
+				  <option value="cancelled">Cancelled</option>
+				</select>
 				<label for="booking-notes">Booking Notes:</label>
 				<textarea id="booking-notes" rows="6" placeholder="Type your message here..." maxlength="500"></textarea>
+				<p style="margin: 5px">Price for the session: <strong><span id="price" class="price">£0.00</span></strong></p>
+				<label for="revised-price">Revised price:</label>
+				<input type="number" id="revised-price" step="0.01">
+				<label for="payment-method">Payment Method:</label>
+				<select id="payment-method" name="payment-method" required>
+				  <option value="" disabled selected>Select a payment method</option>
+				  <option value="in_studio">Pay At Studio</option>
+				  <option value="online">Online</option>
+				  <option value="regulars">Weekly Regulars</option>
+				</select>
 			</div>
 		</div>
 
