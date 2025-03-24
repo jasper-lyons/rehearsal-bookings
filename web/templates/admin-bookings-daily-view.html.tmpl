@@ -37,8 +37,7 @@
 			</div>
 			<div>
 				<button onclick="window.location.href='/admin/bookings/{{.Id}}/edit'">Update</button>
-				<form action="/admin/bookings/{{.Id}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this booking?');">
-					<input type="hidden" name="_method" value="DELETE">
+				<form action="/admin/bookings/{{.Id}}" method="DELETE" onsubmit="return confirm('Are you sure you want to delete this booking?');">
 					<button>Delete</button>
 				</form>
 			</div>
@@ -70,8 +69,7 @@
 				<form action="/admin/bookings/{{.Id}}/cancel" method="PUT" class="mark-cancelled" onsubmit="return confirm('Are you sure you want cancel this booking?');">
 					<button type="submit">Cancel</button>
 				</form>
-				<form action="/admin/bookings/{{.Id}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this booking?');">
-					<input type="hidden" name="_method" value="DELETE">
+				<form action="/admin/bookings/{{.Id}}" method="DELETE" onsubmit="return confirm('Are you sure you want to delete this booking?');">
 					<button>Delete</button>
 				</form>
 			</div>

@@ -58,8 +58,7 @@
                     <td class="bookings-table">{{.BookingNotes}}</td>
                     <td class="bookings-table" style="display: flex;">
                         <button onclick="window.location.href='/admin/bookings/{{.Id}}/edit'">↻</button>
-                        <form action="/admin/bookings/{{.Id}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this booking?');">
-                            <input type="hidden" name="_method" value="DELETE">
+                        <form action="/admin/bookings/{{.Id}}" method="DELETE" onsubmit="return confirm('Are you sure you want to delete this booking?');">
                             <button>☒</button>
                         </form>
                     </td>
