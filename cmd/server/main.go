@@ -65,19 +65,23 @@ func main() {
 
 	br := da.NewBookingsRepository(driver)
 
+	// Adming methods
 	http.Handle("POST /admin/bookings", handlers.AdminBookingsCreate(br))
 	http.Handle("PUT /admin/bookings/{id}/update", handlers.AdminBookingsUpdate(br))
 	http.Handle("DELETE /admin/bookings/{id}", basicauth(handlers.AdminBookingsDelete(br)))
 	http.Handle("PUT /admin/bookings/{id}/paid", basicauth(handlers.AdminBookingsStatusUpdate(br)))
 	http.Handle("PUT /admin/bookings/{id}/cancel", basicauth(handlers.AdminBookingsStatusUpdate(br)))
 
+	// Admin panel forms
 	http.Handle("GET /admin/bookings/new", basicauth(handlers.AdminBookingsNew(br)))
 	http.Handle("GET /admin/bookings/{id}/edit", basicauth(handlers.AdminBookingsUpdateView(br)))
-	http.Handle("GET /admin/bookings", basicauth(handlers.AdminBookingsDaily(br)))
-	http.Handle("GET /admin/bookings/all", basicauth(handlers.AdminBookingsSearchAll(br)))
-	http.Handle("GET /admin/bookings/future", basicauth(handlers.AdminBookingsSearchFuture(br)))
-	http.Handle("GET /admin/bookings/past", basicauth(handlers.AdminBookingsSearchPast(br)))
 
+	// Admin booking views
+	http.Handle("GET /admin/bookings", basicauth(handlers.AdminViewDailyBookings(br)))
+	http.Handle("GET /admin/availability", basicauth(handlers.AdminViewDailyAvailability(br)))
+	http.Handle("GET /admin/bookings/all", basicauth(handlers.AdminViewAllBookings(br)))
+	http.Handle("GET /admin/bookings/future", basicauth(handlers.AdminBookingsFutureBookings(br)))
+	http.Handle("GET /admin/bookings/past", basicauth(handlers.AdminBookingsPastBookings(br)))
 	http.Handle("GET /admin", handlers.Redirect("/admin/bookings"))
 
 	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, paymentsApi))

@@ -11,7 +11,7 @@ type AdminBookingsPast struct {
 	Bookings []da.Booking
 }
 
-func AdminBookingsSearchPast(br *da.BookingsRepository[da.StorageDriver]) Handler {
+func AdminBookingsPastBookings(br *da.BookingsRepository[da.StorageDriver]) Handler {
 	return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
 		bookings, err := br.All()
 		if err != nil {
@@ -29,6 +29,6 @@ func AdminBookingsSearchPast(br *da.BookingsRepository[da.StorageDriver]) Handle
 			return filteredBookings[i].StartTime.Before(filteredBookings[j].StartTime)
 		})
 
-		return Template("admin-bookings-search-view.html.tmpl", AdminBookingsPast{Bookings: filteredBookings})
+		return Template("admin-view-table-template.html.tmpl", AdminBookingsPast{Bookings: filteredBookings})
 	})
 }

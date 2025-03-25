@@ -1,0 +1,39 @@
+{{template "layout.html.tmpl" .}}
+
+{{define "body"}}
+<h1>TIMESLOT AVAILABILITY</h1>
+<!-- Date Selection -->
+<div class="date-selection">
+	<h3>Pick your date:</h3>
+	<!--  Date picker for booking -->
+	<div class="flex-container">
+		<button type="button" id="prev-day">← Previous Day</button>
+		<input type="date" id="date-input" name="date">
+		<button type="button" id="next-day">Next Day →</button>
+		<script src="/static/js/date-picker-functions.js"></script>
+		<script src="/static/js/admin/date-picker-events.js"></script>
+	</div>
+</div>
+<!-- Time & Room Selection -->
+<div class="time-selection">
+	<div id="time-slot-container">
+		<h3>Select your timeslot</h3>
+		<table>
+			<thead>
+				<tr>
+					<th>Hour</th>
+					<th>Room 1</th>
+					<th>Room 2</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- Time slots are generated here -->
+				<script src="/static/js/timeslot-table.js"></script>
+				<script src="/static/js/timeslot-availability.js"></script>
+				<script src="/static/js/timeslot-selections.js"></script>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{{end}}

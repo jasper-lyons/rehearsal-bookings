@@ -10,7 +10,7 @@ type AdminBookingsSearch struct {
 	Bookings []da.Booking
 }
 
-func AdminBookingsSearchAll(br *da.BookingsRepository[da.StorageDriver]) Handler {
+func AdminViewAllBookings(br *da.BookingsRepository[da.StorageDriver]) Handler {
 	return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
 		bookings, err := br.All()
 		if err != nil {
@@ -21,6 +21,6 @@ func AdminBookingsSearchAll(br *da.BookingsRepository[da.StorageDriver]) Handler
 			return bookings[i].StartTime.Before(bookings[j].StartTime)
 		})
 
-		return Template("admin-bookings-search-view.html.tmpl", AdminBookingsSearch{Bookings: bookings})
+		return Template("admin-view-table-template.html.tmpl", AdminBookingsSearch{Bookings: bookings})
 	})
 }

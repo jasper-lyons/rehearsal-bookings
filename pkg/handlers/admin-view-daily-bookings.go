@@ -15,7 +15,7 @@ type GroupedBookings struct {
 	Bookings []da.Booking
 }
 
-func AdminBookingsDaily(br *da.BookingsRepository[da.StorageDriver]) Handler {
+func AdminViewDailyBookings(br *da.BookingsRepository[da.StorageDriver]) Handler {
 	return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
 		bookings, err := br.All()
 		if err != nil {
@@ -29,7 +29,7 @@ func AdminBookingsDaily(br *da.BookingsRepository[da.StorageDriver]) Handler {
 		// Group bookings by date
 		groupedBookings := groupBookingsByDate(bookings)
 
-		return Template("admin-bookings-daily-view.html.tmpl", AdminBookingsDailyView{GroupedBookings: groupedBookings})
+		return Template("admin-view-daily-bookings.html.tmpl", AdminBookingsDailyView{GroupedBookings: groupedBookings})
 	})
 }
 
