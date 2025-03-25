@@ -81,17 +81,4 @@ document.addEventListener('DOMContentLoaded', () => {
         
         return name && email && phone;
     };
-
-    const populateCustomerInfo = () => {
-        // const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const phone = document.getElementById('phone').value;
-        // const summaryName = document.querySelectorAll('.');
-        const summaryEmail = document.getElementById('customer-email');
-        const summaryPhone = document.getElementById('customer-phone');
-
-        // summaryName.forEach(element => element.textContent = `Name: ${name}`);
-        summaryEmail.innerHTML = `<p>An email confirmation will be sent to: <strong>${email}</strong></p>`;
-        summaryPhone.innerHTML = `<p>On the day, an SMS with the access codes will be sent to: <strong>${phone}</strong></p>`;
-    }
 });		
