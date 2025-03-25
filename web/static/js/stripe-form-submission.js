@@ -1,102 +1,182 @@
 window.addEventListener('load', function () {
-	let stripe = Stripe(window.env.STRIPE_PUBLISHABLE_KEY);
-	let elements;
-
-	// Add event listeners for input changes
-	let sessionType = document.getElementById('session-type');
-	let startTime = document.getElementById('start-time');
-	let endTime = document.getElementById('end-time');
-	let cymbals = document.getElementById('cymbals');
-
-	sessionType.addEventListener('change', updatePrice);
-	startTime.addEventListener('change', updatePrice);
-	endTime.addEventListener('change', updatePrice);
-	cymbals.addEventListener('change', updatePrice);
-
-	// Initial price update
-	updatePrice();
-
-	function updatePrice() {
-		fetchPrice().then(function (price) {
-			document.getElementById('stripe-submit').textContent = `Pay: £${price.toFixed(2)}`;
-		});
-	}
-
-	let form = document.getElementById('form');
-	form.addEventListener('submit', async function (e) {
-		e.preventDefault();
-
-		// Show the payment form
-		document.getElementById('stripe-form').style.display = 'block';
-
-		// Create held booking
-		let bookingResponse = await fetch('/bookings', {
-			method: 'POST',
-			body: JSON.stringify({
-				type: document.getElementById('session-type').value,
-				name: document.getElementById('name').value,
-				email: document.getElementById('email').value,
-				phone: document.getElementById('phone').value,
-				room: document.getElementById('room').value,
-				date: document.getElementById('date-input').value,
-				start_time: document.getElementById('start-time').value,
-				end_time: document.getElementById('end-time').value,
-			}),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-
-		if (!bookingResponse.ok) {
-			alert("Can't book " + document.getElementById('room').value + " at that time!");
-			return;
-		}
-
-		let booking = await bookingResponse.json();
-
-		// Get payment intent from server
-		let intentResponse = await fetch('/stripe/payment-intents', {
-			method: 'POST',
-			body: JSON.stringify({
-				booking_id: booking.id
-			}),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-
-		let intent = await intentResponse.json();
-
-		// Initialize Elements with client secret
-		elements = stripe.elements({
-			clientSecret: intent.client_secret,
-			appearance: {
-				theme: 'stripe'
-			}
-		});
-
-		// Create and mount the Payment Element
-		const paymentElement = elements.create('payment');
-		paymentElement.mount('#payment-gateway');
-
-		// Handle payment submission
-		document.getElementById('stripe-submit').addEventListener('click', async function (e) {
-			e.preventDefault()
-			const result = await stripe.confirmPayment({
-				elements,
-				confirmParams: {
-					return_url: window.location.origin + '/booking-confirmation',
-				},
-				redirect: 'if_required',
-			});
-
-			if (result.error) {
-				// Show error to your customer
-				console.error(result.error.message);
-				alert('Payment failed: ' + result.error.message);
-			} else {
-				document.getElementById('stripe-form').style.display = 'none';
-			}
-		});
-	});
+  // Initialize Stripe
+  const stripe = Stripe(window.env.STRIPE_PUBLISHABLE_KEY);
+  let elements;
+  
+  // Cache DOM elements
+  const form = document.getElementById('form');
+  const sessionType = document.getElementById('session-type');
+  const startTime = document.getElementById('start-time');
+  const endTime = document.getElementById('end-time');
+  const cymbals = document.getElementById('cymbals');
+  const stripeSubmitBtn = document.getElementById('stripe-submit');
+  const paymentContainer = document.getElementById('stripe-form');
+  const step3Buttons = document.getElementById('step-3-buttons');
+  const successMessage = document.getElementById('success');
+  
+  // Add event listeners for input changes
+  sessionType.addEventListener('change', updatePrice);
+  startTime.addEventListener('change', updatePrice);
+  endTime.addEventListener('change', updatePrice);
+  cymbals.addEventListener('change', updatePrice);
+  
+  // Initial price update
+  updatePrice();
+  
+  function updatePrice() {
+    fetchPrice().then(function (price) {
+      stripeSubmitBtn.textContent = `Pay: £${price.toFixed(2)}`;
+    });
+  }
+  
+  async function createBooking() {
+    const bookingData = {
+      type: sessionType.value,
+      name: document.getElementById('name').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+      room: document.getElementById('room').value,
+      date: document.getElementById('date-input').value,
+      start_time: startTime.value,
+      end_time: endTime.value,
+    };
+    
+    const bookingResponse = await fetch('/bookings', {
+      method: 'POST',
+      body: JSON.stringify(bookingData),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    if (!bookingResponse.ok) {
+      throw new Error(`Can't book ${bookingData.room} at that time!`);
+    }
+    
+    return bookingResponse.json();
+  }
+  
+  async function getPaymentIntent(bookingId) {
+    const intentResponse = await fetch('/stripe/payment-intents', {
+      method: 'POST',
+      body: JSON.stringify({
+        booking_id: bookingId
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    return intentResponse.json();
+  }
+  
+  async function confirmBooking(bookingId, paymentResult) {
+    return fetch(`/bookings/${bookingId}/confirm`, {
+      method: 'POST',
+      body: JSON.stringify({
+        payment_id: paymentResult.paymentIntent.id,
+        payment_status: paymentResult.paymentIntent.status,
+        payment_amount: paymentResult.paymentIntent.amount,
+        payment_method: paymentResult.paymentIntent.payment_method
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+  
+  async function deleteBooking(bookingId) {
+    return fetch(`/bookings/${bookingId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+  
+  function showError(message) {
+    alert(message);
+    console.error(message);
+  }
+  
+  function setupStripeForm(clientSecret) {
+    elements = stripe.elements({
+      clientSecret: clientSecret,
+      appearance: {
+        theme: 'stripe'
+      }
+    });
+    
+    const paymentElement = elements.create('payment');
+    paymentElement.mount('#payment-gateway');
+  }
+  
+  async function handlePaymentSuccess(bookingId, paymentResult) {
+    try {
+      const confirmResponse = await confirmBooking(bookingId, paymentResult);
+      
+      if (!confirmResponse.ok) {
+        throw new Error('Failed to confirm booking on the server');
+      }
+      
+      // Update UI for success
+      step3Buttons.style.display = 'none';
+      paymentContainer.style.display = 'none';
+      successMessage.style.display = 'block';
+    } catch (error) {
+      showError(`Payment was successful, but there was an error confirming your booking: ${error.message}`);
+    }
+  }
+  
+  async function handlePaymentFailure(bookingId, error) {
+    try {
+      // Delete the booking
+      await deleteBooking(bookingId);
+      showError(`Payment failed: ${error.message}`);
+    } catch (deleteError) {
+      showError(`Payment failed: ${error.message}. Additionally, there was an error cleaning up your booking: ${deleteError.message}`);
+    }
+  }
+  
+  // Handle form submission
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    
+    try {
+      // Show the payment form
+      paymentContainer.style.display = 'block';
+      
+      // Create held booking
+      const booking = await createBooking();
+      const bookingId = booking.id;
+      
+      // Get payment intent from server
+      const intent = await getPaymentIntent(bookingId);
+      
+      // Initialize Stripe Elements with client secret
+      setupStripeForm(intent.client_secret);
+      
+      // Handle payment submission
+      stripeSubmitBtn.onclick = async function (e) {
+        e.preventDefault();
+        
+        const result = await stripe.confirmPayment({
+          elements,
+          confirmParams: {
+            return_url: window.location.origin + '/booking-confirmation',
+          },
+          redirect: 'if_required',
+        });
+        
+        if (result.error) {
+          await handlePaymentFailure(bookingId, result.error);
+        } else {
+          await handlePaymentSuccess(bookingId, result);
+        }
+      };
+      
+    } catch (error) {
+      showError(error.message);
+    }
+  });
 });

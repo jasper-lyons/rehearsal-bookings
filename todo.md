@@ -39,11 +39,17 @@
 6. [ ] - Launch new Bookings
 6.3. [x] - Test SumUp Details - No test details needed with test accounts 
 6.1. [ ] - Email on successful booking
-6.1.1 [ ] - Delete held booking on payment fail
-6.2. [ ] - Booking Success Page
+6.1.1 [x] - Soft Delete held booking on payment fail
+6.2. [x] - Booking Success Page
 6.4. [x] - Password protected Admin Interface
 6.5. [x] - Additional Items on bookings 
 6.5.1 [x] - Cymbals
 6.5.2 [x] - Notes
 6.6. [ ] - Discount Codes
 6.7. [x] - Speed up Sumup Widget Loading
+6.8. [ ] - Store transaction id from stripe in database as stripe-<id>
+6.9. [ ] - Store booking id as transaction reference in stripe
+6.10. [ ] - Implement Backup Strategy
+6.10.1. [ ] - daily backups, to 7 days
+6.10.2. [ ] - weekly backups, to 4 weeks
+6.10.3. [ ] - monthly backups, to 12 months

@@ -200,14 +200,15 @@
 			</div>
 			<br>
 			<hr>
-
-			<!-- Back Button -->
-			<button type="button" id="back-step-2">
-				Back
-			</button>
-			<button type="submit" id="confirm">
-				Confirm
-			</button>
+			<div id="step-3-buttons">
+				<!-- Back Button -->
+				<button type="button" id="back-step-2">
+					Back
+				</button>
+				<button type="submit" id="confirm">
+					Confirm
+				</button>
+			</div>
 			<!-- Payment Gateway -->
 
 			{{ $provider := Getenv "FEATURE_FLAG_PAYMENTS_PROVIDER" }}
@@ -230,11 +231,13 @@
 				</script>
 				<script src="/static/js/stripe-form-submission.js"></script>
 			{{ end }}
+
+
+			<div id="success" style="display: none">
+				<h1>Booking Successful! You will recieve an email comfirming your booking shortly.</h1>
+			</div>
 			
 		</fieldset>
 	</form>
-<div id="success" style="display: none">
-	<h1>Booking Successful! You should recieve a text and email comfirming your booking shortly.</h1>
-</div>
 <script src="/static/js/navigation.js"></script>
 {{end}}
