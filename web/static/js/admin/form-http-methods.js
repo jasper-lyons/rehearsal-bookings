@@ -1,61 +1,31 @@
 window.addEventListener('load', function () {
-	let delete_forms = document.querySelectorAll('[method="DELETE"]')
+	for (let method of ["POST", "DELETE", "PUT"]) {
+		let forms = document.querySelectorAll(`[method="${method}"]`)
 
-	for (form of delete_forms) {
-		form.addEventListener('submit', async function (e) {
-			e.preventDefault();
-			let response = await fetch(e.target.action, {
-				method: 'DELETE'
-			})
+		console.log(forms)
 
-			if (response.redirected) {
-				window.location.replace(response.url)
-			}
-		})
-	}
+		for (form of forms) {
+			let onsubmit = form.onsubmit
+			form.onsubmit = undefined
 
-	let paid_forms = document.querySelectorAll(".mark-paid")
+			form.addEventListener('submit', async function (e) {
+				e.preventDefault();
 
-	for (form of paid_forms) {
-		form.addEventListener('submit', async function (e) {
-			e.preventDefault();
-			let response = await fetch(e.target.action, {
-				method: 'PUT',
-				body: JSON.stringify({
-					status: "paid"
-				}),
-				headers: {
-					'Content-Type': 'application/json'
+				if (onsubmit && onsubmit.call(this, e) === false)
+					return
+
+				let response = await fetch(e.target.action, {
+					method: method,
+					body: JSON.stringify(Object.fromEntries(new FormData(e.target))),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+
+				if (response.redirected) {
+					window.location.replace(response.url)
 				}
-
 			})
-
-			if (response.redirected) {
-				window.location.replace(response.url)
-			}
-		})
+		}
 	}
-
-	let cancelation_forms = document.querySelectorAll(".mark-cancelled")
-
-	for (form of cancelation_forms) {
-		form.addEventListener('submit', async function (e) {
-			e.preventDefault();
-			let response = await fetch(e.target.action, {
-				method: 'PUT',
-				body: JSON.stringify({
-					status: "cancelled"
-				}),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-
-			})
-
-			if (response.redirected) {
-				window.location.replace(response.url)
-			}
-		})
-	}
-
 })

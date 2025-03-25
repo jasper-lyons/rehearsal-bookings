@@ -9,6 +9,8 @@ import (
 	da "rehearsal-bookings/pkg/data_access"
 	"strconv"
 	"errors"
+	"github.com/stripe/stripe-go/v81"
+	"github.com/stripe/stripe-go/v81/paymentintent"
 )
 
 type SumupCheckoutProcessSuccessForm struct {
@@ -61,15 +63,50 @@ func ConfirmSumupPayment(br *da.BookingsRepository[da.StorageDriver], sumupApi A
 	return form.TransactionId, nil
 }
 
-func ConfirmStripePayment(br *da.BookingsRepository[da.StorageDriver], api Api, r *http.Request) (string, Handler) {
-	return "", nil
+type StripePaymentConfirmationForm struct {
+	PaymentId     string  `json:"payment_id"`
+	PaymentStatus string  `json:"payment_status"`
+	PaymentAmount float64 `json:"payment_amount"`
+	PaymentMethod string  `json:"payment_method"`
+}
+
+func ConfirmStripePayment(br *da.BookingsRepository[da.StorageDriver], r *http.Request) (string, Handler) {
+	// Extract the payment confirmation form
+	form, err := ExtractForm[StripePaymentConfirmationForm](r)
+	if err != nil {
+		return "", Error(err, http.StatusInternalServerError)
+	}
+
+	// Set your Stripe API key
+	stripe.Key = os.Getenv("STRIPE_SECRET_KEY")
+
+	// Retrieve the payment intent directly using the stripe-go package
+	pi, err := paymentintent.Get(form.PaymentId, nil)
+	if err != nil {
+		return "", Error(fmt.Errorf("Error retrieving payment intent: %v", err), http.StatusInternalServerError)
+	}
+
+	// Verify payment status is successful (Stripe uses "succeeded" status)
+	if pi.Status != stripe.PaymentIntentStatusSucceeded {
+		return "", Error(fmt.Errorf("Cannot confirm booking, payment status is %s, not succeeded", pi.Status), http.StatusInternalServerError)
+	}
+
+	// Optional: Verify the amount matches what was sent by the client
+	// Note: Stripe stores amount in cents/smallest currency unit
+	expectedAmount := int64(form.PaymentAmount)
+	if pi.Amount != expectedAmount {
+		return "", Error(fmt.Errorf("Payment amount mismatch: expected %d, got %d", expectedAmount, pi.Amount), http.StatusInternalServerError)
+	}
+
+	// Return the payment ID to be stored with the booking
+	return pi.ID, nil
 }
 
 func ConfirmPayment(br *da.BookingsRepository[da.StorageDriver], api Api, r *http.Request) (string, Handler) {
 	if os.Getenv("FEATURE_FLAG_PAYMENTS_PROVIDER") == "sumup" {
 		return ConfirmSumupPayment(br, api, r)
 	} else if os.Getenv("FEATURE_FLAG_PAYMENTS_PROVIDER") == "stripe" {
-		return ConfirmStripePayment(br, api, r)
+		return ConfirmStripePayment(br, r)
 	} else {
 		return "", Error(errors.New("No payment provider configured"), http.StatusInternalServerError)
 	}
