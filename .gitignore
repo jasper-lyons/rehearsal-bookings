@@ -3,5 +3,4 @@ bin
 .env
 .env.old
 .DS_Store
-
-db/output_202503251631.csv
+db/output_*.csv

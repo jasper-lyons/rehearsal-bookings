@@ -60,7 +60,17 @@ func RoomsIndex(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			return Error(errors.New("Missing 'day' query parameter."), http.StatusBadRequest)
 		}
 
-		bookings, err := br.Where("(status = 'paid' or status = 'hold' or status = 'unpaid') and date(start_time) = ?", day)
+		dayStart, err := time.Parse("2006-01-02", day)
+		if err != nil {
+			return Error(err, http.StatusBadRequest)
+		}
+
+		dayEnd := dayStart.Add(time.Hour * 24 * time.Duration(1))
+
+		fmt.Println(dayStart)
+		fmt.Println(dayEnd)
+
+		bookings, err := br.Where("status IN ('paid', 'unpaid', 'hold') and start_time >= ? and end_time <= ?", dayStart, dayEnd)
 		if err != nil {
 			return Error(err, 500)
 		}
