@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	da "rehearsal-bookings/pkg/data_access"
 	"strconv"
@@ -23,6 +24,7 @@ func AdminBookingsDelete(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			return Error(err, 500)
 		}
 
-		return Redirect("/admin/bookings")
+		fmt.Println(r.Header.Get("Referer"))
+		return Redirect(r.Header.Get("Referer"))
 	})
 }
