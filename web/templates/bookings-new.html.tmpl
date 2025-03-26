@@ -27,7 +27,8 @@
 			
 				<!-- Session type information box -->
 				<div id="info-box" class="info-box">
-					<p>Rehearsal session for up to six people</p>
+					<p>Rehearsal session for up to six people.</p>
+					<p class="explainor-text">£12 per hour for bookings under 4 hours, £10 per hour for 4+ hours, £100 for all day bookings (9+ hours) </p>	
 				</div>
 			</div>
 
@@ -51,10 +52,10 @@
 				<button type="button" class="info-toggle-btn" onclick="toggleInfoBox()">ⓘ</button>
 				</div>
 				<div class="info-box" id="timeslotinfo">
-					<button  type="button" class="info-toggle-btn" onclick="toggleInfoBox()">X</button>
-					<strong>How to select your timeslots:</strong>
-					<p>Click on your desired start time in the room of your choice, and then click on the desired end time. This will then select all the hours inbetween your start and end time.</p>
-					<p>If a timeslot is greyed out this means that the room is not available.</p>
+					<button  type="button" onclick="toggleInfoBox()">X</button>
+					<p class="explainor-text"><strong>HOW TO SELECT YOUR TIMESLOT:</strong></p>
+					<p class="explainor-text">Click on your desired start time in the room of your choice, and then click on the desired end time. This will then select all the hours inbetween your start and end time.</p>
+					<p class="explainor-text">If a timeslot is greyed out this means that the room is not available.</p>
 					<script>
 						function toggleInfoBox() {
 							const box = document.getElementById('timeslotinfo');
@@ -96,8 +97,10 @@
 						<!-- Display Booking Details -->
 						<h3>Your Booking:</h3>
 						<div class="summary-room customer-info"></div>
+						<div class="summary-type customer-info"></div>
 						<div class="summary-date customer-info"></div>
 						<div class="summary-time customer-info"></div>
+						<div class="summary-cymbals customer-info"></div>
 					</div>
 				</div>
 			</div>
@@ -119,36 +122,37 @@
 		<!-- Step 2 - Customer Details -->
 		<fieldset id="step-2" class="step hidden">
 			<h1>YOUR PERSONAL DETAILS</h1>
+			<div>
 			<h3>Enter your contact details:</h3>
-			<div class="customer-info">
-				<label for="name">Full Name</label>
-				<input type="text" 
-						id="name"
-						name="name" 
-						pattern="[A-Za-z0-9 ]+"
-						autocomplete="name"
+				<div class="customer-info">
+					<label for="name">Full Name</label>
+					<input type="text" 
+							id="name"
+							name="name" 
+							pattern="[A-Za-z0-9 ]+"
+							autocomplete="name"
+							required>
+				</div>
+
+				<div class="customer-info">
+					<label for="email">Email</label>
+					<input type="email"
+							id="email" 
+							name="email"
+							autocomplete="email" 
+							required>
+				</div>
+
+				<div class="customer-info">
+				<label for="phone">Phone</label>
+				<input type="tel"
+						id="phone"
+						name="phone"
+						pattern="(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}"
+						autocomplete="tel"
 						required>
+				</div>
 			</div>
-
-			<div class="customer-info">
-				<label for="email">Email</label>
-				<input type="email"
-						id="email" 
-						name="email"
-						autocomplete="email" 
-						required>
-			</div>
-
-			<div class="customer-info">
-			<label for="phone">Phone</label>
-			<input type="tel"
-					id="phone"
-					name="phone"
-					pattern="(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}"
-					autocomplete="tel"
-					required>
-			</div>
-
 			<br>
 			<hr>
 
@@ -168,8 +172,10 @@
 				<!-- Display Booking Details -->
 				<h3>Your Booking:</h3>
 				<div class="summary-room customer-info"></div>
+				<div class="summary-type customer-info"></div>
 				<div class="summary-date customer-info"></div>
 				<div class="summary-time customer-info"></div>
+				<div class="summary-cymbals customer-info"></div>
 				<div class="summary-price customer-info price"></div>
 			</div>
 			<!-- Back Button -->
@@ -189,8 +195,10 @@
 				<!-- Display Booking Details -->
 				<h3>Your Booking:</h3>
 				<div class="summary-room customer-info"></div>
+				<div class="summary-type customer-info"></div>
 				<div class="summary-date customer-info"></div>
 				<div class="summary-time customer-info"></div>
+				<div class="summary-cymbals customer-info"></div>
 				<div class="summary-price customer-info price"></div>
 			</div>
 			<br>

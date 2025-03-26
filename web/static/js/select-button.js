@@ -10,9 +10,15 @@ function selectButton(button) {
     if (infoBox) {
         // Update and show the information box content
         if (button.dataset.value === 'band') {
-            infoBox.innerHTML = '<p>Rehearsal session for up to six people</p>';
+            infoBox.innerHTML = `
+                    <p>Rehearsal session for up to six people.</p>
+					<p class="explainor-text">£12 per hour for bookings under 4 hours, £10 per hour for 4+ hours, £100 for all day bookings (9+ hours) </p>
+                    `;
         } else if (button.dataset.value === 'solo') {
-            infoBox.innerHTML = '<p align=right>Rehearsal session for one person</p>';
+            infoBox.innerHTML = `
+                    <p align=right>Rehearsal session for one person</p>
+					<p align=right class="explainor-text">£6.50 per hour. Solo bookings are not available on weekday evenings after 6pm</p>
+                    `;
         }
     }
 

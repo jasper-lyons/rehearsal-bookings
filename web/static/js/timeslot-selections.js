@@ -105,7 +105,6 @@ timeSlots.forEach(slot => {
                     bookNowButton.classList.add('enabled');
                 }                // print the selection for user to see room/time details
                 updatePrice();
-                populateSummary();
 
                 timeSlots.forEach(slot => slot.classList.remove('grabbing'));
             } else {

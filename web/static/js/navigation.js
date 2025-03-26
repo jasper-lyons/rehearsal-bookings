@@ -15,12 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const showStep = (stepNumber) => {
         Object.values(steps).forEach((step) => step.classList.add('hidden'));
         steps[stepNumber].classList.remove('hidden');
+        setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 0); // Use a timeout to ensure it overrides the browser's default behavior
     };
 
     // Step 1 to Step 2
     toStep2Button.addEventListener('click', () => {
         if (validateStep1()) {
             populateSummary();
+            history.pushState({ step: 2 }, null, '');
             showStep(2);
         } else {
             alert('Please select a time!');
@@ -32,19 +36,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (validateStep2()) {
             populateSummary();
             populateCustomerInfo();
+            history.pushState({ step: 3 }, null, '');
             showStep(3);
         }
     });
 
     // Back Button for Step 2
     document.getElementById('back-step-1').addEventListener('click', () => {
+        history.replaceState({ step: 1 }, null, ''); // Use replaceState to avoid adding a new history entry
         showStep(1);
     });
 
     // Back Button for Step 3
     document.getElementById('back-step-2').addEventListener('click', () => {
+        history.replaceState({ step: 2 }, null, ''); // Use replaceState to avoid adding a new history entry
         showStep(2);
     });
+
+    // Handle browser navigation
+    window.addEventListener('popstate', (event) => {
+        if (event.state && event.state.step) {
+            showStep(event.state.step);
+        }
+    });
+
+    // Initialize history state
+    history.replaceState({ step: 1 }, null, '');
 
     // Validate Step 1
     const validateStep1 = () => {

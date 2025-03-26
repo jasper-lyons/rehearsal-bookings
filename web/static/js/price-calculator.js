@@ -28,6 +28,7 @@ function updatePrice() {
 }
 
 window.addEventListener('load', function () {
+    populateSummary();
     let session_type = document.getElementById('session-type')
     let end_time = document.getElementById('end-time')
     let buttons = document.querySelectorAll('.toggle-button');
@@ -35,7 +36,9 @@ window.addEventListener('load', function () {
 
     // event listeners for input changes
     session_type.addEventListener('change', updatePrice)
+    session_type.addEventListener('change', populateSummary)
     end_time.addEventListener('change', updatePrice)
+    end_time.addEventListener('change', populateSummary)
     cymbals.addEventListener('change', updatePrice)
     cymbals.addEventListener('change', populateSummary)
 

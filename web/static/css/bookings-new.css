@@ -54,22 +54,18 @@ select{
     padding: 8px;
 }
 
-label {
+label, input, textarea {
     display: block;
     text-align: left;
-    width: 300px;
-    margin: 5px;
+    width: 40%;
 }
 
 input, textarea {
-    display: block;
-    text-align: left;
-    width: 300px;
     border: #b0b0b0 solid 1.5px;
     border-radius: 2px;
-    margin: 5px;
+    margin: 5px 0px;
     padding: 8px;
-}​
+}
 
 form {
     display: flex;
@@ -255,10 +251,15 @@ td.end-slot {
 }
 
 .info-toggle-btn {
-    font-size: small;
-    padding: 2px;
+    font-size: xx-small;
     height: min-content;
+    margin-top: 12px;
+    padding: 1px;
     width: min-content;
+}
+
+.explainor-text {
+    font-size: small; font-style: oblique;
 }
 
 .time-selection-header {
@@ -298,7 +299,10 @@ td.end-slot {
         width: 50%;
         font-size: x-large;
     }
-    
+
+    input, textarea, label {
+        width: 75%;
+    }   
 }
 
 
