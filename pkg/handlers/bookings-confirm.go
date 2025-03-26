@@ -194,11 +194,15 @@ func BookingsConfirm(br *da.BookingsRepository[da.StorageDriver], api Api) Handl
 		booking.TransactionId = transactionId 
 		br.Update([]da.Booking { *booking })
 
-		err = sendBookingConfirmationEmail(booking)
-		if err != nil {
-			// handle issue with sending email!
-			// maybe we skip to mobile?
-			fmt.Printf("Failed sending confirmation email for booking %i: %v\n", booking.Id, err)
+		if booking.CustomerEmail != "test@test.com" {
+			err = sendBookingConfirmationEmail(booking)
+			if err != nil {
+				// handle issue with sending email!
+				// maybe we skip to mobile?
+				fmt.Printf("Failed sending confirmation email for booking %i: %v\n", booking.Id, err)
+			}
+		} else {
+			fmt.Println("Found test email address, skipping confirmation email")
 		}
 
 		return JSON(booking)
