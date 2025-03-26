@@ -7,10 +7,11 @@ function formatHour(hour_value)  {
 }
 
 for (let hour = startHour; hour <= endHour; hour++) {
-    const formattedHour = formatHour(hour);
+    const formattedStartHour = formatHour(hour);
+    const formattedEndHour = formatHour(hour + 1);
     document.write(`
         <tr>
-            <td>${formattedHour}</td>
+            <td>${formattedStartHour}-${formattedEndHour}</td>
             <td class="time-slot" data-room="room1" data-time="${hour}"></td>
             <td class="time-slot" data-room="room2" data-time="${hour}"></td>
         </tr>

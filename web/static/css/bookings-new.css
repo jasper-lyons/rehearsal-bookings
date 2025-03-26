@@ -299,7 +299,9 @@ td.end-slot {
         width: 50%;
         font-size: x-large;
     }
-
+    td {
+        font-size: small;
+    }
     input, textarea, label {
         width: 75%;
     }   

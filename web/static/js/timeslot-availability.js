@@ -36,7 +36,7 @@ async function setAvailability() {
 
         const slotTime = slot.dataset.time;
         const slotRoom = slot.dataset.room;
-        const timeLabel = slotTime.toString().padStart(2, '0') + ":00";
+        const timeLabel = formatHour(slotTime);
 
         // Disable slot if the room's availability is false
         if (slotRoom === "room1" && !room1.availability[timeLabel]) {
