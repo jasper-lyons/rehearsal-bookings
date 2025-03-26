@@ -36,6 +36,10 @@ document.getElementById('date-input').addEventListener('change', (e) => {
         if (newDate >= minDate && newDate <= maxDate) {
             selectedDate = newDate;
             updateDatePicker();
+        } else if (newDate >= maxDate) {
+            alert("Bookings can only be made upto 60 days in advance!")
+            selectedDate = maxDate;
+            updateDatePicker();
         }
     }
     clearSelection(); // clear the time slot selection when date changes
