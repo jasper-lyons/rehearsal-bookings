@@ -1,7 +1,7 @@
 // Initialize the current date and define the range
 const currentDate = new Date();
 const minDate = new Date(currentDate); 	// Start of the range (today)
-const maxDate = new Date(currentDate); // End of the range (90 days from today)
+const maxDate = new Date(currentDate); // End of the range (60 days from today)
 maxDate.setDate(maxDate.getDate() + 60);
 
 // define the selectedDate - by default this is the current date
