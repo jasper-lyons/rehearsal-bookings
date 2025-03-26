@@ -1,8 +1,8 @@
 {{template "layout.html.tmpl" .}}
 
 {{define "body"}}
-<h1>Create a new booking</h1>
-<div>
+<h1 id="page-header">Create a new booking</h1>
+<div id="form-container">
 	<form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
 		<script src="/static/js/booking-summaries.js"></script>
 		<script src="/static/js/select-button.js"></script>
@@ -137,7 +137,6 @@
 				<input type="tel"
 						id="phone"
 						name="phone"
-						pattern="(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}"
 						autocomplete="tel"
 						required>
 				</div>
@@ -229,13 +228,14 @@
 				</script>
 				<script src="/static/js/stripe-form-submission.js"></script>
 			{{ end }}
-
-
-			<div id="success" style="display: none">
-				<h1>Booking Successful! You will recieve an email comfirming your booking shortly.</h1>
-			</div>
 			
 		</fieldset>
 	</form>
+</div>
+<div id="success" style="display: none">
+	<h1>Booking Successful! You will recieve an email confirming your booking shortly.</h1>
+	<button onclick="window.location.href='/admin/bookings/new'" style="flex: 0;">NEW BOOKING</button>
+	<button onclick="window.location.href='https://badhabiteastbourne.co.uk/'" style="flex: 0;">BACK TO badhabiteastbourne.co.uk</button>
+</div>
 <script src="/static/js/navigation.js"></script>
 {{end}}

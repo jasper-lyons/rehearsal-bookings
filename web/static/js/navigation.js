@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
        
         let nameRegex = /^[a-zA-Z]+([-' ][a-zA-Z]+)*\s+[a-zA-Z]+([-' ][a-zA-Z]+)*$/;
         let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        let phoneRegex = /^\+?\d{11}$/;
+        let phoneRegex = /^(?:\+44|44|0)?\s?7\d{3}\s?\d{3}\s?\d{3}$/;
       
         if (!nameRegex.test(name))  {
             alert('Please provide your full name.');

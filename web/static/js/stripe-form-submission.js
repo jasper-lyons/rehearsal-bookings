@@ -11,9 +11,10 @@ window.addEventListener('load', function () {
   const cymbals = document.getElementById('cymbals');
   const stripeSubmitBtn = document.getElementById('stripe-submit');
   const paymentContainer = document.getElementById('stripe-form');
-  const step3Buttons = document.getElementById('step-3-buttons');
+  const formContainer = document.getElementById('form-container');
   const successMessage = document.getElementById('success');
-  
+  const pageHeader = document.getElementById('page-header');
+
   // Add event listeners for input changes
   sessionType.addEventListener('change', updatePrice);
   startTime.addEventListener('change', updatePrice);
@@ -120,9 +121,11 @@ window.addEventListener('load', function () {
       }
       
       // Update UI for success
-      step3Buttons.style.display = 'none';
+      
+      formContainer.style.display = 'none';
       paymentContainer.style.display = 'none';
       successMessage.style.display = 'block';
+      pageHeader.textContent = 'SUCCESS! 🎉'
     } catch (error) {
       showError(`Payment was successful, but there was an error confirming your booking: ${error.message}`);
     }
