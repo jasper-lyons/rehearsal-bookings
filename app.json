@@ -1,0 +1,9 @@
+{
+	"cron": [{
+		"command": "/app/bin/mark-abandoned-bookings",
+		"schedule": "*/5 * * * *"
+	}, {
+		"command": "/app/bin/send-access-codes",
+		"schedule": "0 * * * *"
+	}]
+}
