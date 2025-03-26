@@ -4,6 +4,7 @@ import (
 	"net/http"
 	da "rehearsal-bookings/pkg/data_access"
 	"time"
+	"errors"
 )
 
 type CreateBookingsForm struct {
@@ -42,6 +43,16 @@ func BookingsCreate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			return Error(err, http.StatusBadRequest)
 		}
 
+		// check that no bookings overlap!
+		bookings, err := br.Where("room_name = ? and (end_time > ? and start_time < ?)", form.Room, startTime, endTime)
+		if err != nil {
+			return Error(err, http.StatusInternalServerError)
+		}
+
+		if len(bookings) > 0 {
+			return Error(errors.New("Can't book, there are overlapping bookings!"), http.StatusBadRequest)
+		}
+
 		booking := da.Booking{
 			Type:          form.Type,
 			CustomerName:  form.Name,
@@ -58,7 +69,7 @@ func BookingsCreate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			PaymentMethod: "online",
 		}
 
-		bookings, err := br.Create([]da.Booking{booking})
+		bookings, err = br.Create([]da.Booking{booking})
 		if err != nil {
 			return Error(err, http.StatusInternalServerError)
 		}

@@ -140,10 +140,17 @@ window.addEventListener('load', function () {
       showError(`Payment failed: ${error.message}. Additionally, there was an error cleaning up your booking: ${deleteError.message}`);
     }
   }
+
+	let intent = null
   
   // Handle form submission
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
+
+		// sometimes an enter ont he keyboard will bubble up to a form submit
+		// this causes a refresh (and a new held booking to be created... which should fail ;)
+		if (intent !== null)
+			return
     
     try {
       // Show the payment form
@@ -154,7 +161,7 @@ window.addEventListener('load', function () {
       const bookingId = booking.id;
       
       // Get payment intent from server
-      const intent = await getPaymentIntent(bookingId);
+      intent = await getPaymentIntent(bookingId);
       
       // Initialize Stripe Elements with client secret
       setupStripeForm(intent.client_secret);
