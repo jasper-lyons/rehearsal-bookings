@@ -48,24 +48,9 @@
 			<!-- Time & Room Selection -->
 			<div class="time-selection">
 				<div class="time-selection-header">
-				<h3>Select your timeslot</h3>
-				<button type="button" class="info-toggle-btn" onclick="toggleInfoBox()">ⓘ</button>
-				</div>
-				<div class="info-box" id="timeslotinfo">
-					<button  type="button" onclick="toggleInfoBox()">X</button>
-					<p class="explainor-text"><strong>HOW TO SELECT YOUR TIMESLOT:</strong></p>
-					<p class="explainor-text">Click on your desired start time in the room of your choice, and then click on the desired end time. This will then select all the hours inbetween your start and end time.</p>
-					<p class="explainor-text">If a timeslot is greyed out this means that the room is not available.</p>
-					<script>
-						function toggleInfoBox() {
-							const box = document.getElementById('timeslotinfo');
-							if (box.style.display === 'none' || box.style.display === '') {
-								box.style.display = 'block';
-							} else {
-								box.style.display = 'none';
-							}
-						}
-					</script>
+					<h3 style="margin-bottom: 2px;">Select your timeslot:</h3>
+					<p class="explainor-text">Click your desired start time & end time — the hours in between will then be selected.</p>
+					<p class="explainor-text">Greyed-out slots mean the room is not available.</p>
 				</div>
 				<div id="time-slot-container">
 					<table>

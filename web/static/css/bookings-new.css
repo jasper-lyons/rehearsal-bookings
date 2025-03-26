@@ -245,11 +245,6 @@ td.end-slot {
     cursor: pointer;
 }
 
-/* Time slot info */
-#timeslotinfo {
-    display: none;
-}
-
 .info-toggle-btn {
     font-size: xx-small;
     height: min-content;
@@ -259,13 +254,12 @@ td.end-slot {
 }
 
 .explainor-text {
-    font-size: small; font-style: oblique;
-}
+    font-size: small; 
+    font-style: oblique;
+    margin-top: 0px;
+    margin-bottom: 1px;
 
-.time-selection-header {
-    display: flex;
-    flex-direction: row;
-    width: fit-content;
+
 }
 
 /* Responsive design */
