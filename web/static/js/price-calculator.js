@@ -22,8 +22,12 @@ async function fetchPrice() {
 
 function updatePrice() {
     let price = document.getElementById('price')
+    const stripeSubmitBtn = document.getElementById('stripe-submit');
     fetchPrice().then(data => {
         price.textContent = `£${(data).toFixed(2)}`
+        if (stripeSubmitBtn) {
+            stripeSubmitBtn.textContent = `Pay: £${(data).toFixed(2)}`; 
+        }
     })
 }
 

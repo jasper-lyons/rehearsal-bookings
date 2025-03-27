@@ -8,28 +8,13 @@ window.addEventListener('load', function () {
   const sessionType = document.getElementById('session-type');
   const startTime = document.getElementById('start-time');
   const endTime = document.getElementById('end-time');
-  const cymbals = document.getElementById('cymbals');
+  const cymbals = document.getElementById('cymbals').checked? 1 : 0;
   const stripeSubmitBtn = document.getElementById('stripe-submit');
   const paymentContainer = document.getElementById('stripe-form');
   const formContainer = document.getElementById('form-container');
   const successMessage = document.getElementById('success');
   const pageHeader = document.getElementById('page-header');
 
-  // Add event listeners for input changes
-  sessionType.addEventListener('change', updatePrice);
-  startTime.addEventListener('change', updatePrice);
-  endTime.addEventListener('change', updatePrice);
-  cymbals.addEventListener('change', updatePrice);
-  
-  // Initial price update
-  updatePrice();
-  
-  function updatePrice() {
-    fetchPrice().then(function (price) {
-      stripeSubmitBtn.textContent = `Pay: £${price.toFixed(2)}`;
-    });
-  }
-  
   async function createBooking() {
     const bookingData = {
       type: sessionType.value,
@@ -40,6 +25,8 @@ window.addEventListener('load', function () {
       date: document.getElementById('date-input').value,
       start_time: startTime.value,
       end_time: endTime.value,
+      cymbals: cymbals,
+      booking_notes: document.getElementById('booking-notes').value,
     };
     
     const bookingResponse = await fetch('/bookings', {
