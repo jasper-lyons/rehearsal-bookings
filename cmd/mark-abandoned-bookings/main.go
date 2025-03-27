@@ -36,11 +36,11 @@ func main() {
 		log.Fatal(err)
 	}
 	for _, booking := range heldBookings {
-		fmt.Println("Marking booking %d as abandoned", booking.Id)
+		log.Println("Marking booking %d as abandoned", booking.Id)
 		booking.Status = "abandoned"
 	}
 
-	bookings, err := br.Update(heldBookings)
+	_, err = br.Update(heldBookings)
 	if err != nil {
 		log.Fatal(err)
 	}
