@@ -59,6 +59,16 @@ func AdminBookingsCreate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 
 		}
 
+		// check that no bookings overlap!
+		bookings, err := br.Where("room_name = ? and (end_time > ? and start_time < ?)", form.Room, startTime, endTime)
+		if err != nil {
+			return Error(err, http.StatusInternalServerError)
+		}
+
+		if len(bookings) > 0 {
+			return Error(errors.New("Can't book, there are overlapping bookings!"), http.StatusBadRequest)
+		}
+
 		booking := da.Booking{
 			Type:           form.Type,
 			CustomerName:   form.Name,
