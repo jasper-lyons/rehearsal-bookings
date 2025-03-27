@@ -11,6 +11,7 @@ function clearSelection() {
     // Remove the selection class from all slots
     timeSlots.forEach(slot => {
         slot.classList.remove('selected','start-slot','end-slot','current-booking');
+        slot.textContent = ''
     });
 
     // Reset the variables
@@ -53,6 +54,7 @@ function selectFirstSlot(slot) {
     startSlot = slot;
     selectedRoom = slot.dataset.room;
     slot.classList.add('selected', 'grabbing', 'start-slot');
+    slot.textContent = 'start'
 }
 
 // Function to select slots between start and end
@@ -91,6 +93,13 @@ timeSlots.forEach(slot => {
                 const formattedStartTime = formatHour(Math.min(startTimeValue, endTimeValue));
                 const formattedEndTime = formatHour(Math.max(startTimeValue, endTimeValue) + 1);
                 const formattedRoom = selectedRoom === 'room1' ? 'Room 1' : 'Room 2';
+
+                if (endTimeValue < startTimeValue) {
+                    endSlot.textContent = 'start'
+                    startSlot.textContent = 'end'
+                } else {
+                    endSlot.textContent = 'end'
+                }
 
                 // Save the data to the hidden inputs
                 document.getElementById('start-time').value = formattedStartTime;

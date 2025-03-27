@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	da "rehearsal-bookings/pkg/data_access"
 	"time"
@@ -67,15 +66,10 @@ func RoomsIndex(br *da.BookingsRepository[da.StorageDriver]) Handler {
 
 		dayEnd := dayStart.Add(time.Hour * 24 * time.Duration(1))
 
-		fmt.Println(dayStart)
-		fmt.Println(dayEnd)
-
 		bookings, err := br.Where("status IN ('paid', 'unpaid', 'hold') and start_time >= ? and end_time <= ?", dayStart, dayEnd)
 		if err != nil {
 			return Error(err, 500)
 		}
-
-		fmt.Println(bookings)
 
 		room1 := NewRoom("Room 1")
 		for _, booking := range bookings {

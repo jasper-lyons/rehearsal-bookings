@@ -192,15 +192,15 @@ td.grabbing {
 }
 
 td.selected {
-    background-color: grey;
+    background-color: #FFE686;
 }
 
 td.start-slot {
-    background-color: #b7b7b7;
+    background-color: #F8D23D;
 }
 
 td.end-slot {
-    background-color: #636262;
+    background-color: #F8D23D;
 }
 
 /* Floating box */
@@ -253,13 +253,10 @@ td.end-slot {
     width: min-content;
 }
 
-.explainor-text {
-    font-size: small; 
+.explainer-text {
     font-style: oblique;
     margin-top: 0px;
     margin-bottom: 1px;
-
-
 }
 
 /* Responsive design */
