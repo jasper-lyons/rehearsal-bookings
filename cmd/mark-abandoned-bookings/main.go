@@ -31,13 +31,17 @@ func main() {
 
 	br := da.NewBookingsRepository(driver)
 
-	heldBookings, err := br.Where(`status = 'hold' and expiration < current_timestamp`)
+	heldBookings, err := br.Where(`expiration < current_timestamp and status = 'hold'`)
 	if err != nil {
 		log.Fatal(err)
 	}
 	for _, booking := range heldBookings {
+		fmt.Println("Marking booking %d as abandoned", booking.Id)
 		booking.Status = "abandoned"
 	}
 
-	br.Update(heldBookings)
+	bookings, err := br.Update(heldBookings)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
