@@ -31,7 +31,7 @@ func main() {
 
 	br := da.NewBookingsRepository(driver)
 
-	heldBookings, err := br.Where(`status = "held" and expiration < current_timestamp`)
+	heldBookings, err := br.Where(`status = 'held' and expiration < current_timestamp`)
 	if err != nil {
 		log.Fatal(err)
 	}
