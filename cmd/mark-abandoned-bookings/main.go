@@ -35,9 +35,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, booking := range heldBookings {
-		log.Println("Marking booking %d as abandoned", booking.Id)
-		booking.Status = "abandoned"
+
+	for i := range heldBookings {
+		log.Println("Marking booking %d as abandoned", heldBookings[i].Id)
+		heldBookings[i].Status = "abandoned"
 	}
 
 	_, err = br.Update(heldBookings)
