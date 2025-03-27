@@ -6,6 +6,7 @@ import (
 	da "rehearsal-bookings/pkg/data_access"
 	"strconv"
 	"time"
+	"errors"
 )
 
 type AdminCreateBookingsForm struct {
@@ -86,7 +87,7 @@ func AdminBookingsCreate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			PaymentMethod:  form.PaymentMethod,
 		}
 
-		bookings, err := br.Create([]da.Booking{booking})
+		bookings, err = br.Create([]da.Booking{booking})
 		if err != nil {
 			return Error(err, http.StatusInternalServerError)
 		}
