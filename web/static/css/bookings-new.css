@@ -258,44 +258,6 @@ td.end-slot {
     margin-bottom: 1px;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-    #session-type-container {
-        flex-direction: column;
-    }
-    button:hover:not(:disabled) {
-        background-color: none; 
-        box-shadow: none; 
-    }
-    .info-box {
-        margin-top: 5px;
-    }
-    .flex-container {
-        flex-direction: column;
-    }
-    .flex-container > * {
-        flex: 1;
-        width: 100%;
-        margin: 5px 0;
-        box-sizing: border-box;
-    }
-    .time-slot-container {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-    .floating-box {
-        width: 50%;
-        font-size: x-large;
-    }
-    td {
-        font-size: small;
-    }
-    input, textarea, label {
-        width: 75%;
-    }   
-}
 
 
 /*  ADMIN PANEL */
@@ -368,4 +330,54 @@ td.end-slot {
 svg {
     width: 24px;
     height: 24px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    #session-type-container {
+        flex-direction: column;
+    }
+    button:hover:not(:disabled) {
+        background-color: none; 
+        box-shadow: none; 
+    }
+    .info-box {
+        margin-top: 5px;
+    }
+    .flex-container {
+        flex-direction: column;
+    }
+    .flex-container > * {
+        flex: 1;
+        width: 100%;
+        margin: 5px 0;
+        box-sizing: border-box;
+    }
+    .time-slot-container {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    .floating-box {
+        width: 50%;
+        font-size: x-large;
+    }
+    td {
+        font-size: small;
+    }
+    input, textarea, label {
+        width: 75%;
+    } 
+    .bookings-panel {
+        flex-direction: column;
+    }
+
+    .admin-panel {
+        width: auto;
+    }
+    
+    .admin-update {
+        width: 97%;
+    }
 }

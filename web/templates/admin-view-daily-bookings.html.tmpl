@@ -63,18 +63,18 @@
 				<p><strong>Email: </strong>{{.CustomerEmail}}</p>
 			</div>
 			<div>
-				<button onclick="window.location.href='/admin/bookings/{{.Id}}/edit'">Update</button>
-				<form action="/admin/bookings/{{.Id}}/paid" method="PUT" class="mark-paid" onsubmit="return confirm('Are you sure you want mark this booking as paid?');">
-					<input type="hidden" name="status" value="paid">
-					<button type="submit" {{if eq .Status "paid"}}disabled{{end}}>Mark paid</button>
-				</form>
-				<form action="/admin/bookings/{{.Id}}/cancel" method="PUT" class="mark-cancelled" onsubmit="return confirm('Are you sure you want cancel this booking?');">
-					<input type="hidden" name="status" value="cancelled">
-					<button type="submit">Cancel</button>
-				</form>
-				<form action="/admin/bookings/{{.Id}}" method="DELETE" onsubmit="return confirm('Are you sure you want to delete this booking?');">
-					<button>Delete</button>
-				</form>
+					<button class="admin-update" onclick="window.location.href='/admin/bookings/{{.Id}}/edit'">Update</button>
+					<form action="/admin/bookings/{{.Id}}/paid" method="PUT" class="mark-paid" onsubmit="return confirm('Are you sure you want mark this booking as paid?');">
+						<input type="hidden" name="status" value="paid">
+						<button type="submit" {{if eq .Status "paid"}}disabled{{end}}>Mark paid</button>
+					</form>
+					<form action="/admin/bookings/{{.Id}}/cancel" method="PUT" class="mark-cancelled" onsubmit="return confirm('Are you sure you want cancel this booking?');">
+						<input type="hidden" name="status" value="cancelled">
+						<button type="submit">Cancel</button>
+					</form>
+					<form action="/admin/bookings/{{.Id}}" method="DELETE" onsubmit="return confirm('Are you sure you want to delete this booking?');">
+						<button>Delete</button>
+					</form>	
 			</div>
 		</div>
 		{{ end }}
