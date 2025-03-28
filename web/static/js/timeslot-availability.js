@@ -10,15 +10,11 @@ async function fetchAvailability(date) {
     }
 }
 
-// Function to set the availability of each timeslot. 
-// This function is called by updateDatePicker() and selectButton()
+// Function to set the availability of each timeslot based on the results of rooms API
 async function setAvailability() {
+    const timeSlots = document.querySelectorAll('.time-slot');
     const datePicker = document.getElementById('date-input');
-
-    let date = new Date(datePicker.value);
-    let isWeekday = date.getDay() >= 1 && date.getDay() <= 5; // Monday = 1, Friday = 5
     const rooms = await fetchAvailability(datePicker.value); // ✅ Await the result
-
     const room1 = rooms.find(r => r.name === "Room 1"); // ✅ Find Room 1
     if (!room1) {
         console.error('Room 1 not found!');
@@ -33,7 +29,6 @@ async function setAvailability() {
 
     timeSlots.forEach(slot => {
         slot.classList.remove('unavailable');
-
         const slotTime = slot.dataset.time;
         const slotRoom = slot.dataset.room;
         const timeLabel = formatHour(slotTime);
@@ -49,6 +44,21 @@ async function setAvailability() {
             return;
         }
 
+    });
+}
+
+// Function to set the availability of each timeslot based on the business logic
+// used on the user side of bookings, rather than admin
+async function setBookableSlots() {
+    const timeSlots = document.querySelectorAll('.time-slot');
+    const datePicker = document.getElementById('date-input');
+
+    let date = new Date(datePicker.value);
+    let isWeekday = date.getDay() >= 1 && date.getDay() <= 5; // Monday = 1, Friday = 5
+
+    timeSlots.forEach(slot => {
+        const slotTime = slot.dataset.time;
+
         if (datePicker.value === datePicker.min && slotTime < new Date().getHours() + 2) {
             slot.classList.add('unavailable');
         }
@@ -62,6 +72,5 @@ async function setAvailability() {
         if (isWeekday && document.getElementById('session-type').value === "solo" && slotTime > 17) {
             slot.classList.add('unavailable');
         }
-
     });
 }

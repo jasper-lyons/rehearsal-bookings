@@ -6,8 +6,8 @@ let selectedRoom = null;
 
 // Function to clear the selection and reset the variables 
 // This is needed so that users can't book more than one room or time-range
-// This function is also called by updateDatePicker()
 function clearSelection() {
+
     // Remove the selection class from all slots
     timeSlots.forEach(slot => {
         slot.classList.remove('selected','start-slot','end-slot','current-booking');
@@ -45,6 +45,7 @@ function clearSelection() {
         if (document.getElementById('original-booking-date')) {
             selectedSlots();
         }
+        setBookableSlots();
     });
 }
 
@@ -130,6 +131,8 @@ timeSlots.forEach(slot => {
         }
     });
 });
-
+    
 // set the availability for the initial date
-setAvailability();
+setAvailability().then(() => {
+    setBookableSlots();
+});

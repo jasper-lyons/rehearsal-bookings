@@ -24,4 +24,5 @@ function selectedSlots() {
 // set the availability for the initial date
 setAvailability().then(() => {
     selectedSlots();
+    setBookableSlots();
 });

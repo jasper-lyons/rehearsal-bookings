@@ -22,7 +22,9 @@ document.getElementById('prev-day').addEventListener('click', () => {
     updateDatePicker(animated = true, timebound = false).then(() => {
         updateUrl();
         showDateGroup();
+        setAvailability();
     });
+
 });
 
 document.getElementById('next-day').addEventListener('click', () => {
@@ -30,6 +32,7 @@ document.getElementById('next-day').addEventListener('click', () => {
     updateDatePicker(animated = true, timebound = false).then(() => {
         updateUrl();
         showDateGroup();
+        setAvailability();
     });
 });
 
@@ -40,10 +43,12 @@ document.getElementById('date-input').addEventListener('change', (e) => {
     updateDatePicker(animated = false, timebound = false).then(() => {
         updateUrl();
         showDateGroup();
+        setAvailability();
     });
 });
 
 // Initialize the display and hidden input with today's date
 updateDatePicker(animated = false, timebound = false).then(() => {
     showDateGroup();
+    setAvailability();
 });
