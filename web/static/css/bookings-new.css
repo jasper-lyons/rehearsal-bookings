@@ -195,7 +195,7 @@ td.selected {
     background-color: #FFE686;
 }
 
-td.start-slot {
+td.start-slot, td.end-slot {
     background-color: #F8D23D;
 }
 

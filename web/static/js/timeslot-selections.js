@@ -48,13 +48,42 @@ function clearSelection() {
     });
 }
 
+function saveSlotSelections(start, end, room) {
+    const startTimeValue = parseInt(start.dataset.time, 10);
+    const endTimeValue = parseInt(end.dataset.time, 10);
+    const formattedStartTime = formatHour(Math.min(startTimeValue, endTimeValue));
+    const formattedEndTime = formatHour(Math.max(startTimeValue, endTimeValue) + 1);
+    const formattedRoom = room === 'room1' ? 'Room 1' : 'Room 2';
+
+    if (endTimeValue < startTimeValue) {
+        end.textContent = formattedStartTime
+        start.textContent = formattedEndTime
+    } else if (endTimeValue === startTimeValue) {  
+        end.textContent = `${formattedStartTime} - ${formattedEndTime}`;
+    } else {
+        start.textContent = formattedStartTime
+        end.textContent = formattedEndTime
+    }
+
+    // Save the data to the hidden inputs
+    document.getElementById('start-time').value = formattedStartTime;
+    document.getElementById('end-time').value = formattedEndTime;
+    document.getElementById('room').value = formattedRoom;
+
+    // Trigger the change event on the end-time input to update the price
+    document.getElementById('end-time').dispatchEvent(new Event('change'));
+    
+    updatePrice();
+}
+
 // Function for initialising the first time slot (used on odd clicks, 1, 3 etc...)
 function selectFirstSlot(slot) {
     clearSelection();
     startSlot = slot;
+    endSlot = slot;
     selectedRoom = slot.dataset.room;
-    slot.classList.add('selected', 'grabbing', 'start-slot');
-    slot.textContent = `${formatHour(slot.dataset.time)} - `
+    slot.classList.add('selected', 'start-slot');
+    saveSlotSelections(startSlot, endSlot, selectedRoom);
 }
 
 // Function to select slots between start and end
@@ -82,52 +111,21 @@ timeSlots.forEach(slot => {
             if (!startSlot) {
                 // First click: set the start slot
                 selectFirstSlot(slot);
-            } else if (!endSlot && slot.dataset.room === selectedRoom) {
+                
+                // Enable book now button 
+                document.getElementById('book-now').classList.add('enabled');
+            } else if (startSlot == endSlot && slot.dataset.room === selectedRoom) {
                 // Second click: set the end slot and select all in between
                 endSlot = slot;
                 slot.classList.add('end-slot');
                 selectSlotsBetween(startSlot, endSlot);
-
-                const startTimeValue = parseInt(startSlot.dataset.time, 10);
-                const endTimeValue = parseInt(endSlot.dataset.time, 10);
-                const formattedStartTime = formatHour(Math.min(startTimeValue, endTimeValue));
-                const formattedEndTime = formatHour(Math.max(startTimeValue, endTimeValue) + 1);
-                const formattedRoom = selectedRoom === 'room1' ? 'Room 1' : 'Room 2';
-                startSlot.textContent = `${formattedStartTime} - ${formattedEndTime}`;
-                if (endTimeValue < startTimeValue) {
-                    endSlot.textContent = `${formattedStartTime} - ${formattedEndTime}`;
-                    endSlot.classList.add('start-slot');
-                    startSlot.textContent = '';
-                    startSlot.classList.remove('start-slot');
-
-                }
-                // Save the data to the hidden inputs
-                document.getElementById('start-time').value = formattedStartTime;
-                document.getElementById('end-time').value = formattedEndTime;
-                document.getElementById('room').value = formattedRoom;
-
-                // Trigger the change event on the end-time input to update the price
-                document.getElementById('end-time').dispatchEvent(new Event('change'));
-                // Enable book now button if exists
-                const bookNowButton = document.getElementById('book-now');
-                if (bookNowButton) {
-                    bookNowButton.classList.add('enabled');
-                }                // print the selection for user to see room/time details
-                updatePrice();
-
-                timeSlots.forEach(slot => slot.classList.remove('grabbing'));
+                saveSlotSelections(startSlot, endSlot, selectedRoom);
             } else {
                 // Third click: clear the selection and start again
                 selectFirstSlot(slot);
-            }
-        }
-    });
 
-    // On mouse over, if dragging, add the slots affected to the selectedSlots array
-    slot.addEventListener('mouseover', () => {
-        if (startSlot && !endSlot) {
-            if (selectedRoom === slot.dataset.room) {
-                slot.classList.add('grabbing');						
+                // Enable book now button 
+                document.getElementById('book-now').classList.add('enabled');
             }
         }
     });
