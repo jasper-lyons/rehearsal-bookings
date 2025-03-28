@@ -54,7 +54,7 @@ function selectFirstSlot(slot) {
     startSlot = slot;
     selectedRoom = slot.dataset.room;
     slot.classList.add('selected', 'grabbing', 'start-slot');
-    slot.textContent = 'start'
+    slot.textContent = `${formatHour(slot.dataset.time)} - `
 }
 
 // Function to select slots between start and end
@@ -93,14 +93,14 @@ timeSlots.forEach(slot => {
                 const formattedStartTime = formatHour(Math.min(startTimeValue, endTimeValue));
                 const formattedEndTime = formatHour(Math.max(startTimeValue, endTimeValue) + 1);
                 const formattedRoom = selectedRoom === 'room1' ? 'Room 1' : 'Room 2';
-
+                startSlot.textContent = `${formattedStartTime} - ${formattedEndTime}`;
                 if (endTimeValue < startTimeValue) {
-                    endSlot.textContent = 'start'
-                    startSlot.textContent = 'end'
-                } else {
-                    endSlot.textContent = 'end'
-                }
+                    endSlot.textContent = `${formattedStartTime} - ${formattedEndTime}`;
+                    endSlot.classList.add('start-slot');
+                    startSlot.textContent = '';
+                    startSlot.classList.remove('start-slot');
 
+                }
                 // Save the data to the hidden inputs
                 document.getElementById('start-time').value = formattedStartTime;
                 document.getElementById('end-time').value = formattedEndTime;
