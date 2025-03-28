@@ -12,11 +12,9 @@
 		<script src="/static/js/admin/form-submission.js"></script>
 		
 		<!-- Step 1: Rehearsal Type, Date & Timeslot Selection -->
-		<h1>YOUR BOOKING DETAILS</h1>
-
 		<!-- Session Type Selection -->
 		<div id="session-types">
-			<h3>Select your session type:</h3>
+			<h3>Session Type:</h3>
 			<!--  Toggle buttons for selecting solo or band sessions -->
 			<div id="session-type-container">
 				<button type="button" class="toggle-button selected" data-value="band" onclick="selectButton(this)">Band</button>
@@ -34,7 +32,7 @@
 
 		<!-- Date Selection -->
 		<div class="date-selection">
-			<h3>Pick your date:</h3>
+			<h3>Date:</h3>
 			<!--  Date picker for booking -->
 			<div class="flex-container">
 				<button type="button" id="prev-day">← Previous Day</button>
@@ -48,7 +46,7 @@
 		<!-- Time & Room Selection -->
 		<div class="time-selection">
 			<div id="time-slot-container">
-				<h3>Select your timeslot</h3>
+				<h3>Timeslot:</h3>
 				<table>
 					<colgroup>
 						<col style="width: 40%;">
@@ -81,38 +79,34 @@
 				</div>
 			</div>
 		</div>
-
 		<!-- Step 2 - Customer Details -->
-		<h1>YOUR PERSONAL DETAILS</h1>
-		<h3>Enter your contact details:</h3>
-		<div class="customer-info">
-			<label for="name">Full Name</label>
-			<input type="text" 
-					id="name"
-					name="name" 
+		<div class="customer-details">
+			<h3>Customer details:</h3>
+			<div class="customer-info">
+				<label for="name">Full Name</label>
+				<input type="text" 
+						id="name"
+						name="name" 
+						required>
+			</div>
+
+			<div class="customer-info">
+				<label for="email">Email</label>
+				<input type="email"
+						id="email" 
+						name="email"
+						required>
+			</div>
+
+			<div class="customer-info">
+			<label for="phone">Phone</label>
+			<input type="tel"
+					id="phone"
+					name="phone"
+					pattern="(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}"
 					required>
+			</div>
 		</div>
-
-		<div class="customer-info">
-			<label for="email">Email</label>
-			<input type="email"
-					id="email" 
-					name="email"
-					required>
-		</div>
-
-		<div class="customer-info">
-		<label for="phone">Phone</label>
-		<input type="tel"
-				id="phone"
-				name="phone"
-				pattern="(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}"
-				required>
-		</div>
-
-		<br>
-		<hr>
-
 		<div id="booking-details">
 			<!-- Display Booking Details -->
 			<h3>Price, Status & Notes</h3>
@@ -138,10 +132,6 @@
 				</select>
 			</div>
 		</div>
-
-		<br>
-		<hr>
-
 		<div id="booking-summary">
 			<!-- Display Booking Details -->
 			<h3>Your Booking:</h3>
@@ -151,7 +141,7 @@
 		</div>
 
 		<button type="submit" id="book-now">
-			CONFIRM & BOOK FOR: <span id="price" class="price">£0.00</span>
+			CONFIRM & BOOK
 		</button>
 		<script>
 			let form = document.getElementById('form')
