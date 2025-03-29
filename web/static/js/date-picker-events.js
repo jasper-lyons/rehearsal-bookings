@@ -1,3 +1,5 @@
+const options = { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
+
 // Add event listeners for buttons
 document.getElementById('prev-day').addEventListener('click', () => {
     if(document.getElementById('original-booking-date')) {
@@ -9,6 +11,7 @@ document.getElementById('prev-day').addEventListener('click', () => {
             updateDatePicker(animated = true);
         }
     }
+    document.getElementById('formatted-date').textContent = new Intl.DateTimeFormat('en-GB', options).format(new Date(datePicker.value));
     clearSelection(); // clear the time slot selection when date changes
 });
 
@@ -22,6 +25,7 @@ document.getElementById('next-day').addEventListener('click', () => {
             updateDatePicker(animated = true);
         }
     }
+    document.getElementById('formatted-date').textContent = new Intl.DateTimeFormat('en-GB', options).format(new Date(datePicker.value));
     clearSelection(); // clear the time slot selection when date changes
     
 });
@@ -47,6 +51,7 @@ document.getElementById('date-input').addEventListener('change', (e) => {
             updateDatePicker();
         }
     }
+    document.getElementById('formatted-date').textContent = new Intl.DateTimeFormat('en-GB', options).format(new Date(datePicker.value));
     clearSelection(); // clear the time slot selection when date changes
 });
 
