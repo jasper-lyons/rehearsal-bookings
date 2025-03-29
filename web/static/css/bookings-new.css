@@ -176,6 +176,13 @@ th {
     text-transform: uppercase;
 }
 
+th.date-header {
+    text-align: center; 
+    background-color: transparent; 
+    color: black;
+    border: none;
+}
+
 td.unavailable {
     background-image: repeating-linear-gradient(45deg, white, white 2.5px, lightgray 2.5px, lightgray 5px);
     cursor: not-allowed; 
@@ -344,8 +351,8 @@ svg {
     #session-type-container {
         flex-direction: column;
     }
-    button:hover:not(:disabled) {
-        background-color: none; 
+    .toggle-button:hover:not(:disabled) {
+        background-color: black; 
         box-shadow: none; 
     }
     .info-box {

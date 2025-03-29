@@ -3,7 +3,13 @@ async function populateSummary() {
     // Get the values from the form
     const room = document.getElementById('room').value;
     const session_type = document.getElementById('session-type').value;
-    const date = document.getElementById('date-input').value;
+    const dateInput = document.getElementById('date-input').value;
+    const formattedDate = new Date(dateInput).toLocaleDateString('en-GB', {
+        weekday: 'long',
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+    }).replace(/,/g, '');
     const startTime = document.getElementById('start-time').value;
     const endTime = document.getElementById('end-time').value;
     const cymbals = document.getElementById('cymbals').checked? 'Yes' : 'No';
@@ -21,7 +27,7 @@ async function populateSummary() {
     // Update the summary content for all elements with these classes
     summaryRooms.forEach(element => element.innerHTML = `<p>Room: <strong>${room}</strong></p>`);
     summaryTypes.forEach(element => element.innerHTML = `<p>Session Type: <strong>${session_type.charAt(0).toUpperCase() + session_type.slice(1)}</strong></p>`);
-    summaryDate.forEach(element => element.innerHTML = `<p>Date: <strong>${date}</strong></p>`);
+    summaryDate.forEach(element => element.innerHTML = `<p>Date: <strong>${formattedDate}</strong></p>`);
     summaryTimes.forEach(element => element.innerHTML = `<p>Time: <strong>${startTime} - ${endTime}</strong></p>`);
     summaryCymbals.forEach(element => element.innerHTML = `<p>Cymbal Hire: <strong>${cymbals}</strong></p>`);
     summaryPrices.forEach(element => element.innerHTML = `<p>Price: <strong>${price}</strong></p>`);

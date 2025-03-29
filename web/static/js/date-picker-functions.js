@@ -32,6 +32,9 @@ async function updateDatePicker(animated = false, timebound = true) {
         datePicker.classList.add('animate');
         setTimeout(() => datePicker.classList.remove('animate'), 150); // Match the animation duration   
     }
+
+    const options = { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
+    document.getElementById('formatted-date').textContent = new Intl.DateTimeFormat('en-GB', options).format(new Date(datePicker.value));
 }
 
 

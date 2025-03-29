@@ -38,13 +38,11 @@
 				<!--  Date picker for booking -->
 				<div class="flex-container">
 					<button type="button" id="prev-day">← Previous Day</button>
-					<input type="date" id="date-input" name="date">
+					<input type="date" id="date-input" name="date" onclick="this.showPicker()">
 					<button type="button" id="next-day">Next Day →</button>
-					<script src="/static/js/date-picker-functions.js"></script>
-					<script src="/static/js/date-picker-events.js"></script>
 				</div>
 			</div>
-
+			
 			<!-- Time & Room Selection -->
 			<div class="time-selection">
 				<div class="time-selection-header">
@@ -66,6 +64,10 @@
 						</colgroup>
 						<thead>
 							<tr>
+								<th class="date-header"></th>
+								<th colspan="2" id="selected-date" class="date-header" style="border: black 1px solid;"><span id="formatted-date"></span></th>
+							</tr>
+							<tr>
 								<th>Hour</th>
 								<th>
 									Room 1 <a href="https://badhabiteastbourne.co.uk/room1/" target="_blank" class="room-link" title="Click for room specs"> ➚ </a>
@@ -77,6 +79,8 @@
 						</thead>
 						<tbody>
 							<!-- Time slots are generated here -->
+							<script src="/static/js/date-picker-functions.js"></script>
+							<script src="/static/js/date-picker-events.js"></script>
 							<script src="/static/js/timeslot-table.js"></script>
 							<script src="/static/js/timeslot-availability.js"></script>
 							<script src="/static/js/timeslot-selections.js"></script>
