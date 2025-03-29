@@ -73,29 +73,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Validate Step 2
     const validateStep2 = () => {
-        const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-       
+        const name = document.getElementById('name');
+        const email = document.getElementById('email');
+        const phone = document.getElementById('phone');
+
         let nameRegex = /^[a-zA-Z]+([-' ][a-zA-Z]+)*\s+[a-zA-Z]+([-' ][a-zA-Z]+)*$/;
         let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         let phoneRegex = /^(?:\+44|44|0)?\s?7\d{3}\s?\d{3}\s?\d{3}$/;
-      
-        if (!nameRegex.test(name))  {
-            alert('Please provide your full name.');
-            return false;
-        }
-      
-        if (!emailRegex.test(email)) {
-            alert('Please enter a valid email address.');
-            return false;
+
+        let isValid = true;
+
+        // Reset previous error states
+        [name, email, phone].forEach((input) => {
+            input.classList.remove('error');
+            const errorSpan = input.nextElementSibling;
+            if (errorSpan && errorSpan.classList.contains('error-message')) {
+                errorSpan.remove();
+            }
+        });
+
+        if (!nameRegex.test(name.value.trim())) {
+            isValid = false;
+            name.classList.add('error');
+            const errorSpan = document.createElement('span');
+            errorSpan.classList.add('error-message');
+            errorSpan.textContent = 'Please provide your full name.';
+            name.parentNode.appendChild(errorSpan);
         }
 
-        if (!phoneRegex.test(phone)) {
-            alert('Please enter a valid phone number.');
-            return false;
+        if (!emailRegex.test(email.value.trim())) {
+            isValid = false;
+            email.classList.add('error');
+            const errorSpan = document.createElement('span');
+            errorSpan.classList.add('error-message');
+            errorSpan.textContent = 'Please enter a valid email address.';
+            email.parentNode.appendChild(errorSpan);
         }
-        
-        return name && email && phone;
+
+        if (!phoneRegex.test(phone.value.trim())) {
+            isValid = false;
+            phone.classList.add('error');
+            const errorSpan = document.createElement('span');
+            errorSpan.classList.add('error-message');
+            errorSpan.textContent = 'Please enter a valid phone number.';
+            phone.parentNode.appendChild(errorSpan);
+        }
+
+        if (!isValid) {
+            alert('Please enter all your details.');
+        }
+
+        return isValid;
     };
 });		

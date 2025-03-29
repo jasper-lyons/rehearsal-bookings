@@ -254,8 +254,19 @@ td.start-slot, td.end-slot {
     margin-bottom: 1px;
 }
 
+.error {
+    border: 1px solid red;
+    margin-bottom: 0px;
+}
 
+.error-message {
+    color: red;
+    font-size: small;
+}
 
+.room-link {
+    color: white;
+}
 /*  ADMIN PANEL */
 .bookings-panel {
     display: flex;
@@ -359,20 +370,23 @@ svg {
         width: 50%;
         font-size: x-large;
     }
-    td {
+    td,th {
         font-size: small;
     }
     input, textarea, label {
         width: 75%;
     } 
+    .error-message {
+        font-size: 12px;
+    }
+
+    /* Admin panels */ 
     .bookings-panel {
         flex-direction: column;
     }
-
     .admin-panel {
         width: auto;
     }
-    
     .admin-update {
         width: 97%;
     }
