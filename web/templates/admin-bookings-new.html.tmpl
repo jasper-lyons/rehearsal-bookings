@@ -1,8 +1,12 @@
 {{template "layout.html.tmpl" .}}
 
+{{ define "PageStyle"}}
+style="background-color: lightsalmon;"
+{{end}}
+
 {{define "body"}}
 <h1>ADMIN: Create a new booking</h1>
-<div id="form-container">
+<div id="form-container" class="admin-view">
 	<form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
 		<!-- CSRF Protection -->
 		<input type="hidden" name="csrf_token" value="{{.CSRFToken}}">

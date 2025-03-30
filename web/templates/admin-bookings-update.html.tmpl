@@ -1,9 +1,13 @@
 {{template "layout.html.tmpl" .}}
 
+{{ define "PageStyle"}}
+style="background-color: #FFE686;"
+{{end}}
+
 {{define "body"}}
 	{{range .Bookings}}
 	<h1>ADMIN: Update Booking #{{.Id}}</h1>
-	<div id="form-container">
+	<div id="form-container" class="admin-view">
 	<p>Existing Booking Details:</p>
 	<div class='bookings-panel {{if eq .Status "cancelled"}}cancelled{{else if eq .Status "paid"}}paid{{else}}unpaid{{end}}'>
 		<div class="admin-panel">

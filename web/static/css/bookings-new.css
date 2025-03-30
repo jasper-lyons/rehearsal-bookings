@@ -310,6 +310,14 @@ td.start-slot, td.end-slot {
     width: 50%;
 }
 
+.admin-view {
+    background: white;
+    padding: 0px 20px 20px 20px;
+    border-width: 2px;
+    border-style: groove;
+    border-color: darkgrey;
+}
+
 .bookings-table {
     padding: 2px;
     text-transform: uppercase;

@@ -74,6 +74,7 @@ func main() {
 
 	// Admin panel forms
 	http.Handle("GET /admin/bookings/new", basicauth(handlers.AdminBookingsNew(br)))
+	http.Handle("GET /admin/new", basicauth(handlers.AdminBookingsNew(br)))
 	http.Handle("GET /admin/bookings/{id}/edit", basicauth(handlers.AdminBookingsUpdateView(br)))
 
 	// Admin booking views
@@ -83,6 +84,7 @@ func main() {
 	http.Handle("GET /admin/bookings/future", basicauth(handlers.AdminBookingsFutureBookings(br)))
 	http.Handle("GET /admin/bookings/past", basicauth(handlers.AdminBookingsPastBookings(br)))
 	http.Handle("GET /admin", handlers.Redirect("/admin/bookings"))
+	http.Handle("GET /admin/", handlers.Redirect("/admin/bookings"))
 
 	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, paymentsApi))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))
