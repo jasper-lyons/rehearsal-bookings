@@ -1,10 +1,10 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 	da "rehearsal-bookings/pkg/data_access"
 	"time"
-	"errors"
 )
 
 type CreateBookingsForm struct {

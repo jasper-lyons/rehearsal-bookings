@@ -5,10 +5,6 @@ window.addEventListener('load', function () {
   
   // Cache DOM elements
   const form = document.getElementById('form');
-  const sessionType = document.getElementById('session-type');
-  const startTime = document.getElementById('start-time');
-  const endTime = document.getElementById('end-time');
-  const cymbals = document.getElementById('cymbals').checked? 1 : 0;
   const stripeSubmitBtn = document.getElementById('stripe-submit');
   const paymentContainer = document.getElementById('stripe-form');
   const formContainer = document.getElementById('form-container');
@@ -17,15 +13,15 @@ window.addEventListener('load', function () {
 
   async function createBooking() {
     const bookingData = {
-      type: sessionType.value,
+      type: document.getElementById('session-type').value,
       name: document.getElementById('name').value,
       email: document.getElementById('email').value,
       phone: document.getElementById('phone').value,
       room: document.getElementById('room').value,
       date: document.getElementById('date-input').value,
-      start_time: startTime.value,
-      end_time: endTime.value,
-      cymbals: cymbals,
+      start_time: document.getElementById('start-time').value,
+      end_time: document.getElementById('end-time').value,
+      cymbals: document.getElementById('cymbals').checked? 1 : 0,
       booking_notes: document.getElementById('booking-notes').value,
     };
     
