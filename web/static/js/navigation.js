@@ -43,13 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Back Button for Step 2
     document.getElementById('back-step-1').addEventListener('click', () => {
-        history.replaceState({ step: 1 }, null, ''); // Use replaceState to avoid adding a new history entry
+        history.back();
         showStep(1);
     });
 
     // Back Button for Step 3
     document.getElementById('back-step-2').addEventListener('click', () => {
-        history.replaceState({ step: 2 }, null, ''); // Use replaceState to avoid adding a new history entry
+        history.back();
         showStep(2);
     });
 
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Initialize history state
-    history.replaceState({ step: 1 }, null, '');
+    history.pushState({ step: 1 }, null, '');
 
     // Validate Step 1
     const validateStep1 = () => {
