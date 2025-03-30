@@ -11,10 +11,10 @@ if (document.getElementById('original-booking-date')) {
     selectedDate = new Date(document.getElementById('original-booking-date').textContent);
 }
 
+const datePicker = document.getElementById('date-input');
+
 // Update the displayed date and button states
 async function updateDatePicker(animated = false, timebound = true) {
-    const datePicker = document.getElementById('date-input');
-
     if (timebound) {
         datePicker.min = minDate.toLocaleDateString('en-CA');
         datePicker.max = maxDate.toLocaleDateString('en-CA');
@@ -37,7 +37,6 @@ async function updateDatePicker(animated = false, timebound = true) {
 
 // function to show the correct date group based on selectedDate
 function showDateGroup() {
-    const datePicker = document.getElementById('date-input');
     const dateGroups = document.querySelectorAll(".date-group");
 
     // Show the correct date group
