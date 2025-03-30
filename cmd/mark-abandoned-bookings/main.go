@@ -36,7 +36,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Printkn("Found %d held bookings", len(heldBookings));
+	log.Println("Found %d held bookings", len(heldBookings));
 
 	for i := range heldBookings {
 		log.Println("Marking booking %d as abandoned", heldBookings[i].Id)
