@@ -285,21 +285,24 @@ td.start-slot, td.end-slot {
     margin: 10px 0px;
 }
 
-.bookings-panel.unpaid {
+.unpaid {
     background-color: lightsalmon;
 }
 
-.bookings-panel.paid {
+.paid {
     background-color: #AAF8C1;
+}
+
+.regulars {
+    background-color: #D1C3F3;
+}
+
+.cancelled {
+    background-color: #c7c7c7;
 }
 
 .bookings-panel.update {
     background-color: #FFE686;
-}
-
-.bookings-panel.cancelled {
-    background-color: #c7c7c7
-    ;
 }
 
 .admin-panel {

@@ -16,6 +16,7 @@ function updateUrl() {
     newUrl.searchParams.set('date', formatDate(selectedDate));
     window.history.pushState({}, '', newUrl);
 }
+
 // Add event listeners for buttons
 document.getElementById('prev-day').addEventListener('click', () => {
     selectedDate.setDate(selectedDate.getDate() - 1); // Move one day back
@@ -23,6 +24,7 @@ document.getElementById('prev-day').addEventListener('click', () => {
         updateUrl();
         showDateGroup();
         setAvailability();
+        location.reload(); // Rerender the page
     });
 
 });
@@ -33,6 +35,7 @@ document.getElementById('next-day').addEventListener('click', () => {
         updateUrl();
         showDateGroup();
         setAvailability();
+        location.reload(); // Rerender the page
     });
 });
 
@@ -44,6 +47,7 @@ document.getElementById('date-input').addEventListener('change', (e) => {
         updateUrl();
         showDateGroup();
         setAvailability();
+        location.reload(); // Rerender the page
     });
 });
 

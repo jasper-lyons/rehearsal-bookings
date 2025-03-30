@@ -85,6 +85,7 @@ func main() {
 	http.Handle("GET /admin/bookings/past", basicauth(handlers.AdminBookingsPastBookings(br)))
 	http.Handle("GET /admin", handlers.Redirect("/admin/bookings"))
 	http.Handle("GET /admin/", handlers.Redirect("/admin/bookings"))
+	http.Handle("GET /admin/dailycalendar", basicauth(handlers.AdminDailyCalendar(br)))
 
 	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, paymentsApi))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))

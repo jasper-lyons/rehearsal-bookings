@@ -9,8 +9,8 @@ async function sendForm(endPoint, content) {
 		document.getElementById('form-container').style.display = 'none';
 		document.getElementById('success').style.display = 'block';
 		setTimeout(() => {
-			location.reload();
-		}, 1500);
+			window.location.href = '/admin/bookings';
+		}, 1000);
 	}
 
 	let booking = await bookingResponse.json()

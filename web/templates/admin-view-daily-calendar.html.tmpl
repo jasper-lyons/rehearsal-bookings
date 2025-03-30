@@ -1,0 +1,66 @@
+{{template "layout.html.tmpl" .}}
+
+{{define "body"}}
+<h1>DAILY CALENDAR</h1>
+<div style="display: flex; gap: 15px;">
+	<p class="paid">PAID</p>
+	<p class="unpaid">UNPAID</p>
+	<p class="regulars">REGULAR</p>
+</div>	
+<div class="date-selection">
+	<h3>Pick your date:</h3>
+	<!--  Date picker for booking -->
+	<div class="flex-container">
+		<button type="button" id="prev-day">← Previous Day</button>
+		<input type="date" id="date-input" name="date">
+		<button type="button" id="next-day">Next Day →</button>
+		<script src="/static/js/date-picker-functions.js"></script>
+		<script src="/static/js/timeslot-availability.js"></script>
+	</div>
+</div>
+
+<div>
+    <h2>{{.Date}}</h2>
+    <div class="calendar-view">
+        <table>
+			<colgroup>
+				<col style="width: 40%;">
+				<col style="width: 30%;">
+				<col style="width: 30%;">
+			</colgroup>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Room 1</th>
+                    <th>Room 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range .TimeSlots }}
+                <tr>
+                    <td>{{.StartTime.Format "15:04"}} - {{.EndTime.Format "15:04"}}</td>
+                    <td>
+                        {{ range .Room1Bookings }}
+                        <div class="{{ if eq .PaymentMethod "regulars"}}regulars{{else if eq .Status "paid"}}paid{{else if eq .Status "unpaid"}}unpaid{{end}}">
+                            <p>{{.CustomerName}}</p>
+                            <p>{{.Type}}{{ if eq .Cymbals 1}} with hired cymbals{{else}}{{end}}</p>
+                        </div>
+                        {{ end }}
+                    </td>
+                    <td>
+                        {{ range .Room2Bookings }}
+                        <div class="{{if eq .Status "paid"}}paid{{else if eq .Status "unpaid"}}unpaid{{else}}regulars{{end}}">
+                            <p>{{.CustomerName}}</p>
+                            <p>{{.Type}}{{ if eq .Cymbals 1}} with hired cymbals{{else}}{{end}}</p>
+                        </div>
+                        {{ end }}
+                    </td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="/static/js/admin/date-picker-events.js"></script>
+
+{{end}}
