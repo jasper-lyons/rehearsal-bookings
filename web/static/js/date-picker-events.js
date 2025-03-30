@@ -61,3 +61,5 @@ if(document.getElementById('original-booking-date')) {
 } else {
     updateDatePicker();
 }
+
+document.getElementById('formatted-date').textContent = new Intl.DateTimeFormat('en-GB', options).format(new Date(datePicker.value));
