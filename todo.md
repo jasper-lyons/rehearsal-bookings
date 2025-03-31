@@ -47,7 +47,7 @@
 6.5.2 [x] - Notes
 6.6. [ ] - Discount Codes
 6.7. [x] - Speed up Sumup Widget Loading
-6.8. [ ] - Store transaction id from stripe in database as stripe-<id>
+6.8. [x] - Store transaction id from stripe in database as stripe-<id>
 6.9. [ ] - Store booking id as transaction reference in stripe
 6.10. [ ] - Implement Backup Strategy
 6.10.1. [ ] - daily backups, to 7 days
