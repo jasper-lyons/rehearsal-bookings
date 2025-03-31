@@ -116,62 +116,6 @@ func ConfirmPayment(br *da.BookingsRepository[da.StorageDriver], api Api, r *htt
 	}
 }
 
-type EmailTemplateData struct {
-	RoomName string
-	Day string
-	StartTime string
-	EndTime string
-}
-
-var confirmationEmailTemplate = `
-Just to confirm you've booked {{.RoomName}} at Bad Habit Studios on the {{.Day}} from
-{{.StartTime}} to {{.EndTime}}.
-
-If you need to cancel or modify the booking reach out to badhabitstudioseb@gmail.com
-
-This is an automated email so if you reply to it, we might not be able to get back to you.
-`
-
-func sendBookingConfirmationEmail(booking *da.Booking) error {
-	from := mail.NewEmail("Rehearsal Booking", os.Getenv("TRANSACTIONAL_FROM_ADDRESS"))
-	subject := "Bad Habit Studios: Rehearsal Booking Confirmation"
-	to := mail.NewEmail(booking.CustomerName, booking.CustomerEmail)
-	
-	// Prepare the template data
-	templateData := EmailTemplateData{
-		RoomName: booking.RoomName,
-		Day: booking.StartTime.Format("Monday, 2nd January, 2006"),
-		StartTime: booking.StartTime.Format("3:04 PM"),
-		EndTime: booking.EndTime.Format("3:04 PM"),
-	}
-
-	
-	tmpl, err := template.New("confirmation-email").Parse(confirmationEmailTemplate)
-	if err != nil {
-		return fmt.Errorf("Failed to parse email template: %v", err)
-	}
-	
-	// Execute the template with our data
-	var emailContent bytes.Buffer
-	if err := tmpl.Execute(&emailContent, templateData); err != nil {
-		return fmt.Errorf("Failed to execute email template: %v", err)
-	}
-	
-	message := mail.NewSingleEmail(from, subject, to, emailContent.String(), "")
-	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
-	response, err := client.Send(message)
-	if err != nil {
-		return fmt.Errorf("Failed to send confirmation email: %v", err)
-	}
-	
-	// Log the response for monitoring purposes
-	if response.StatusCode >= 400 {
-		return fmt.Errorf("Failed to send confirmation email. Status: %d, Body: %s", response.StatusCode, response.Body)
-	}
-	
-	return nil
-}
-
 func BookingsConfirm(br *da.BookingsRepository[da.StorageDriver], api Api) Handler {
 	return Handler(func (w http.ResponseWriter, r *http.Request) Handler {
 		transactionId, errorHandler := ConfirmPayment(br, api, r)
@@ -191,18 +135,21 @@ func BookingsConfirm(br *da.BookingsRepository[da.StorageDriver], api Api) Handl
 		}
 
 		booking.Status = "paid"
-		booking.TransactionId = transactionId 
+		booking.TransactionId = "stripe-" + transactionId 
 		br.Update([]da.Booking { *booking })
 
 		if booking.CustomerEmail != "test@test.com" {
-			err = sendBookingConfirmationEmail(booking)
+			err = SendCustomerBookingConfirmationEmail(booking)
 			if err != nil {
-				// handle issue with sending email!
-				// maybe we skip to mobile?
-				fmt.Printf("Failed sending confirmation email for booking %i: %v\n", booking.Id, err)
+				fmt.Printf("Failed sending customer confirmation email for booking %i: %v\n", booking.Id, err)
 			}
 		} else {
 			fmt.Println("Found test email address, skipping confirmation email")
+		}
+
+		err = SendAdminBookingNotificationEmail(booking)
+		if err != nil {
+			fmt.Printf("Failed sending admin booking notification email for booking %i: %v\n", booking.Id, err)
 		}
 
 		return JSON(booking)
