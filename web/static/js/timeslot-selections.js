@@ -73,7 +73,13 @@ function saveSlotSelections(start, end, room) {
 
     // Trigger the change event on the end-time input to update the price
     document.getElementById('end-time').dispatchEvent(new Event('change'));
-    
+
+    // Add the beforeunload listener
+    if (!window.beforeUnloadListenerAdded) {
+        window.beforeUnloadListenerAdded = true; // Set the property to true after adding the listener
+        window.addEventListener('beforeunload', handleBeforeUnload);
+    }       
+
     updatePrice();
 }
 
@@ -92,7 +98,6 @@ function selectSlotsBetween(start, end) {
     const startTime = parseInt(start.dataset.time, 10);
     const endTime = parseInt(end.dataset.time, 10);
     const room = start.dataset.room;
-
     timeSlots.forEach(slot => {
         const slotTime = parseInt(slot.dataset.time, 10);
         if (

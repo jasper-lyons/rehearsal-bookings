@@ -102,13 +102,19 @@ window.addEventListener('load', function () {
       if (!confirmResponse.ok) {
         throw new Error('Failed to confirm booking on the server');
       }
+
+      // Update reload prompt event listener
+      if (window.beforeUnloadListenerAdded) {
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+        window.beforeUnloadListenerAdded = false; // Reset the flag
+      }
       
       // Update UI for success
-      
       formContainer.style.display = 'none';
       paymentContainer.style.display = 'none';
       successMessage.style.display = 'block';
-      pageHeader.textContent = 'SUCCESS! 🎉'
+      pageHeader.textContent = 'SUCCESS! 🎉';
+
     } catch (error) {
       showError(`Payment was successful, but there was an error confirming your booking: ${error.message}`);
     }

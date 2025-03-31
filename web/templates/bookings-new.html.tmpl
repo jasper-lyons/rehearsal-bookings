@@ -6,6 +6,7 @@
 	<form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
 		<script src="/static/js/booking-summaries.js"></script>
 		<script src="/static/js/select-button.js"></script>
+		<script src="static/js/refresh-alert.js"></script>
 		<!-- CSRF Protection -->
 		<input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 		
@@ -185,6 +186,7 @@
 			<button type="button" id="pay-now">
 				PAY NOW
 			</button>
+
 		</fieldset>
 
 		<!-- Step 3: Final Confirmation & Payment -->

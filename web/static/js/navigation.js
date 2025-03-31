@@ -62,9 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize history state
     history.pushState({ step: 1 }, null, '');
 
-    window.onbeforeunload = function() {
-        return "Your rehearsal details will be lost if you leave the page, are you sure?";
-    };
 
     // Validate Step 1
     const validateStep1 = () => {
