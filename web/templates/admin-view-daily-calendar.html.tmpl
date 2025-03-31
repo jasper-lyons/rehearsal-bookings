@@ -2,11 +2,6 @@
 
 {{define "body"}}
 <h1>DAILY CALENDAR</h1>
-<div style="display: flex; gap: 15px;">
-	<p class="paid">PAID</p>
-	<p class="unpaid">UNPAID</p>
-	<p class="regulars">REGULAR</p>
-</div>	
 <div class="date-selection">
 	<h3>Pick your date:</h3>
 	<!--  Date picker for booking -->
@@ -18,7 +13,12 @@
 		<script src="/static/js/timeslot-availability.js"></script>
 	</div>
 </div>
-
+<div style="display: flex; gap: 15px;">
+    <h3>LEGEND:</h3>
+	<p class="paid">PAID</p>
+	<p class="unpaid">UNPAID</p>
+	<p class="regulars">REGULAR</p>
+</div>	
 <div>
     <h2>{{.Date}}</h2>
     <div class="calendar-view">
@@ -37,21 +37,21 @@
             </thead>
             <tbody>
                 {{ range .TimeSlots }}
-                <tr>
+                <tr style="height: 40px;">
                     <td>{{.StartTime.Format "15:04"}} - {{.EndTime.Format "15:04"}}</td>
-                    <td>
+                    <td class="calendar-cell">
                         {{ range .Room1Bookings }}
-                        <div class="{{ if eq .PaymentMethod "regulars"}}regulars{{else if eq .Status "paid"}}paid{{else if eq .Status "unpaid"}}unpaid{{end}}">
-                            <p>{{.CustomerName}}</p>
-                            <p>{{.Type}}{{ if eq .Cymbals 1}} with hired cymbals{{else}}{{end}}</p>
+                        <div class="calendar-cell {{ if eq .PaymentMethod "regulars"}}regulars{{else if eq .Status "paid"}}paid{{else if eq .Status "unpaid"}}unpaid{{end}}">
+                            <p class="calendar-cell">{{.CustomerName}}</p>
+                            <p class="calendar-cell">{{.Type}}{{ if eq .Cymbals 1}} with hired cymbals{{else}}{{end}}</p>
                         </div>
                         {{ end }}
                     </td>
-                    <td>
+                    <td class="calendar-cell">
                         {{ range .Room2Bookings }}
-                        <div class="{{if eq .Status "paid"}}paid{{else if eq .Status "unpaid"}}unpaid{{else}}regulars{{end}}">
-                            <p>{{.CustomerName}}</p>
-                            <p>{{.Type}}{{ if eq .Cymbals 1}} with hired cymbals{{else}}{{end}}</p>
+                        <div class="calendar-cell {{if eq .Status "paid"}}paid{{else if eq .Status "unpaid"}}unpaid{{else}}regulars{{end}}">
+                            <p class="calendar-cell">{{.CustomerName}}</p>
+                            <p class="calendar-cell">{{.Type}}{{ if eq .Cymbals 1}} with hired cymbals{{else}}{{end}}</p>
                         </div>
                         {{ end }}
                     </td>

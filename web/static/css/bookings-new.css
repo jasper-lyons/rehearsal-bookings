@@ -357,6 +357,11 @@ svg {
     height: 24px;
 }
 
+.calendar-cell {
+    margin: 0px;
+    padding: 0px;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     #session-type-container {
