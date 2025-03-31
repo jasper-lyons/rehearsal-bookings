@@ -4,7 +4,13 @@ style="background-color: #D1C3F3;"
 {{end}}
 
 {{define "body"}}
-<h1>AVAILABILITY</h1>
+<div class="flex-container">
+	<h1>AVAILABILITY</h1>
+	<div class="flex-container" style="justify-content: right;">
+		<button onclick="window.location.href='/admin/bookings/new'" style="flex: 0;">NEW BOOKING</button>
+		<button onclick="window.location.href=window.location.origin + '/admin/bookings?date=' + new URLSearchParams(window.location.search).get('date')" style="flex: 0;">BOOKINGS LIST</button>
+	</div>
+</div>
 <div class="admin-view">
 	<!-- Date Selection -->
 	<div class="date-selection">

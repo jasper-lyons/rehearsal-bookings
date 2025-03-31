@@ -53,6 +53,7 @@ document.getElementById('date-input').addEventListener('change', (e) => {
 
 // Initialize the display and hidden input with today's date
 updateDatePicker(animated = false, timebound = false).then(() => {
+    updateUrl();
     showDateGroup();
     setAvailability();
 });
