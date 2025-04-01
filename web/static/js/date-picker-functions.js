@@ -5,7 +5,7 @@ const maxDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), curr
 maxDate.setDate(maxDate.getDate() + 60);
 
 // define the selectedDate - by default this is the current date
-let selectedDate = new Date(currentDate);
+let selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()); 
 
 if (document.getElementById('original-booking-date')) {
     selectedDate = new Date(document.getElementById('original-booking-date').textContent);

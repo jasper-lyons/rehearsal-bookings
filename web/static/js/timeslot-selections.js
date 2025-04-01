@@ -45,7 +45,10 @@ function clearSelection() {
         if (document.getElementById('original-booking-date')) {
             selectedSlots();
         }
-        setBookableSlots();
+
+        if (!document.getElementById('payment-method')) {
+            setBookableSlots();
+        }
     });
 }
 
@@ -139,5 +142,7 @@ timeSlots.forEach(slot => {
     
 // set the availability for the initial date
 setAvailability().then(() => {
-    setBookableSlots();
+    if (!document.getElementById('payment-method')) {
+        setBookableSlots();
+    }
 });
