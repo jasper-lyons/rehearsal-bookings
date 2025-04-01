@@ -23,7 +23,6 @@ document.getElementById('prev-day').addEventListener('click', () => {
     updateDatePicker(animated = true, timebound = false).then(() => {
         updateUrl();
         showDateGroup();
-        setAvailability();
         location.reload(); // Rerender the page
     });
 
@@ -34,7 +33,6 @@ document.getElementById('next-day').addEventListener('click', () => {
     updateDatePicker(animated = true, timebound = false).then(() => {
         updateUrl();
         showDateGroup();
-        setAvailability();
         location.reload(); // Rerender the page
     });
 });
@@ -46,7 +44,6 @@ document.getElementById('date-input').addEventListener('change', (e) => {
     updateDatePicker(animated = false, timebound = false).then(() => {
         updateUrl();
         showDateGroup();
-        setAvailability();
         location.reload(); // Rerender the page
     });
 });
@@ -55,5 +52,4 @@ document.getElementById('date-input').addEventListener('change', (e) => {
 updateDatePicker(animated = false, timebound = false).then(() => {
     updateUrl();
     showDateGroup();
-    setAvailability();
 });

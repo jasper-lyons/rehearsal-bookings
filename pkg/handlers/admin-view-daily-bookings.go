@@ -17,7 +17,7 @@ type GroupedBookings struct {
 
 func AdminViewDailyBookings(br *da.BookingsRepository[da.StorageDriver]) Handler {
 	return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
-		bookings, err := br.All()
+		bookings, err := br.Where("status IN ('paid', 'unpaid', 'hold', 'cancelled') ")
 		if err != nil {
 			return Error(err, 500)
 		}

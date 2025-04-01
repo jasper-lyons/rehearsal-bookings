@@ -5,11 +5,11 @@ style="background-color: #D1C3F3;"
 {{define "body"}}
 <div class="admin-view">
 <div class="flex-container">
-	<h1>DAILY CALENDAR</h1>
-	<div class="flex-container" style="justify-content: right;">
-		<button onclick="window.location.href='/admin/bookings/new'" style="flex: 0;">NEW BOOKING</button>
-		<button onclick="window.location.href=window.location.origin + '/admin/bookings?date=' + new URLSearchParams(window.location.search).get('date')" style="flex: 0;">BOOKINGS LIST</button>
-	</div>
+    <h1>AVAILABILITY</h1>
+    <div class="flex-container" style="justify-content: right;">
+        <button onclick="window.location.href='/admin/bookings/new'" style="flex: 0;">NEW BOOKING</button>
+        <button onclick="window.location.href=window.location.origin + '/admin/bookings?date=' + new URLSearchParams(window.location.search).get('date')" style="flex: 0;">BOOKINGS LIST</button>
+    </div>
 </div>
 <div class="date-selection">
 	<h3>Pick your date:</h3>
@@ -22,11 +22,12 @@ style="background-color: #D1C3F3;"
 		<script src="/static/js/timeslot-availability.js"></script>
 	</div>
 </div>
-<div style="display: flex; gap: 15px;">
+<div style="display: flex; gap: 15px; align-items: center;">
     <h3>LEGEND:</h3>
-	<p class="paid">PAID</p>
-	<p class="unpaid">UNPAID</p>
-	<p class="regulars">REGULAR</p>
+	<p class="legend paid">PAID</p>
+	<p class="legend unpaid">UNPAID</p>
+	<p class="legend regulars">REGULAR</p>
+	<p class="legend held">HELD</p>
 </div>	
 <div>
     <h2>{{.Date}}</h2>
@@ -58,7 +59,7 @@ style="background-color: #D1C3F3;"
                     </td>
                     <td class="calendar-cell">
                         {{ range .Room2Bookings }}
-                        <div class="calendar-cell {{if eq .Status "paid"}}paid{{else if eq .Status "unpaid"}}unpaid{{else}}regulars{{end}}">
+                        <div class="calendar-cell {{ if eq .PaymentMethod "regulars"}}regulars{{else if eq .Status "paid"}}paid{{else if eq .Status "unpaid"}}unpaid{{else if eq .Status "hold"}}held{{end}}">
                             <p class="calendar-cell">{{.CustomerName}}</p>
                             <p class="calendar-cell">{{.Type}}{{ if eq .Cymbals 1}} with hired cymbals{{else}}{{end}}</p>
                         </div>
@@ -71,5 +72,10 @@ style="background-color: #D1C3F3;"
     </div>
 </div>
 <script src="/static/js/admin/date-picker-events.js"></script>
+<script>
+    window.addEventListener('load', function () {
+        setAvailability();
+    })
+</script>
 </div>
 {{end}}
