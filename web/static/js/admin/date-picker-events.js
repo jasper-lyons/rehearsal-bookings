@@ -1,7 +1,3 @@
-function formatDate(date) {
-    return date.toISOString().split('T')[0]
-}
-
 const urlParams = new URLSearchParams(window.location.search);
 const dateParam = urlParams.get('date');
 if (dateParam) {
@@ -13,7 +9,7 @@ if (dateParam) {
 
 function updateUrl() {
     const newUrl = new URL(window.location);
-    newUrl.searchParams.set('date', formatDate(selectedDate));
+    newUrl.searchParams.set('date', selectedDate.toLocaleDateString('en-CA'));
     window.history.pushState({}, '', newUrl);
 }
 
