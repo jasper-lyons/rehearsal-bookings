@@ -1,33 +1,34 @@
 package handlers
 
 import (
-	"net/http"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"net/http"
 	"os"
-	"time"
 	da "rehearsal-bookings/pkg/data_access"
 	"strconv"
-	"errors"
+	"time"
+
 	"github.com/stripe/stripe-go/v81"
 	"github.com/stripe/stripe-go/v81/paymentintent"
 )
 
 type SumupCheckoutProcessSuccessForm struct {
-	CheckoutId string `json:"id"`
-	Amount float32 `json:"amount"`
-	CheckoutReference string `json:"checkout_reference"`
-	PaidAt time.Time `json:"paid_at"`
-	Status string `json:"status"`
-	TransactionCode string `json:"transation_code"`
-	TransactionId string `json:"transaction_id"`
+	CheckoutId        string    `json:"id"`
+	Amount            float32   `json:"amount"`
+	CheckoutReference string    `json:"checkout_reference"`
+	PaidAt            time.Time `json:"paid_at"`
+	Status            string    `json:"status"`
+	TransactionCode   string    `json:"transation_code"`
+	TransactionId     string    `json:"transaction_id"`
 }
 
 type GetSumupTransactionRequest struct {
-	Amount float32 `json:"amount"`
-	CheckoutReference string `json:"checkout_reference"`
-	Currency string `json:"currency"`
-	MerchantCode string `json:"merchant_code"`
+	Amount            float32 `json:"amount"`
+	CheckoutReference string  `json:"checkout_reference"`
+	Currency          string  `json:"currency"`
+	MerchantCode      string  `json:"merchant_code"`
 }
 
 type SumupTransaction struct {
@@ -113,7 +114,7 @@ func ConfirmPayment(br *da.BookingsRepository[da.StorageDriver], api Api, r *htt
 }
 
 func BookingsConfirm(br *da.BookingsRepository[da.StorageDriver], api Api) Handler {
-	return Handler(func (w http.ResponseWriter, r *http.Request) Handler {
+	return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
 		transactionId, errorHandler := ConfirmPayment(br, api, r)
 		if errorHandler != nil {
 			return errorHandler
@@ -131,8 +132,10 @@ func BookingsConfirm(br *da.BookingsRepository[da.StorageDriver], api Api) Handl
 		}
 
 		booking.Status = "paid"
-		booking.TransactionId = "stripe-" + transactionId 
-		br.Update([]da.Booking { *booking })
+		booking.TransactionId = "stripe-" + transactionId
+		booking.PaidAt = time.Now()
+
+		br.Update([]da.Booking{*booking})
 
 		if booking.CustomerEmail != "test@test.com" {
 			err = SendCustomerBookingConfirmationEmail(booking)

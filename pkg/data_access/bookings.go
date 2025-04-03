@@ -21,8 +21,10 @@ type Booking struct {
 	BookingNotes   string    `sql:"booking_notes" json:"booking_notes"`
 	TransactionId  string    `sql:"transaction_id" json:"transaction_id"`
 	PaymentMethod  string    `sql:"payment_method" json:"payment_method"`
-	UpdatedAt			 time.Time `sql:"updated_at" generated:"true" json:"updated_at"`
-	CreatedAt			 time.Time `sql:"created_at" generated:"true" json:"created_at"`
+	UpdatedAt      time.Time `sql:"updated_at" generated:"true" json:"updated_at"`
+	CreatedAt      time.Time `sql:"created_at" generated:"true" json:"created_at"`
+	CancelledAt    time.Time `sql:"cancelled_at" json:"cancelled_at"`
+	PaidAt         time.Time `sql:"paid_at" json:"paid_at"`
 }
 
 type BookingsRepository[D StorageDriver] struct {

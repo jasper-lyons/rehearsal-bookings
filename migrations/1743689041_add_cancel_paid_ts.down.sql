@@ -1,0 +1,2 @@
+ALTER TABLE bookings DROP COLUMN paid_at DATETIME;
+ALTER TABLE bookings DROP COLUMN cancelled_at DATETIME;

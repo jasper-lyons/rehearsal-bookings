@@ -36,6 +36,11 @@
 			</div>
 			<div class="admin-panel">
 				<h3>BOOKING CANCELLED</h3>
+				<hr>
+				<h3>Booking Details</h3>
+                <p><strong>Transaction ID: </strong>{{.TransactionId}}</p>
+				<p><strong>Created At: </strong>{{.CreatedAt.Format "2006-01-02 15:04"}}</p>			
+				<p><strong>Cancelled At: </strong>{{.CancelledAt.Format "2006-01-02 15:04"}}</p>
 			</div>
 			<div>
 				<button class="admin-update" onclick="window.location.href='/admin/bookings/{{.Id}}/edit'">Update</button>
@@ -62,13 +67,35 @@
 				<p><strong>Name: </strong>{{.CustomerName}}</p>
 				<p><strong>Phone: </strong>{{.CustomerPhone}}</p>
 				<p><strong>Email: </strong>{{.CustomerEmail}}</p>
+				<hr>
+				<h3>Booking Details</h3>
+                <p><strong>Transaction ID: </strong>{{.TransactionId}}</p>
+				<p><strong>Created At: </strong>{{.CreatedAt.Format "2006-01-02 15:04"}}</p>
+				<p><strong>Last Updated: </strong>{{.UpdatedAt.Format "2006-01-02 15:04"}}</p>
+				<p><strong>Paid: </strong>{{if eq .Status "paid"}}{{.PaidAt.Format "2006-01-02 15:04"}}{{else}} {{end}}</p>
 			</div>
 			<div>
 					<button class="admin-update" onclick="window.location.href='/admin/bookings/{{.Id}}/edit'">Update</button>
-					<form action="/admin/bookings/{{.Id}}/paid" method="PUT" class="mark-paid" onsubmit="return confirm('Are you sure you want mark this booking as paid?');">
+					<button type="button" onclick="togglePaymentForm({{.Id}})" {{if eq .Status "paid"}}disabled{{end}}>Mark paid</button>
+					<form id="payment-form-{{.Id}}" action="/admin/bookings/{{.Id}}/paid" method="PUT" class="mark-paid" style="display: none;" onsubmit="return confirm('Are you sure you want to mark this booking as paid?');">
 						<input type="hidden" name="status" value="paid">
-						<button type="submit" {{if eq .Status "paid"}}disabled{{end}}>Mark paid</button>
+						<label for="payment-method-{{.Id}}">Payment Method:</label>
+						<select id="payment-method-{{.Id}}" name="payment_method" required>
+							<option value="" disabled selected>Select a payment method</option>
+							<option value="in_studio_cash">Pay At Studio - Cash</option>
+							<option value="in_studio_link">Pay At Studio - Link</option>
+							<option value="in_studio_sumup">Pay At Studio - SumUp</option>
+							<option value="online">Online</option>
+							<option value="regulars">Weekly Regulars</option>
+						</select>
+						<button type="submit">Submit</button>
 					</form>
+					<script>
+						function togglePaymentForm(id) {
+							const form = document.getElementById(`payment-form-${id}`);
+							form.style.display = form.style.display === 'none' ? 'block' : 'none';
+						}
+					</script>
 					<form action="/admin/bookings/{{.Id}}/cancel" method="PUT" class="mark-cancelled" onsubmit="return confirm('Are you sure you want cancel this booking?');">
 						<input type="hidden" name="status" value="cancelled">
 						<button type="submit">Cancel</button>
