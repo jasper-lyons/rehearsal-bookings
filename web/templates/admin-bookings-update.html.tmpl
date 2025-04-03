@@ -30,7 +30,7 @@ style="background-color: #FFE686;"
 		</div>
 	</div>
 	<form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
-		<!-- <script src="/static/js/price-calculator.js"></script> -->
+		<script src="/static/js/refresh-alert.js"></script>
 		<script src="/static/js/booking-summaries.js"></script>
 		<script src="/static/js/select-button.js"></script>
 		<script src="/static/js/price-calculator.js"></script>
@@ -151,13 +151,6 @@ style="background-color: #FFE686;"
 			  <option value="regulars" {{if eq .PaymentMethod "regulars"}}selected{{end}}>Weekly Regulars</option>
 			</select>
 		</div>
-		<!-- Updated details summary-->
-		<div class="submit-button"> 
-		<button type="button" onclick="updatedDetails()">Review Changes</button>
-		</div>
-		<h3>Updated Booking Details:</h3>
-		<span class='bookings-panel update' id="updated-details"></span>
-
 		<!-- Submit Button -->
 		<div class="submit-button">
 			<button type="submit" id="submit-button">Confirm</button>

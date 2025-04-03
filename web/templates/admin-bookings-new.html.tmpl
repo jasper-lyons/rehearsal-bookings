@@ -10,6 +10,7 @@ style="background-color: lightsalmon;"
 	<form id="form" method="POST" action="/" class="max-w-lg mx-auto p-6">
 		<!-- CSRF Protection -->
 		<input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+		<script src="/static/js/refresh-alert.js"></script>
 		<script src="/static/js/booking-summaries.js"></script>
 		<script src="/static/js/select-button.js"></script>
 		<script src="/static/js/price-calculator.js"></script>
@@ -42,11 +43,9 @@ style="background-color: lightsalmon;"
 				<button type="button" id="prev-day">← Previous Day</button>
 				<input type="date" id="date-input" name="date">
 				<button type="button" id="next-day">Next Day →</button>
-				<script src="/static/js/date-picker-functions.js"></script>
-				<script src="/static/js/date-picker-events.js"></script>
 			</div>
 		</div>
-
+		
 		<!-- Time & Room Selection -->
 		<div class="time-selection">
 			<div id="time-slot-container">
@@ -70,6 +69,8 @@ style="background-color: lightsalmon;"
 					</thead>
 					<tbody>
 						<!-- Time slots are generated here -->
+						<script src="/static/js/date-picker-functions.js"></script>
+						<script src="/static/js/date-picker-events.js"></script>
 						<script src="/static/js/timeslot-table.js"></script>
 						<script src="/static/js/timeslot-availability.js"></script>
 						<script src="/static/js/timeslot-selections.js"></script>
