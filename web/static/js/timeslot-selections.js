@@ -94,6 +94,11 @@ function selectFirstSlot(slot) {
     selectedRoom = slot.dataset.room;
     slot.classList.add('selected', 'start-slot');
     saveSlotSelections(startSlot, endSlot, selectedRoom);
+
+    // if needed update the status of the book now button
+    if (document.getElementById('book-now')) {
+        document.getElementById('book-now').classList.add('enabled');
+    }
 }
 
 // Function to select slots between start and end
@@ -114,7 +119,7 @@ function selectSlotsBetween(start, end) {
 
     if (hasUnavailableSlots) {
         alert("can't book over already booked timeslots!");
-        selectFirstSlot(start)
+        clearSelection()
         return;
     }
 
@@ -131,8 +136,6 @@ timeSlots.forEach(slot => {
                 // First click: set the start slot
                 selectFirstSlot(slot);
                 
-                // Enable book now button 
-                document.getElementById('book-now').classList.add('enabled');
             } else if (startSlot == endSlot && slot.dataset.room === selectedRoom) {
                 // Second click: set the end slot and select all in between
                 endSlot = slot;
@@ -142,9 +145,6 @@ timeSlots.forEach(slot => {
             } else {
                 // Third click: clear the selection and start again
                 selectFirstSlot(slot);
-
-                // Enable book now button 
-                document.getElementById('book-now').classList.add('enabled');
             }
         }
     });
