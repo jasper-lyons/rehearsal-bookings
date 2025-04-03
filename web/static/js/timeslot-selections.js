@@ -101,15 +101,25 @@ function selectSlotsBetween(start, end) {
     const startTime = parseInt(start.dataset.time, 10);
     const endTime = parseInt(end.dataset.time, 10);
     const room = start.dataset.room;
-    timeSlots.forEach(slot => {
+    const filteredSlots = Array.from(timeSlots).filter(slot => {
         const slotTime = parseInt(slot.dataset.time, 10);
-        if (
+        return (
             slot.dataset.room === room &&
             slotTime >= Math.min(startTime, endTime) &&
             slotTime <= Math.max(startTime, endTime)
-        ) {
-            slot.classList.add('selected');
-        }
+        );
+    });
+
+    const hasUnavailableSlots = filteredSlots.some(slot => slot.classList.contains('unavailable'));
+
+    if (hasUnavailableSlots) {
+        alert("can't book over already booked timeslots!");
+        selectFirstSlot(start)
+        return;
+    }
+
+    filteredSlots.forEach(slot => {
+        slot.classList.add('selected');
     });
 }
 
