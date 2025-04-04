@@ -144,7 +144,15 @@ window.addEventListener('load', function () {
     try {
       // Show the payment form
       paymentContainer.style.display = 'block';
-      
+
+      // disable the back buttons once form has been submitted
+      document.getElementById("back-step-2").disabled = true;
+      history.pushState(null, null, location.href);
+
+      window.onpopstate = function () {
+        alert("If you leave this page, your booking could be lost.");
+        history.pushState(null, null, location.href);
+      };
       // Create held booking
       const booking = await createBooking();
       const bookingId = booking.id;
@@ -155,6 +163,9 @@ window.addEventListener('load', function () {
       // Initialize Stripe Elements with client secret
       setupStripeForm(intent.client_secret);
       
+      // Show concessions message once the stripe form has loaded
+      document.getElementById('payment-concessions').style.display = 'block';
+
       // Handle payment submission
       stripeSubmitBtn.onclick = async function (e) {
         e.preventDefault();
