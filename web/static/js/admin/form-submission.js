@@ -8,6 +8,11 @@ async function sendForm(endPoint, content) {
 	if (bookingResponse.ok) {
 		document.getElementById('form-container').style.display = 'none';
 		document.getElementById('success').style.display = 'block';
+		// Update reload prompt event listener
+		if (window.beforeUnloadListenerAdded) {
+		window.removeEventListener('beforeunload', handleBeforeUnload);
+		window.beforeUnloadListenerAdded = false; // Reset the flag
+		}
 		setTimeout(() => {
 			window.location.href = '/admin/bookings';
 		}, 1000);

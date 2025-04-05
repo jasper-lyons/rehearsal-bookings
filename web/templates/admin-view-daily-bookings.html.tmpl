@@ -20,6 +20,13 @@
 		<button type="button" id="next-day">Next Day →</button>
 		<script src="/static/js/date-picker-functions.js"></script>
 	</div>
+	<div style="display: flex; gap: 15px; align-items: center;">
+		<h3>LEGEND:</h3>
+		<p class="legend paid">PAID</p>
+		<p class="legend unpaid">UNPAID</p>
+		<p class="legend regulars">REGULAR</p>
+		<p class="legend cancelled">CANCELLED</p>
+	</div>
 </div>
 
 <div id="bookings-container">
@@ -28,7 +35,7 @@
     <h2>{{.Date}}</h2>
 	{{ range .Bookings }}
 		{{ if eq .Status "cancelled" }}
-		<div class='bookings-panel {{if eq .Status "cancelled"}}cancelled{{else if eq .Status "paid"}}paid{{else}}unpaid{{end}}'>
+		<div class='bookings-panel cancelled'>
 			<div class="admin-panel">
 				<h3>Booking ID: #{{.Id}}</h3>
 				<p><strong>Room: </strong>{{.RoomName}}</p>
@@ -50,7 +57,7 @@
 			</div>
 		</div>	
 		{{ else }}
-		<div class='bookings-panel {{if eq .Status "cancelled"}}cancelled{{else if eq .Status "paid"}}paid{{else}}unpaid{{end}}'>
+		<div class='bookings-panel {{ if eq .PaymentMethod "regulars"}}regulars{{else if eq .Status "paid"}}paid{{else}}unpaid{{end}}'>
 			<div class="admin-panel">
 				<h3>Booking ID: #{{.Id}}</h3>
 				<p><strong>Room: </strong>{{.RoomName}}</p>

@@ -46,7 +46,7 @@ func AdminViewDailyAvailability(br *da.BookingsRepository[da.StorageDriver]) Han
 		// Generate time slots
 		var timeSlots []TimeSlot
 		startHour := 10 // Start at 10:00 AM
-		endHour := 22   // End at 10:00 PM
+		endHour := 23   // End at 11:00 PM
 		for hour := startHour; hour < endHour; hour++ {
 			startTime := startOfDay.Add(time.Duration(hour) * time.Hour)
 			endTime := startTime.Add(time.Hour)

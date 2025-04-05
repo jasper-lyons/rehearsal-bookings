@@ -1,0 +1,41 @@
+INSERT INTO 
+    bookings(
+        created_at,
+        updated_at,
+        customer_name,
+        customer_email,
+        customer_phone,
+        room_name,
+        start_time,
+        end_time,
+        notes,
+        type,
+        status,
+        expiration,
+        price,
+        transaction_id,
+        cymbals,
+        discount_amount,
+        booking_notes,
+        payment_method
+    )                                                         
+SELECT 
+    strftime('%Y-%m-%dT%H:%M:%SZ',created_at),
+    strftime('%Y-%m-%dT%H:%M:%SZ',updated_at),
+    customer_name,
+    customer_email,
+    customer_phone,
+    room_name,
+    strftime('%Y-%m-%dT%H:%M:%SZ',start_time),
+    strftime('%Y-%m-%dT%H:%M:%SZ',end_time),
+    notes,
+    CAST(type AS VARCHAR(100)),
+    CAST(status AS VARCHAR(100)),
+    CAST(expiration AS TIMESTAMP),
+    CAST(price AS REAL),
+    CAST(transaction_id AS VARCHAR(100)),
+    CAST(cymbals AS BOOLEAN),
+    CAST(discount_amount AS REAL),
+    CAST(booking_notes AS VARCHAR(500)),
+    payment_method 
+FROM [TABLE];

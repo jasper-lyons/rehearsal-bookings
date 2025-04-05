@@ -140,7 +140,7 @@ style="background-color: #FFE686;"
 			<br>	
 			<p style="margin: 5px">Price for the session: <strong><span id="price" class="price">£0.00</span></strong></p>
 			<label for="revised-price">Revised price:</label>
-			<input type="number" id="revised-price" step="0.01">
+			<input type="number" id="revised-price" step="0.01" value="{{.Price}}"?>
 			<br>
 			<label for="payment-method">Payment Method:</label>
 			<select id="payment-method" name="payment-method">
@@ -149,6 +149,7 @@ style="background-color: #FFE686;"
 			  <option value="in_studio_link" {{if eq .PaymentMethod "in_studio_link"}}selected{{end}}>Pay At Studio - Link</option>
 			  <option value="in_studio_sumup" {{if eq .PaymentMethod "in_studio_sumup"}}selected{{end}}>Pay At Studio - SumUp</option> 
 			  <option value="regulars" {{if eq .PaymentMethod "regulars"}}selected{{end}}>Weekly Regulars</option>
+			  <option value="internal" {{if eq .PaymentMethod "internal"}}selected{{end}}>Internal Bookings</option>
 			</select>
 		</div>
 		<!-- Submit Button -->
