@@ -85,11 +85,11 @@ func main() {
 	http.Handle("GET /admin/bookings/past", basicauth(handlers.AdminBookingsPastBookings(br)))
 	http.Handle("GET /admin", handlers.Redirect("/admin/bookings"))
 	http.Handle("GET /admin/", handlers.Redirect("/admin/bookings"))
+	http.Handle("GET /admin/export", basicauth(handlers.ExportData(br)))
 
 	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, paymentsApi))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))
 
-	http.Handle("GET /export", basicauth(handlers.ExportData(br)))
 	http.Handle("GET /rooms", handlers.RoomsIndex(br))
 	http.Handle("GET /price-calculator", handlers.CalculatePrice(br))
 
