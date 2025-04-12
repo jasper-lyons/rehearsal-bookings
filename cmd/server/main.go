@@ -89,7 +89,7 @@ func main() {
 	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, paymentsApi))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))
 
-	http.Handle("GET /export", handlers.ExportData(br))
+	http.Handle("GET /export", basicauth(handlers.ExportData(br)))
 	http.Handle("GET /rooms", handlers.RoomsIndex(br))
 	http.Handle("GET /price-calculator", handlers.CalculatePrice(br))
 
