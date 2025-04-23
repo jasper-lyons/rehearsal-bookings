@@ -22,12 +22,13 @@ style="background-color: #D1C3F3;"
 		<script src="/static/js/timeslot-availability.js"></script>
 	</div>
 </div>
-<div style="display: flex; gap: 15px; align-items: center;">
+<div style="display: flex; gap: 5px; align-items: center; flex-wrap: wrap;">
     <h3>LEGEND:</h3>
 	<p class="legend paid">PAID</p>
 	<p class="legend unpaid">UNPAID</p>
 	<p class="legend regulars">REGULAR</p>
 	<p class="legend held">HELD</p>
+    <p class="legend rec-room">REC-ROOM FLAG</p>
 </div>	
 <div>
     <h2>{{.Date}}</h2>
@@ -35,14 +36,16 @@ style="background-color: #D1C3F3;"
         <table>
 			<colgroup>
 				<col style="width: 40%;">
-				<col style="width: 30%;">
-				<col style="width: 30%;">
+				<col style="width: 20%;">
+                <col style="width: 20%;">
+                <col style="width: 20%;">
 			</colgroup>
             <thead>
                 <tr>
                     <th>Time</th>
                     <th>Room 1</th>
                     <th>Room 2</th>
+                    <th>Rec Room</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,7 +62,15 @@ style="background-color: #D1C3F3;"
                     </td>
                     <td class="calendar-cell">
                         {{ range .Room2Bookings }}
-                        <div class="calendar-cell {{ if eq .PaymentMethod "regulars"}}regulars{{else if eq .Status "paid"}}paid{{else if eq .Status "unpaid"}}unpaid{{else if eq .Status "hold"}}held{{end}}">
+                        <div class="calendar-cell {{ if eq .PaymentMethod "regulars"}}regulars{{else if eq .Status "paid"}}paid{{else if eq .Status "unpaid"}}unpaid{{else if eq .Status "hold"}}held{{end}} {{if eq .RoomName "Rec Room"}}rec-room{{end}}">
+                            <p class="calendar-cell">{{.CustomerName}}</p>
+                            <p class="calendar-cell">{{.Type}}{{ if eq .Cymbals 1}} with hired cymbals{{else}}{{end}}</p>
+                        </div>
+                        {{ end }}
+                    </td>
+                    <td class="calendar-cell">
+                        {{ range .RecRoomBookings }}
+                        <div class="calendar-cell {{ if eq .PaymentMethod "regulars"}}regulars{{else if eq .Status "paid"}}paid{{else if eq .Status "unpaid"}}unpaid{{else if eq .Status "hold"}}held{{end}} {{if eq .RoomName "Rec Room"}}rec-room{{end}}">
                             <p class="calendar-cell">{{.CustomerName}}</p>
                             <p class="calendar-cell">{{.Type}}{{ if eq .Cymbals 1}} with hired cymbals{{else}}{{end}}</p>
                         </div>

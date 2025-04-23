@@ -305,9 +305,15 @@ td.start-slot, td.end-slot {
     background-color: #c7c7c7;
 }
 
+.rec-room{
+    border: solid 1px red;
+    border-left: solid 10px red;
+}
+
 .legend {
     padding: 10px;
     border-radius: 15px;
+    margin: 0;
 
 }
 .bookings-panel.update {
@@ -421,5 +427,9 @@ svg {
     }
     .admin-update {
         width: 97%;
+    }
+
+    .legend {
+       font-size: small;
     }
 }

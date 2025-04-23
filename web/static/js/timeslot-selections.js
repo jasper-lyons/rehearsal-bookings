@@ -11,7 +11,7 @@ function clearSelection() {
     // Remove the selection class from all slots
     timeSlots.forEach(slot => {
         slot.classList.remove('selected','start-slot','end-slot','current-booking');
-        slot.textContent = ''
+        slot.textContent = '';
     });
 
     // Reset the variables
@@ -26,9 +26,9 @@ function clearSelection() {
         document.getElementById('end-time').value = document.getElementById('original-end-time').textContent;
         document.getElementById('room').value = document.getElementById('original-room').textContent;
     } else {
-        document.getElementById('start-time').value = null;
-        document.getElementById('end-time').value = null;
-        document.getElementById('room').value = null;
+        document.getElementById('start-time').value = '';
+        document.getElementById('end-time').value = '';
+        document.getElementById('room').value = '';
     }
 
     // Trigger the change event on the end-time input to update the price
@@ -57,7 +57,7 @@ function saveSlotSelections(start, end, room) {
     const endTimeValue = parseInt(end.dataset.time, 10);
     const formattedStartTime = formatHour(Math.min(startTimeValue, endTimeValue));
     const formattedEndTime = formatHour(Math.max(startTimeValue, endTimeValue) + 1);
-    const formattedRoom = room === 'room1' ? 'Room 1' : 'Room 2';
+    const formattedRoom = room;
 
     if (endTimeValue < startTimeValue) {
         end.textContent = formattedStartTime

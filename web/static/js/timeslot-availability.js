@@ -21,12 +21,20 @@ async function setAvailability() {
         return;
     }
 
-    const room2 = rooms.find(r => r.name === "Room 2"); // ✅ Find Room 1
+    const room2 = rooms.find(r => r.name === "Room 2");
     if (!room2) {
         console.error('Room 2 not found!');
         return;
     }
 
+    const recRoom = rooms.find(r => r.name === "Rec Room");
+    if (!recRoom) {
+        console.error('Rec Room not found!');
+        return;
+    }
+
+    // Clear all previous availability
+    // and set the availability based on the API response
     timeSlots.forEach(slot => {
         slot.classList.remove('unavailable');
         const slotTime = slot.dataset.time;
@@ -34,16 +42,20 @@ async function setAvailability() {
         const timeLabel = formatHour(slotTime);
 
         // Disable slot if the room's availability is false
-        if (slotRoom === "room1" && !room1.availability[timeLabel]) {
+        if (slotRoom === "Room 1" && !room1.availability[timeLabel]) {
             slot.classList.add('unavailable');
             return;
         }
 
-        if (slotRoom === "room2" && !room2.availability[timeLabel]) {
+        if (slotRoom === "Room 2" && !room2.availability[timeLabel]) {
             slot.classList.add('unavailable');
             return;
         }
 
+        if (slotRoom === "Rec Room" && !recRoom.availability[timeLabel]) {
+            slot.classList.add('unavailable');
+            return;
+        }
     });
 }
 

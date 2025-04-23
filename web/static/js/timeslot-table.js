@@ -9,11 +9,22 @@ function formatHour(hour_value)  {
 for (let hour = startHour; hour <= endHour; hour++) {
     const formattedStartHour = formatHour(hour);
     const formattedEndHour = formatHour(hour + 1);
-    document.write(`
-        <tr>
-            <td>${formattedStartHour}-${formattedEndHour}</td>
-            <td class="time-slot" data-room="room1" data-time="${hour}"></td>
-            <td class="time-slot" data-room="room2" data-time="${hour}"></td>
-        </tr>
-    `);
+    if (document.getElementById("rec-room-timeslot-table")) {
+        document.write(`
+            <tr>
+                <td>${formattedStartHour}-${formattedEndHour}</td>
+                <td class="time-slot" data-room="Room 1" data-time="${hour}"></td>
+                <td class="time-slot" data-room="Room 2" data-time="${hour}"></td>
+                <td class="time-slot" data-room="Rec Room" data-time="${hour}"></td>
+            </tr>
+        `);
+    } else {
+        document.write(`
+            <tr>
+                <td>${formattedStartHour}-${formattedEndHour}</td>
+                <td class="time-slot" data-room="Room 1" data-time="${hour}"></td>
+                <td class="time-slot" data-room="Room 2" data-time="${hour}"></td>
+            </tr>
+        `);
+    }
 }

@@ -97,6 +97,18 @@ func RoomsIndex(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			}
 		}
 
-		return JSON(RoomsIndexView{Rooms: []Room{room1, room2}})
+		recRoom := NewRoom("Rec Room")
+		for _, booking := range bookings {
+			if booking.RoomName == "Rec Room" {
+				startTime := booking.StartTime
+				// This truncates the float64 into an int so we're assuming accurate, whole hour maths...
+				hours := int(booking.EndTime.Sub(startTime).Hours())
+				for i := range hours {
+					bookedHour := startTime.Add(time.Hour * time.Duration(i))
+					recRoom.Availability[bookedHour.Format("15:04")] = false
+				}
+			}
+		}
+		return JSON(RoomsIndexView{Rooms: []Room{room1, room2, recRoom}})
 	})
 }

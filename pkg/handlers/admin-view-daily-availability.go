@@ -7,10 +7,11 @@ import (
 )
 
 type TimeSlot struct {
-	StartTime     time.Time
-	EndTime       time.Time
-	Room1Bookings []da.Booking
-	Room2Bookings []da.Booking
+	StartTime       time.Time
+	EndTime         time.Time
+	Room1Bookings   []da.Booking
+	Room2Bookings   []da.Booking
+	RecRoomBookings []da.Booking
 }
 
 type DailyBookings struct {
@@ -52,23 +53,26 @@ func AdminViewDailyAvailability(br *da.BookingsRepository[da.StorageDriver]) Han
 			endTime := startTime.Add(time.Hour)
 
 			// Filter bookings for this time slot and room
-			var room1Bookings, room2Bookings []da.Booking
+			var room1Bookings, room2Bookings, recRoomBookings []da.Booking
 			for _, booking := range bookings {
 				if booking.StartTime.Before(endTime) && booking.EndTime.After(startTime) {
 					if booking.RoomName == "Room 1" {
 						room1Bookings = append(room1Bookings, booking)
 					} else if booking.RoomName == "Room 2" {
 						room2Bookings = append(room2Bookings, booking)
+					} else if booking.RoomName == "Rec Room" {
+						recRoomBookings = append(recRoomBookings, booking)
 					}
 				}
 			}
 
 			// Add the time slot to the list
 			timeSlots = append(timeSlots, TimeSlot{
-				StartTime:     startTime,
-				EndTime:       endTime,
-				Room1Bookings: room1Bookings,
-				Room2Bookings: room2Bookings,
+				StartTime:       startTime,
+				EndTime:         endTime,
+				Room1Bookings:   room1Bookings,
+				Room2Bookings:   room2Bookings,
+				RecRoomBookings: recRoomBookings,
 			})
 		}
 

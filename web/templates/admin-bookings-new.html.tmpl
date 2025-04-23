@@ -53,8 +53,9 @@ style="background-color: lightsalmon;"
 				<table>
 					<colgroup>
 						<col style="width: 40%;">
-						<col style="width: 30%;">
-						<col style="width: 30%;">
+						<col style="width: 20%;">
+						<col style="width: 20%;">
+						<col style="width: 20%;">
 					</colgroup>
 					<thead>
 						<tr>
@@ -65,13 +66,14 @@ style="background-color: lightsalmon;"
 							<th>Hour</th>
 							<th>Room 1</th>
 							<th>Room 2</th>
+							<th>Rec Room</th>
 						</tr>
 					</thead>
 					<tbody>
 						<!-- Time slots are generated here -->
 						<script src="/static/js/date-picker-functions.js"></script>
 						<script src="/static/js/date-picker-events.js"></script>
-						<script src="/static/js/timeslot-table.js"></script>
+						<script id="rec-room-timeslot-table" src="/static/js/timeslot-table.js"></script>
 						<script src="/static/js/timeslot-availability.js"></script>
 						<script src="/static/js/timeslot-selections.js"></script>
 					</tbody>
