@@ -142,11 +142,16 @@ window.addEventListener('load', function () {
 			return
     
     try {
+      // Show the loading icon
+      const loadingIcon = document.getElementById('loading-icon');
+      loadingIcon.style.display = 'block';
+      
       // Show the payment form
       paymentContainer.style.display = 'block';
 
       // disable the back buttons once form has been submitted
       document.getElementById("back-step-2").disabled = true;
+      document.getElementById("confirm").disabled = true;
       history.pushState(null, null, location.href);
 
       window.onpopstate = function () {
@@ -162,6 +167,9 @@ window.addEventListener('load', function () {
       
       // Initialize Stripe Elements with client secret
       setupStripeForm(intent.client_secret);
+      
+      // Hide the loading icon once the payment container is ready
+      loadingIcon.style.display = 'none';
       
       // Show concessions message once the stripe form has loaded
       document.getElementById('payment-concessions').style.display = 'block';

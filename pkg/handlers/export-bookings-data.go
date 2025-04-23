@@ -14,7 +14,7 @@ func ExportData(br *da.BookingsRepository[da.StorageDriver]) Handler {
 
 		startDay := r.URL.Query().Get("start-day")
 		if startDay == "" {
-			return Error(errors.New("Missing 'start_day' query parameter."), http.StatusBadRequest)
+			return Error(errors.New("Missing 'start-day' query parameter."), http.StatusBadRequest)
 		}
 
 		startDayFormatted, err := time.Parse("2006-01-02", startDay)

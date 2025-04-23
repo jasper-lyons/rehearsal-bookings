@@ -220,7 +220,10 @@
 				</button>
 			</div>
 			<!-- Payment Gateway -->
-
+			<div id="loading-icon" style="display: none; text-align: center; margin-top: 20px;">
+				<p>Loading payment form...</p>
+				<img src="/static/images/loading-icon.gif" alt="Loading..." style="width: 50px; height: 50px;">
+			</div>
 			{{ $provider := Getenv "FEATURE_FLAG_PAYMENTS_PROVIDER" }}
 			{{ if eq $provider  "sumup" }}
 				<div id="payment-gateway" style="display: none;"></div>
