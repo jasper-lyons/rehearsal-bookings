@@ -433,3 +433,16 @@ svg {
        font-size: small;
     }
 }
+
+
+.logo {
+    max-width: 100px; 
+    height: auto;
+}
+
+.logo-text {
+    color:#ff004c;
+    text-align: left;
+    font-size: 1em;
+    padding-left: 0.8em; ;
+}
