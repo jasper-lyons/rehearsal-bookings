@@ -2,7 +2,7 @@ const options = { weekday: 'short', day: '2-digit', month: 'short', year: 'numer
 
 // Add event listeners for buttons
 document.getElementById('prev-day').addEventListener('click', () => {
-    if(document.getElementById('original-booking-date')) {
+    if(document.getElementById('form-container').classList.contains('admin-view')) {
         selectedDate.setDate(selectedDate.getDate() - 1);
         updateDatePicker(animated = true, timebound = false);
     } else {
@@ -16,7 +16,7 @@ document.getElementById('prev-day').addEventListener('click', () => {
 });
 
 document.getElementById('next-day').addEventListener('click', () => {
-    if(document.getElementById('original-booking-date')) {
+    if(document.getElementById('form-container').classList.contains('admin-view')) {
         selectedDate.setDate(selectedDate.getDate() + 1);
         updateDatePicker(animated = true, timebound = false);
     } else {
@@ -33,7 +33,7 @@ document.getElementById('next-day').addEventListener('click', () => {
 // Add event listener for the date picker input
 document.getElementById('date-input').addEventListener('change', (e) => {
     const newDate = new Date(e.target.value);
-    if(document.getElementById('original-booking-date')) {
+    if(document.getElementById('form-container').classList.contains('admin-view')) {
         selectedDate = newDate;
         updateDatePicker(animated = false, timebound = false);
     } else {
@@ -56,7 +56,7 @@ document.getElementById('date-input').addEventListener('change', (e) => {
 });
 
 // Initialize the display and hidden input with today's date
-if(document.getElementById('original-booking-date')) {
+if(document.getElementById('form-container').classList.contains('admin-view')) {
     updateDatePicker(animated = false, timebound = false);
 } else {
     updateDatePicker();

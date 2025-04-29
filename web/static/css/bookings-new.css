@@ -446,3 +446,7 @@ svg {
     font-size: 1em;
     padding-left: 0.8em; ;
 }
+
+h3 {
+    text-transform: uppercase;
+}

@@ -5,7 +5,7 @@ function selectedSlots() {
     if (originalBookingDate === newBookingDate) {
         const startTime = parseInt(document.getElementById('original-start-time').textContent, 10);
         const endTime = parseInt(document.getElementById('original-end-time').textContent, 10);
-        const room = document.getElementById('room').value === 'Room 1' ? 'room1' : 'room2';
+        const room = document.getElementById('room').value;
 
         timeSlots.forEach(slot => {
             const slotTime = parseInt(slot.dataset.time, 10);
