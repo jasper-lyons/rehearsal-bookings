@@ -81,8 +81,6 @@ func main() {
 	http.Handle("GET /admin/bookings", basicauth(handlers.AdminViewDailyBookings(br)))
 	http.Handle("GET /admin/availability", basicauth(handlers.AdminViewDailyAvailability(br)))
 	http.Handle("GET /admin/bookings/all", basicauth(handlers.AdminViewAllBookings(br)))
-	http.Handle("GET /admin/bookings/future", basicauth(handlers.AdminBookingsFutureBookings(br)))
-	http.Handle("GET /admin/bookings/past", basicauth(handlers.AdminBookingsPastBookings(br)))
 	http.Handle("GET /admin", handlers.Redirect("/admin/bookings"))
 	http.Handle("GET /admin/", handlers.Redirect("/admin/bookings"))
 	http.Handle("GET /admin/export", basicauth(handlers.ExportData(br)))
