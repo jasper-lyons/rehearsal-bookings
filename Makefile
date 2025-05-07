@@ -13,3 +13,5 @@ mark-abandoned-bookings: cmd/mark-abandoned-bookings/main.go
 send-access-codes: cmd/send-access-codes/main.go
 	go build -o bin/send-access-codes cmd/send-access-codes/main.go
 
+backup-database: cmd/backup-database/main.go
+	go build -o bin/backup-database cmd/backup-database/main.go

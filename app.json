@@ -5,5 +5,8 @@
 	}, {
 		"command": "/app/bin/send-access-codes",
 		"schedule": "0 * * * *"
+	}, {
+		"command": "/app/bin/backup-database",
+		"schedule": "0 0 * * *"
 	}]
 }
