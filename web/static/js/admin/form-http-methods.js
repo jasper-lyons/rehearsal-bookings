@@ -2,8 +2,6 @@ window.addEventListener('load', function () {
 	for (let method of ["POST", "DELETE", "PUT"]) {
 		let forms = document.querySelectorAll(`[method="${method}"]`)
 
-		console.log(forms)
-
 		for (form of forms) {
 			let onsubmit = form.onsubmit
 			form.onsubmit = undefined

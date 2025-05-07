@@ -26,7 +26,7 @@ async function sendForm(endPoint, content) {
 
 function adminCreateBooking() {
 	// check if all fields are filled
-	let requiredFields = ['session-type', 'name','email', 'phone', 'room', 'date-input', 'start-time', 
+	let requiredFields = ['session-type', 'name', 'phone', 'room', 'date-input', 'start-time', 
 						'status', 'payment-method']
 	for (let field of requiredFields) {
 		if (!document.getElementById(field).value) {
@@ -45,7 +45,7 @@ function adminCreateBooking() {
 		body: JSON.stringify({
 			type: document.getElementById('session-type').value,
 			name: document.getElementById('name').value,
-			email: document.getElementById('email').value,
+			email: document.getElementById('email').value || '-',
 			phone: document.getElementById('phone').value,
 			room: document.getElementById('room').value,
 			date: document.getElementById('date-input').value,
@@ -69,7 +69,7 @@ function adminCreateBooking() {
 
 function adminUpdateBooking() {
 	// check if all fields are filled
-	let requiredFields = ['session-type', 'customer-name','customer-email', 'customer-phone', 'room',
+	let requiredFields = ['session-type', 'customer-name', 'customer-phone', 'room',
 						 'date-input', 'start-time', 'end-time', 'status', 'payment-method']
 	for (let field of requiredFields) {
 		if (!document.getElementById(field).value) {
@@ -88,7 +88,7 @@ function adminUpdateBooking() {
 		body: JSON.stringify({
 			type: document.getElementById('session-type').value,
 			name: document.getElementById('customer-name').value,
-			email: document.getElementById('customer-email').value,
+			email: document.getElementById('customer-email').value || '-',
 			phone: document.getElementById('customer-phone').value,
 			room: document.getElementById('room').value,
 			date: document.getElementById('date-input').value,

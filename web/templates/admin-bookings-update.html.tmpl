@@ -114,18 +114,17 @@ style="background-color: #FFE686;"
 						name="name"
 						value="{{.CustomerName}}"
 						required>
+				<label for="customer-email">Email:</label>
+				<input type="text" 
+						id="customer-email" 
+						name="email"
+						value="{{.CustomerEmail}}">
 				<label for="customer-phone">Phone:</label>
 				<input type="tel"
 						id="customer-phone"
 						name="phone"
 						value="{{.CustomerPhone}}"
 						pattern="(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}"
-						required>
-				<label for="customer-email">Email:</label>
-				<input type="email"
-						id="customer-email" 
-						name="email"
-						value="{{.CustomerEmail}}"
 						required>
 			</div>
 		</div>
