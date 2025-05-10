@@ -72,8 +72,7 @@ func AdminViewDailyBookings(br *da.BookingsRepository[da.StorageDriver], codes d
 		}
 
 		adminBookings := make([]AdminBooking, len(bookings))
-		customerCodesMessageTemplate := `
-Hey, we are looking forward to seeing you at Bad Habit for your rehearsal today!
+		customerCodesMessageTemplate := `Hey, we are looking forward to seeing you at Bad Habit for your rehearsal today!
 
 Here are the details and information about your booking:
 • Booking time: {{ .StartTime }}-{{ .EndTime }} 
@@ -88,8 +87,7 @@ You asked for Cymbals so they'll be left in the room :)
 • ROOM 1. This is the room directly in front of you as you walk into the studio.
 • ROOM 2. This is the room on the right after you walk into the studio.
 {{ end }}
-Any questions or concerns, please get in touch!
-		`
+Any questions or concerns, please get in touch!`
 		for i, booking := range bookings {
 			var messageContent bytes.Buffer
 
