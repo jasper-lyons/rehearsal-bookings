@@ -24,6 +24,7 @@ func AdminViewDailyAvailability(br *da.BookingsRepository[da.StorageDriver]) Han
 		dateParam := r.URL.Query().Get("date")
 		var selectedDate time.Time
 		if dateParam == "" {
+			// TODO: redirect to todays date with the date param default to today
 			selectedDate = time.Now()
 		} else {
 			var err error
