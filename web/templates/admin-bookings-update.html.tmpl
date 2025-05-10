@@ -145,12 +145,13 @@ style="background-color: #FFE686;"
 			<br>
 			<label for="payment-method">Payment Method:</label>
 			<select id="payment-method" name="payment-method">
-			  <option value="online" {{if eq .PaymentMethod "online"}}selected{{end}}>Online</option>
-			  <option value="in_studio_cash" {{if eq .PaymentMethod "in_studio_cash"}}selected{{end}}>Pay At Studio - Cash</option>
-			  <option value="in_studio_link" {{if eq .PaymentMethod "in_studio_link"}}selected{{end}}>Pay At Studio - Link</option>
-			  <option value="in_studio_sumup" {{if eq .PaymentMethod "in_studio_sumup"}}selected{{end}}>Pay At Studio - SumUp</option> 
-			  <option value="regulars" {{if eq .PaymentMethod "regulars"}}selected{{end}}>Weekly Regulars</option>
-			  <option value="internal" {{if eq .PaymentMethod "internal"}}selected{{end}}>Internal Bookings</option>
+				<option value="in_studio_cash" {{if eq .PaymentMethod "in_studio_cash"}}selected{{end}}>Pay At Studio - Cash</option>
+				<option value="in_studio_link" {{if eq .PaymentMethod "in_studio_link"}}selected{{end}}>Pay At Studio - Link</option>
+				<option value="in_studio_sumup" {{if eq .PaymentMethod "in_studio_sumup"}}selected{{end}}>Pay At Studio - SumUp</option> 
+				<option value="invoice" {{if eq .PaymentMethod "invoice"}}selected{{end}}>Invoice</option>
+				<option value="online" {{if eq .PaymentMethod "online"}}selected{{end}}>Online</option>
+				<option value="regulars" {{if eq .PaymentMethod "regulars"}}selected{{end}}>Weekly Regulars</option>
+				<option value="internal" {{if eq .PaymentMethod "internal"}}selected{{end}}>Internal Bookings</option>
 			</select>
 		</div>
 		<!-- Submit Button -->
