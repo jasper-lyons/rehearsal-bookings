@@ -6,7 +6,6 @@ import (
 	"time"
 	"text/template"
 	"bytes"
-	"fmt"
 )
 
 type AdminBookingsDailyView struct {
@@ -36,7 +35,7 @@ type CustomerBookingCodesSMSData struct {
 	FirstMessage bool
 }
 
-func AdminViewDailyBookings(br *da.BookingsRepository[da.StorageDriver]) Handler {
+func AdminViewDailyBookings(br *da.BookingsRepository[da.StorageDriver], codes da.Codes) Handler {
 	return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
 		dateParam := r.URL.Query().Get("date")
 		var selectedDate time.Time
@@ -91,14 +90,22 @@ Any questions or concerns, please get in touch!
 				return Error(err, http.StatusInternalServerError)
 			}
 
-			fmt.Println(previousBookings)
+			frontDoorCode, err := codes.FrontDoorCodeFor(booking.StartTime.Weekday())
+			if err != nil {
+				return Error(err, http.StatusInternalServerError)
+			}
+
+			roomDoorCode, err := codes.GetCode(booking.RoomName)
+			if err != nil {
+				return Error(err, http.StatusInternalServerError)
+			}
 
 			customerCodesMessageData := CustomerBookingCodesSMSData {
 				Room: booking.RoomName,
 				StartTime: booking.StartTime.Format("15:04"),
 				EndTime: booking.EndTime.Format("15:04"),
-				FrontDoorCode: "",
-				RoomDoorCode: "",
+				FrontDoorCode: frontDoorCode,
+				RoomDoorCode: roomDoorCode,
 				Cymbals: booking.Cymbals,
 				FirstMessage: previousBookings == nil,
 			}

@@ -2,6 +2,7 @@ package data_access
 
 import (
 	"time"
+	"fmt"
 )
 
 type Code struct {
@@ -55,4 +56,44 @@ func (cr *CodesRepository[StorageDriver]) Where(query string, params ...any) ([]
 		return nil, err
 	}
 	return RowsToType[Code](rows)
+}
+
+type Codes struct {
+	cr *CodesRepository[StorageDriver]
+}
+
+func NewCodes(cr *CodesRepository[StorageDriver]) Codes {
+	return Codes {
+		cr: cr,
+	}
+}
+
+func (codes *Codes) GetCode(key string) (string, error) {
+	code, err := codes.cr.Find(key)
+	if err != nil {
+		return "", err
+	}
+
+	return code.CodeValue, nil
+}
+
+func (codes *Codes) FrontDoorCodeFor(weekday time.Weekday) (string, error) {
+	switch weekday {
+	case time.Monday:
+		return codes.GetCode("Monday Front Door")
+	case time.Tuesday:
+		return codes.GetCode("Tuesday Front Door")
+	case time.Wednesday:
+		return codes.GetCode("Wednesday Front Door")
+	case time.Thursday:
+		return codes.GetCode("Thursday Front Door")
+	case time.Friday:
+		return codes.GetCode("Friday Front Door")
+	case time.Saturday:
+		return codes.GetCode("Saturday Front Door")
+	case time.Sunday:
+		return codes.GetCode("Sunday Front Door")
+	default:
+		return "", fmt.Errorf("invalid weekday: %v", weekday)
+	}
 }

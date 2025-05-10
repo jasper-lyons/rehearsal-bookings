@@ -65,6 +65,7 @@ func main() {
 
 	br := da.NewBookingsRepository(driver)
 	cr := da.NewCodesRepository(driver)
+	codes := da.NewCodes(cr)
 
 	// Adming methods
 	http.Handle("POST /admin/bookings", handlers.AdminBookingsCreate(br))
@@ -79,7 +80,7 @@ func main() {
 	http.Handle("GET /admin/bookings/{id}/edit", basicauth(handlers.AdminBookingsUpdateView(br)))
 
 	// Admin booking views
-	http.Handle("GET /admin/bookings", basicauth(handlers.AdminViewDailyBookings(br)))
+	http.Handle("GET /admin/bookings", basicauth(handlers.AdminViewDailyBookings(br, codes)))
 	http.Handle("GET /admin/availability", basicauth(handlers.AdminViewDailyAvailability(br)))
 	http.Handle("GET /admin/bookings/all", basicauth(handlers.AdminViewAllBookings(br)))
 	http.Handle("GET /admin", handlers.Redirect("/admin/bookings"))
