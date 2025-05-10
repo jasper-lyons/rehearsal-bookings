@@ -3,10 +3,16 @@ package handlers
 import (
 	"net/http"
 	da "rehearsal-bookings/pkg/data_access"
+	"time"
 )
 
 type AdminCodesView struct {
-	Codes []da.Code
+	Codes []AdminCode
+}
+
+type AdminCode struct {
+	da.Code
+	Expired bool
 }
 
 func AdminViewCodes(cr *da.CodesRepository[da.StorageDriver]) Handler {
@@ -16,6 +22,15 @@ func AdminViewCodes(cr *da.CodesRepository[da.StorageDriver]) Handler {
 			return Error(err, 500)
 		}
 
-		return Template("admin-codes-view.html.tmpl", AdminCodesView{Codes: codes})
+		var adminCodes []AdminCode
+
+		for _, code := range codes {
+			adminCodes = append(adminCodes, AdminCode{
+				Code:    code,
+				Expired: time.Now().AddDate(0, -1, 0).After(code.UpdatedAt),
+			})
+		}
+
+		return Template("admin-codes-view.html.tmpl", AdminCodesView{Codes: adminCodes})
 	})
 }

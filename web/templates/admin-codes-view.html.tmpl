@@ -10,11 +10,10 @@ style="background-color: #ACEEDB;"
 </div>
 <div class="admin-view" style="padding: 20px;">
     {{ range .Codes }}
-        <div style="padding: 10px">
-            <h3 class="codes-display"> {{.CodeName}} : {{.CodeValue}}</h3>
-            <p class="codes-display" style="font-size: small;"><strong>Last Updated: </strong>{{.UpdatedAt.Format "2006-01-02 15:04"}}</p>
-        </div>
-    {{ end }}
+    <div style='padding: 10px; color: {{if eq .Expired true }}red{{else}}black{{end}};'>
+        <h3 class='codes-display' > {{.CodeName}} : {{.CodeValue}}</h3>
+        <p class="codes-display" style="font-size: small;"><strong>Last Updated: </strong>{{.UpdatedAt.Format "2006-01-02 15:04"}}</p>
     </div>
+    {{ end }}
 </div>
 {{ end }}
