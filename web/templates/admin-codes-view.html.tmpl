@@ -1,0 +1,20 @@
+{{template "layout.html.tmpl" .}}
+{{ define "PageStyle"}}
+style="background-color: #ACEEDB;"
+{{end}}
+{{define "body"}}
+
+<h1>ADMIN: View Codes</h1>
+<div>
+    <button class="admin-update" onclick="window.location.href='/admin/codes/update'">Update Codes</button>
+</div>
+<div class="admin-view" style="padding: 20px;">
+    {{ range .Codes }}
+        <div style="padding: 10px">
+            <h3 class="codes-display"> {{.CodeName}} : {{.CodeValue}}</h3>
+            <p class="codes-display" style="font-size: small;"><strong>Last Updated: </strong>{{.UpdatedAt.Format "2006-01-02 15:04"}}</p>
+        </div>
+    {{ end }}
+    </div>
+</div>
+{{ end }}

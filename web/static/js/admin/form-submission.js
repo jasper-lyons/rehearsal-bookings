@@ -1,7 +1,7 @@
-async function sendForm(endPoint, content) {
+async function sendForm(endPoint, content, redirect) {
 	let bookingResponse = await fetch(endPoint, content)
 	if (!bookingResponse.ok) {
-		alert("Can't book ", document.getElementById('room').value, " at that time!")
+		alert("Cannot submit form!")
 		return
 	}
 
@@ -14,7 +14,7 @@ async function sendForm(endPoint, content) {
 		window.beforeUnloadListenerAdded = false; // Reset the flag
 		}
 		setTimeout(() => {
-			window.location.href = '/admin/bookings';
+			window.location.href = redirect;
 		}, 1000);
 	}
 
@@ -64,7 +64,7 @@ function adminCreateBooking() {
 
 	let endPoint = '/admin/bookings'
 
-	return sendForm(endPoint, content)
+	return sendForm(endPoint, content, '/admin/bookings')
 }
 
 function adminUpdateBooking() {
@@ -108,5 +108,35 @@ function adminUpdateBooking() {
 	bookingId = document.getElementById('booking-id').textContent
 	endPoint = `/admin/bookings/${bookingId}/update`
 
-	return sendForm(endPoint, content)
+	return sendForm(endPoint, content, '/admin/bookings')
+}
+
+
+function adminUpdateCodes() {
+	// check if all fields are filled
+	let requiredFields = ['code-name', 'code-value']
+	for (let field of requiredFields) {
+		if (!document.getElementById(field).value) {
+			alert('Please fill out all fields')
+			return
+		}
+	}
+
+	console.log('code-name', document.getElementById('code-name').value)
+
+	content = {
+		method: 'PUT',
+		body: JSON.stringify({
+			code_name: document.getElementById('code-name').value,
+			code_value: document.getElementById('code-value').value,
+		}),
+		headers: {
+				'Content-Type': 'application/json'
+			}
+		}
+	
+	let endPoint = '/admin/codes/update'
+	
+	return sendForm(endPoint, content, '/admin/codes')
+
 }

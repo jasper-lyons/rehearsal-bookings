@@ -42,8 +42,6 @@ func AdminBookingsUpdate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			return Error(err, http.StatusBadRequest)
 		}
 
-		fmt.Println(form)
-
 		startTime, err := time.Parse("2006-01-02 15:04", form.Date+" "+form.StartTime)
 		if err != nil {
 			fmt.Println("start")

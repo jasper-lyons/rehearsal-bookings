@@ -1,6 +1,9 @@
 {{template "layout.html.tmpl" .}}
-
+{{ define "PageStyle"}}
+style="background-color: #D1C3F3;"
+{{end}}
 {{define "body"}}
+<div class="admin-view">
 <div class="flex-container">
 	<script src="/static/js/admin/form-http-methods.js"></script>
 	<h1 style="white-space: nowrap;">Daily Bookings</h1>
@@ -10,6 +13,7 @@
 		<button onclick="window.location.href='/admin/bookings/all'" style="flex: 0;">ALL BOOKINGS</button>
 	</div>
 </div>
+<button onclick="window.location.href='/admin/codes'" style="flex: 0;">CODES</button>
 <!-- Date Selection -->
 <div class="date-selection">
 	<h3>Pick your date:</h3>

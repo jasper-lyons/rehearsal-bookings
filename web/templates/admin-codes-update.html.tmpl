@@ -1,0 +1,47 @@
+{{template "layout.html.tmpl" .}}
+{{ define "PageStyle"}}
+style="background-color: #ACEEDB;"
+{{end}}
+{{define "body"}}
+
+<h1>ADMIN: Update Codes</h1>
+<div id="form-container" class="admin-view">
+	<form id="update_code_form" method="POST" action="/" class="max-w-lg mx-auto p-6">
+        <script src="/static/js/admin/form-submission.js"></script>
+        <div style="padding: 15px 5px;">
+            <label for="code-name">Code Name:</label>
+            <select id="code-name" name="code-name" required style="width: auto;">
+                <option value="" disabled selected>Please select code to change</option>
+                <option value="Room 1">Room 1</option>
+                <option value="Room 2">Room 2</option>
+                <option value="Monday Front Door">Monday Front Door</option>
+                <option value="Tuesday Front Door">Tuesday Front Door</option>
+                <option value="Wednesday Front Door">Wednesday Front Door</option>
+                <option value="Thursday Front Door">Thursday Front Door</option>
+                <option value="Friday Front Door">Friday Front Door</option>
+                <option value="Saturday Front Door">Saturday Front Door</option>
+                <option value="Sunday Front Door">Sunday Front Door</option>
+                <option value="Room 2 Store">Room 2 Store</option>
+                <option value="Rec Room Store">Rec Room Store</option>
+                <option value="Rec Room Keybox">Rec Room Keybox</option>
+            </select>
+            <label for="code-value">Code Value:</label>
+            <input type="text" id="code-value" name="code-value" pattern="\d{4}" title="Please enter a 4-digit number" required style="margin: 5px;">
+        </div>
+        <!-- Submit Button -->
+        <div class="submit-button">
+            <button type="submit" id="submit-button">Confirm</button>
+            <script>
+                let form = document.getElementById('update_code_form')
+                form.addEventListener('submit', async function (e) {
+                    e.preventDefault()
+                    adminUpdateCodes();
+                });
+            </script>
+        </div>
+    </form>
+</div>
+<div id="success" style="display: none;">
+    <h1>Code Updated Successfully!</h1>
+</div>
+{{ end }}

@@ -64,6 +64,7 @@ func main() {
 	)
 
 	br := da.NewBookingsRepository(driver)
+	cr := da.NewCodesRepository(driver)
 
 	// Adming methods
 	http.Handle("POST /admin/bookings", handlers.AdminBookingsCreate(br))
@@ -90,6 +91,11 @@ func main() {
 
 	http.Handle("GET /rooms", handlers.RoomsIndex(br))
 	http.Handle("GET /price-calculator", handlers.CalculatePrice(br))
+
+	// Code update
+	http.Handle("GET /admin/codes/update", basicauth(handlers.AdminUpdateCodesView(cr)))
+	http.Handle("PUT /admin/codes/update", basicauth(handlers.AdminUpdateCodes(cr)))
+	http.Handle("GET /admin/codes", basicauth(handlers.AdminViewCodes(cr)))
 
 	if os.Getenv("FEATURE_FLAG_PAYMENTS_PROVIDER") == "sumup" {
 		http.Handle("POST /sumup/checkouts", handlers.SumupCheckoutCreate(paymentsApi))
