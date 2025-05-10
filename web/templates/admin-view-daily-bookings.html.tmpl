@@ -31,7 +31,6 @@
 </div>
 
 <div id="bookings-container">
-{{ range .GroupedBookings }}
 	<div class="date-group" data-date="{{.Date}}">
     <h2>{{.Date}}</h2>
 	{{ range .Bookings }}
@@ -69,11 +68,152 @@
 				<p><strong>Payment Method: </strong>{{.PaymentMethod}}</p>
 				<p><strong>Status: </strong>{{.Status}}</p>
 				<p><strong>Booking Notes: </strong>{{.BookingNotes}}</p>
+
+				<div>
+					<strong>Codes Message:</strong>
+					<pre id="booking-codes-message" style="white-space: pre-wrap;">{{.BookingCodesMessage}}</pre>
+					<script>
+					/**
+					 * Adds click-to-copy functionality to an HTML element with mobile support
+					 * @param {string} selector - CSS selector for the element(s) to make copyable
+					 */
+					function makeElementsCopyable(selector) {
+						// Find all matching elements
+						const elements = document.querySelectorAll(selector);
+
+						elements.forEach(element => {
+								// Add a visual cue that the element is copyable
+								element.style.cursor = 'pointer';
+
+								// Optional: Add a title attribute for tooltip
+								if (!element.title) {
+								element.title = 'Click to copy text';
+								}
+
+								// Add click event listener
+								element.addEventListener('click', function() {
+										// Get the text content of the element
+										const textToCopy = this.textContent;
+
+										// Try modern Clipboard API first
+										if (navigator.clipboard && navigator.clipboard.writeText) {
+										navigator.clipboard.writeText(textToCopy)
+										.then(() => showCopySuccess(this))
+										.catch(err => {
+												console.warn('Clipboard API failed:', err);
+												// Try fallback method
+												fallbackCopyTextToClipboard(textToCopy, this);
+												});
+										} else {
+										// Use fallback for browsers without Clipboard API
+										fallbackCopyTextToClipboard(textToCopy, this);
+										}
+										});
+						});
+
+						// Fallback copy method for older browsers
+						function fallbackCopyTextToClipboard(text, element) {
+							// Create temporary input element
+							const textArea = document.createElement('textarea');
+							textArea.value = text;
+
+							// Make the textarea out of viewport
+							textArea.style.position = 'fixed';
+							textArea.style.left = '-999999px';
+							textArea.style.top = '-999999px';
+							document.body.appendChild(textArea);
+
+							// Support for iOS
+							textArea.contentEditable = true;
+							textArea.readOnly = false;
+
+							// Select the text
+							textArea.focus();
+							textArea.select();
+
+							let success = false;
+							try {
+								// Execute copy command
+								success = document.execCommand('copy');
+							} catch (err) {
+								console.error('Fallback copy failed:', err);
+							}
+
+							// Clean up
+							document.body.removeChild(textArea);
+
+							if (success) {
+								showCopySuccess(element);
+							} else {
+								alert('Unable to copy text to clipboard');
+							}
+						}
+
+						// Visual feedback function
+						function showCopySuccess(element) {
+							const originalBackground = element.style.backgroundColor;
+							element.style.backgroundColor = '#c8f7c5'; // Light green for success
+
+							// Reset background after short delay
+							setTimeout(() => {
+									element.style.backgroundColor = originalBackground;
+									}, 500);
+
+							// Optional: Add a small tooltip or message
+							const msg = document.createElement('div');
+							msg.textContent = 'Copied!';
+							msg.style.position = 'absolute';
+							msg.style.left = '50%';
+							msg.style.transform = 'translateX(-50%)';
+							msg.style.bottom = '-20px';
+							msg.style.backgroundColor = 'rgba(0,0,0,0.7)';
+							msg.style.color = 'white';
+							msg.style.padding = '4px 8px';
+							msg.style.borderRadius = '4px';
+							msg.style.fontSize = '12px';
+							msg.style.zIndex = '1000';
+
+							// Ensure the element can handle absolute positioning of the tooltip
+							if (window.getComputedStyle(element).position === 'static') {
+								element.style.position = 'relative';
+							}
+
+							element.appendChild(msg);
+							setTimeout(() => element.removeChild(msg), 1500);
+
+							console.log('Text copied to clipboard:', text);
+						}
+					}
+					makeElementsCopyable("#booking-codes-message")
+					</script>
+				</div>
 			</div>
 			<div class="admin-panel">
 				<h3>Customer Details</h3>
 				<p><strong>Name: </strong>{{.CustomerName}}</p>
-				<p><strong>Phone: </strong>{{.CustomerPhone}}</p>
+				<p>
+					<strong>Phone: </strong>
+					<a href="javascript:void(0)"
+						 onclick="sendSMS('{{ .CustomerPhone }}', '{{ .BookingCodesMessage }}')">{{.CustomerPhone}}</a>
+					<script>
+						// Function to handle SMS links with correct encoding
+						function sendSMS(phoneNumber, message) {
+							// Clean the phone number
+							phoneNumber = phoneNumber.replace(/\D/g, '');
+
+							// For iOS devices (they handle spaces differently)
+							if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+								// On iOS, use ampersand and body parameter
+								window.location.href = 'sms:' + phoneNumber + '&body=' + encodeURIComponent(message);
+							} else {
+								// For Android and other devices
+								window.location.href = 'sms:' + phoneNumber + '?body=' + encodeURIComponent(message);
+							}
+
+							return false; // Prevent default link behavior
+						}
+					</script>
+				</p>
 				<p><strong>Email: </strong>{{.CustomerEmail}}</p>
 				<hr>
 				<h3>Booking Details</h3>
@@ -118,7 +258,6 @@
 		{{ end }}
 	{{ end }}
 	</div>
-{{ end }}
 </div>
 <script src="/static/js/admin/date-picker-events.js"></script>
 
