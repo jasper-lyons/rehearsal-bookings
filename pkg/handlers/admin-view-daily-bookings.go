@@ -15,6 +15,7 @@ type AdminBookingsDailyView struct {
 
 type AdminBooking struct {
 	da.Booking
+	IsToday bool
 	BookingCodesMessage string
 }
 
@@ -33,6 +34,16 @@ type CustomerBookingCodesSMSData struct {
 	RoomDoorCode string
 	Cymbals int64
 	FirstMessage bool
+}
+
+func IsTodayInLocation(t time.Time, loc *time.Location) bool {
+	now := time.Now().In(loc)
+	t = t.In(loc)
+	
+	y1, m1, d1 := now.Date()
+	y2, m2, d2 := t.Date()
+	
+	return y1 == y2 && m1 == m2 && d1 == d2
 }
 
 func AdminViewDailyBookings(br *da.BookingsRepository[da.StorageDriver], codes da.Codes) Handler {
@@ -80,42 +91,48 @@ You asked for Cymbals so they'll be left in the room :)
 Any questions or concerns, please get in touch!
 		`
 		for i, booking := range bookings {
-			messageTmpl, err := template.New("codes-sms").Parse(customerCodesMessageTemplate)
-			if err != nil {
-				return Error(err, http.StatusInternalServerError)
-			}
-
-			previousBookings, err := br.Where("customer_phone = ? and start_time < ?", booking.CustomerPhone, booking.StartTime)
-			if err != nil {
-				return Error(err, http.StatusInternalServerError)
-			}
-
-			frontDoorCode, err := codes.FrontDoorCodeFor(booking.StartTime.Weekday())
-			if err != nil {
-				return Error(err, http.StatusInternalServerError)
-			}
-
-			roomDoorCode, err := codes.GetCode(booking.RoomName)
-			if err != nil {
-				return Error(err, http.StatusInternalServerError)
-			}
-
-			customerCodesMessageData := CustomerBookingCodesSMSData {
-				Room: booking.RoomName,
-				StartTime: booking.StartTime.Format("15:04"),
-				EndTime: booking.EndTime.Format("15:04"),
-				FrontDoorCode: frontDoorCode,
-				RoomDoorCode: roomDoorCode,
-				Cymbals: booking.Cymbals,
-				FirstMessage: previousBookings == nil,
-			}
-
 			var messageContent bytes.Buffer
-			if err := messageTmpl.Execute(&messageContent, customerCodesMessageData); err != nil {
-				return Error(err, http.StatusInternalServerError)
+
+			uk, _ := time.LoadLocation("Europe/London")
+			isToday := IsTodayInLocation(booking.StartTime, uk)
+			if isToday {
+				messageTmpl, err := template.New("codes-sms").Parse(customerCodesMessageTemplate)
+				if err != nil {
+					return Error(err, http.StatusInternalServerError)
+				}
+
+				previousBookings, err := br.Where("customer_phone = ? and start_time < ?", booking.CustomerPhone, booking.StartTime)
+				if err != nil {
+					return Error(err, http.StatusInternalServerError)
+				}
+
+				frontDoorCode, err := codes.FrontDoorCodeFor(booking.StartTime.Weekday())
+				if err != nil {
+					return Error(err, http.StatusInternalServerError)
+				}
+
+				roomDoorCode, err := codes.GetCode(booking.RoomName)
+				if err != nil {
+					return Error(err, http.StatusInternalServerError)
+				}
+
+				customerCodesMessageData := CustomerBookingCodesSMSData {
+					Room: booking.RoomName,
+					StartTime: booking.StartTime.Format("15:04"),
+					EndTime: booking.EndTime.Format("15:04"),
+					FrontDoorCode: frontDoorCode,
+					RoomDoorCode: roomDoorCode,
+					Cymbals: booking.Cymbals,
+					FirstMessage: previousBookings == nil,
+				}
+
+				if err := messageTmpl.Execute(&messageContent, customerCodesMessageData); err != nil {
+					return Error(err, http.StatusInternalServerError)
+				}
 			}
 			adminBookings[i] = AdminBooking {
 				Booking: booking,
+				IsToday: isToday, 
 				BookingCodesMessage: messageContent.String(),
 			}
 		}

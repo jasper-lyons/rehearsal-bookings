@@ -73,6 +73,7 @@ style="background-color: #D1C3F3;"
 				<p><strong>Status: </strong>{{.Status}}</p>
 				<p><strong>Booking Notes: </strong>{{.BookingNotes}}</p>
 
+				{{ if .IsToday }}
 				<div>
 					<strong>Codes Message:</strong>
 					<pre id="booking-codes-message" style="white-space: pre-wrap;">{{.BookingCodesMessage}}</pre>
@@ -191,33 +192,38 @@ style="background-color: #D1C3F3;"
 					makeElementsCopyable("#booking-codes-message")
 					</script>
 				</div>
+				{{ end }}
 			</div>
 			<div class="admin-panel">
 				<h3>Customer Details</h3>
 				<p><strong>Name: </strong>{{.CustomerName}}</p>
 				<p>
 					<strong>Phone: </strong>
-					<a href="javascript:void(0)"
-						 onclick="sendSMS('{{ .CustomerPhone }}', '{{ .BookingCodesMessage }}')">{{.CustomerPhone}}</a>
-					<script>
-						// Function to handle SMS links with correct encoding
-						function sendSMS(phoneNumber, message) {
-							// Clean the phone number
-							phoneNumber = phoneNumber.replace(/\D/g, '');
+					{{ if .IsToday }}
+						<a href="javascript:void(0)"
+							 onclick="sendSMS('{{ .CustomerPhone }}', '{{ .BookingCodesMessage }}')">{{.CustomerPhone}}</a>
+						<script>
+							// Function to handle SMS links with correct encoding
+							function sendSMS(phoneNumber, message) {
+								// Clean the phone number
+								phoneNumber = phoneNumber.replace(/\D/g, '');
 
-							// For iOS devices (they handle spaces differently)
-							if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-								// On iOS, use ampersand and body parameter
-								window.location.href = 'sms:' + phoneNumber + '&body=' + encodeURIComponent(message);
-							} else {
-								// For Android and other devices
-								window.location.href = 'sms:' + phoneNumber + '?body=' + encodeURIComponent(message);
+								// For iOS devices (they handle spaces differently)
+								if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+									// On iOS, use ampersand and body parameter
+									window.location.href = 'sms:' + phoneNumber + '&body=' + encodeURIComponent(message);
+								} else {
+									// For Android and other devices
+									window.location.href = 'sms:' + phoneNumber + '?body=' + encodeURIComponent(message);
+								}
+
+								return false; // Prevent default link behavior
 							}
-
-							return false; // Prevent default link behavior
-						}
-					</script>
-				</p>
+						</script>
+					</p>
+					{{ else }}
+						{{ .CustomerPhone }}
+					{{ end }}
 				<p><strong>Email: </strong>{{.CustomerEmail}}</p>
 				<hr>
 				<h3>Booking Details</h3>
