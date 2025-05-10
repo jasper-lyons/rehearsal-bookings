@@ -6,6 +6,7 @@ import (
 	"time"
 	"text/template"
 	"bytes"
+	"fmt"
 )
 
 type AdminBookingsDailyView struct {
@@ -32,6 +33,7 @@ type CustomerBookingCodesSMSData struct {
 	FrontDoorCode string
 	RoomDoorCode string
 	Cymbals int64
+	FirstMessage bool
 }
 
 func AdminViewDailyBookings(br *da.BookingsRepository[da.StorageDriver]) Handler {
@@ -67,10 +69,14 @@ Here are the details and information about your booking:
 • Booking time: {{ .StartTime }}-{{ .EndTime }} 
 • Location: {{ .Room }}
 • Front door access code: {{ .FrontDoorCode }}#
-• Room door access code: {{ .RoomDoorCode }}# (Please note that the keypad to use for accessing rooms is the one found on the wall rather than on the door)
+• Room door access code: {{ .RoomDoorCode }}# {{ if .FirstMessage }}(Please note that the keypad to use for accessing rooms is the one found on the wall rather than on the door){{ end }}
 {{ if eq .Cymbals 1 }}
 
 You asked for Cymbals so they'll be left in the room :)
+{{ end }}
+{{ if .FirstMessage }}
+• ROOM 1. This is the room directly in front of you as you walk into the studio.
+• ROOM 2. This is the room on the right after you walk into the studio.
 {{ end }}
 Any questions or concerns, please get in touch!
 		`
@@ -80,6 +86,13 @@ Any questions or concerns, please get in touch!
 				return Error(err, http.StatusInternalServerError)
 			}
 
+			previousBookings, err := br.Where("customer_phone = ? and start_time < ?", booking.CustomerPhone, booking.StartTime)
+			if err != nil {
+				return Error(err, http.StatusInternalServerError)
+			}
+
+			fmt.Println(previousBookings)
+
 			customerCodesMessageData := CustomerBookingCodesSMSData {
 				Room: booking.RoomName,
 				StartTime: booking.StartTime.Format("15:04"),
@@ -87,6 +100,7 @@ Any questions or concerns, please get in touch!
 				FrontDoorCode: "",
 				RoomDoorCode: "",
 				Cymbals: booking.Cymbals,
+				FirstMessage: previousBookings == nil,
 			}
 
 			var messageContent bytes.Buffer
