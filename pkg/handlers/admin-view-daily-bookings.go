@@ -109,7 +109,7 @@ Any questions or concerns, please get in touch!`
 					return Error(err, http.StatusInternalServerError)
 				}
 
-				roomDoorCode, err := codes.GetCode(booking.RoomName)
+				roomDoorCode, err := codes.RoomCodeFor(booking.RoomName)
 				if err != nil {
 					return Error(err, http.StatusInternalServerError)
 				}

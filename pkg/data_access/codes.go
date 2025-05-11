@@ -105,3 +105,14 @@ func (codes *Codes) FrontDoorCodeFor(weekday time.Weekday) (string, error) {
 		return "", fmt.Errorf("invalid weekday: %v", weekday)
 	}
 }
+
+func (codes *Codes) RoomCodeFor(room string) (string, error) {
+	switch room {
+	case "Room 1":
+		return codes.GetCode("Room 1")
+	case "Room 2":
+		return codes.GetCode("Room 1")
+	case "Rec Room":
+		return codes.GetCode("Rec Room Store")
+	}
+}
