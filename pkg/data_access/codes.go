@@ -114,5 +114,7 @@ func (codes *Codes) RoomCodeFor(room string) (string, error) {
 		return codes.GetCode("Room 1")
 	case "Rec Room":
 		return codes.GetCode("Rec Room Store")
+	default:
+		return "", fmt.Errorf("invalid room name: %v", room)
 	}
 }
