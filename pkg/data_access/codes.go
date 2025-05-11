@@ -27,6 +27,14 @@ func (cr *CodesRepository[StorageDriver]) Find(code_name string) (*Code, error) 
 		return nil, err
 	}
 	codes, err := RowsToType[Code](rows)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(codes) == 0 || codes == nil {
+		return nil, fmt.Errorf("No code found with name %s", code_name)
+	}
+
 	return &codes[0], err
 }
 
