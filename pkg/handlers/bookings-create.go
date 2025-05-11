@@ -5,6 +5,8 @@ import (
 	"net/http"
 	da "rehearsal-bookings/pkg/data_access"
 	"time"
+	"regexp"
+	"strings"
 )
 
 type CreateBookingsForm struct {
@@ -18,6 +20,50 @@ type CreateBookingsForm struct {
 	EndTime      string `json:"end_time"`
 	Cymbals      int64  `json:"cymbals"`
 	BookingNotes string `json:"booking_notes"`
+}
+
+func NormalizePhoneNumber(phoneNumber string) (string, error) {
+	// Remove all spaces, hyphens, parentheses, and dots
+	reg := regexp.MustCompile(`[\s\-\(\)\.]`)
+	phoneNumber = reg.ReplaceAllString(phoneNumber, "")
+	
+	// Check if the string is empty after cleaning
+	if phoneNumber == "" {
+		return "", errors.New("phone number is empty")
+	}
+	
+	// Case: Already in international format with + (e.g., +447XXXXXXXXX)
+	if strings.HasPrefix(phoneNumber, "+447") && len(phoneNumber) == 13 {
+		return phoneNumber, nil
+	}
+	
+	// Case: International format without + (e.g., 447XXXXXXXXX)
+	if strings.HasPrefix(phoneNumber, "447") && len(phoneNumber) == 12 {
+		return "+" + phoneNumber, nil
+	}
+	
+	// Case: Domestic format starting with 07 (e.g., 07XXXXXXXXX)
+	if strings.HasPrefix(phoneNumber, "07") && len(phoneNumber) == 11 {
+		return "+44" + phoneNumber[1:], nil
+	}
+	
+	// Case: Just the number part without any prefix (e.g., 7XXXXXXXXX)
+	if strings.HasPrefix(phoneNumber, "7") && len(phoneNumber) == 10 {
+		return "+44" + phoneNumber, nil
+	}
+	
+	// If it's a UK number starting with +44 but not a mobile (not +447...)
+	if strings.HasPrefix(phoneNumber, "+44") && !strings.HasPrefix(phoneNumber, "+447") {
+		return "", errors.New("not a UK mobile number: does not start with +447")
+	}
+	
+	// For non-UK international numbers that start with +
+	if strings.HasPrefix(phoneNumber, "+") && !strings.HasPrefix(phoneNumber, "+44") {
+		return "", errors.New("not a UK number: does not start with +44")
+	}
+	
+	// If we reach here, the number doesn't match any of our expected formats
+	return "", errors.New("invalid UK mobile number format")
 }
 
 // All bookings are created with a "hold" status
@@ -43,6 +89,11 @@ func BookingsCreate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			return Error(err, http.StatusBadRequest)
 		}
 
+		phone, err := NormalizePhoneNumber(form.Phone)
+		if err != nil {
+			return Error(err, http.StatusBadRequest)
+		}
+
 		// check that no bookings overlap!
 		bookings, err := br.Where("(status in ('paid', 'unpaid', 'hold')) and room_name = ? and (end_time > ? and start_time < ?)", form.Room, startTime, endTime)
 		if err != nil {
@@ -57,7 +108,7 @@ func BookingsCreate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			Type:          form.Type,
 			CustomerName:  form.Name,
 			CustomerEmail: form.Email,
-			CustomerPhone: form.Phone,
+			CustomerPhone: phone, 
 			RoomName:      form.Room,
 			StartTime:     startTime,
 			EndTime:       endTime,

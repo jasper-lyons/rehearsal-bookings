@@ -42,6 +42,12 @@ func AdminBookingsCreate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 		if err != nil {
 			return Error(err, http.StatusBadRequest)
 		}
+
+		phone, err := NormalizePhoneNumber(form.Phone)
+		if err != nil {
+			return Error(err, http.StatusBadRequest)
+		}
+
 		price, err := BookingPrice(form.Type, startTime, endTime, int(form.Cymbals))
 		if err != nil {
 			fmt.Println("price")
@@ -74,7 +80,7 @@ func AdminBookingsCreate(br *da.BookingsRepository[da.StorageDriver]) Handler {
 			Type:           form.Type,
 			CustomerName:   form.Name,
 			CustomerEmail:  form.Email,
-			CustomerPhone:  form.Phone,
+			CustomerPhone:  phone,
 			RoomName:       form.Room,
 			StartTime:      startTime,
 			EndTime:        endTime,
