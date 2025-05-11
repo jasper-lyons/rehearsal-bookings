@@ -1,8 +1,8 @@
 package data_access
 
 import (
-	"time"
 	"fmt"
+	"time"
 )
 
 type Code struct {
@@ -71,7 +71,7 @@ type Codes struct {
 }
 
 func NewCodes(cr *CodesRepository[StorageDriver]) Codes {
-	return Codes {
+	return Codes{
 		cr: cr,
 	}
 }
@@ -111,7 +111,7 @@ func (codes *Codes) RoomCodeFor(room string) (string, error) {
 	case "Room 1":
 		return codes.GetCode("Room 1")
 	case "Room 2":
-		return codes.GetCode("Room 1")
+		return codes.GetCode("Room 2")
 	case "Rec Room":
 		return codes.GetCode("Rec Room Store")
 	default:

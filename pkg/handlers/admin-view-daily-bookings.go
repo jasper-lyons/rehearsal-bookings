@@ -1,11 +1,12 @@
 package handlers
 
 import (
+	"bytes"
 	"net/http"
 	da "rehearsal-bookings/pkg/data_access"
-	"time"
+	"sort"
 	"text/template"
-	"bytes"
+	"time"
 )
 
 type AdminBookingsDailyView struct {
@@ -15,34 +16,34 @@ type AdminBookingsDailyView struct {
 
 type AdminBooking struct {
 	da.Booking
-	IsToday bool
+	IsToday             bool
 	BookingCodesMessage string
 }
 
 func NewAdminBooking(booking da.Booking, codesMessage string) AdminBooking {
-	return AdminBooking {
-		Booking: booking,
+	return AdminBooking{
+		Booking:             booking,
 		BookingCodesMessage: codesMessage,
 	}
 }
 
 type CustomerBookingCodesSMSData struct {
-	Room string
-	StartTime string 
-	EndTime string 
+	Room          string
+	StartTime     string
+	EndTime       string
 	FrontDoorCode string
-	RoomDoorCode string
-	Cymbals int64
-	FirstMessage bool
+	RoomDoorCode  string
+	Cymbals       int64
+	FirstMessage  bool
 }
 
 func IsTodayInLocation(t time.Time, loc *time.Location) bool {
 	now := time.Now().In(loc)
 	t = t.In(loc)
-	
+
 	y1, m1, d1 := now.Date()
 	y2, m2, d2 := t.Date()
-	
+
 	return y1 == y2 && m1 == m2 && d1 == d2
 }
 
@@ -114,29 +115,32 @@ Any questions or concerns, please get in touch!`
 					return Error(err, http.StatusInternalServerError)
 				}
 
-				customerCodesMessageData := CustomerBookingCodesSMSData {
-					Room: booking.RoomName,
-					StartTime: booking.StartTime.Format("15:04"),
-					EndTime: booking.EndTime.Format("15:04"),
+				customerCodesMessageData := CustomerBookingCodesSMSData{
+					Room:          booking.RoomName,
+					StartTime:     booking.StartTime.Format("15:04"),
+					EndTime:       booking.EndTime.Format("15:04"),
 					FrontDoorCode: frontDoorCode,
-					RoomDoorCode: roomDoorCode,
-					Cymbals: booking.Cymbals,
-					FirstMessage: previousBookings == nil,
+					RoomDoorCode:  roomDoorCode,
+					Cymbals:       booking.Cymbals,
+					FirstMessage:  previousBookings == nil,
 				}
 
 				if err := messageTmpl.Execute(&messageContent, customerCodesMessageData); err != nil {
 					return Error(err, http.StatusInternalServerError)
 				}
 			}
-			adminBookings[i] = AdminBooking {
-				Booking: booking,
-				IsToday: isToday, 
+			adminBookings[i] = AdminBooking{
+				Booking:             booking,
+				IsToday:             isToday,
 				BookingCodesMessage: messageContent.String(),
 			}
 		}
-
-		return Template("admin-view-daily-bookings.html.tmpl", AdminBookingsDailyView {
-			Date: selectedDate.Format("2006-01-02"),
+		// Sort bookings by start_time
+		sort.Slice(adminBookings, func(i, j int) bool {
+			return adminBookings[i].Booking.StartTime.Before(adminBookings[j].Booking.StartTime)
+		})
+		return Template("admin-view-daily-bookings.html.tmpl", AdminBookingsDailyView{
+			Date:     selectedDate.Format("2006-01-02"),
 			Bookings: adminBookings,
 		})
 	})
