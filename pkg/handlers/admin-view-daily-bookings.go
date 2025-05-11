@@ -82,8 +82,8 @@ Here are the details and information about your booking:
 {{ if eq .Cymbals 1 }}
 
 You asked for Cymbals so they'll be left in the room :)
-{{ end }}
-{{ if .FirstMessage }}
+{{ end }}{{ if .FirstMessage }}
+
 • ROOM 1. This is the room directly in front of you as you walk into the studio.
 • ROOM 2. This is the room on the right after you walk into the studio.
 {{ end }}
