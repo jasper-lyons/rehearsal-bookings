@@ -41,9 +41,9 @@ var customerConfirmationEmailHTMLTemplate = `
     
     <p>On the day of your rehearsal, we will text door codes to <strong>{{ .CustomerPhone }}</strong>. For security reasons, we generally keep the code-lock enabled even when the studio is staffed, so please share these with your bandmates and make a note of them when you go in and out of the building.</p>
     
-    <p>Further information about location and room specs can be found on our website at <a href="https://badhabiteastbourne.co.uk" target="_blank">badhabiteastbourne.co.uk</a>.</p>
+    <p>Further information about location and room specs can be found on our website at <a href="https://badhabitstudios.co.uk" target="_blank">badhabitstudios.co.uk</a>.</p>
     
-	<p>Please note that we have a 24 hour cancellation policy. More details can be found <a href="https://badhabiteastbourne.co.uk/cancel/" target="_blank">here</a>.</p>
+	<p>Please note that we have a 24 hour cancellation policy. More details can be found <a href="https://badhabitstudios.co.uk/cancellation-policy" target="_blank">here</a>.</p>
     <p>Any questions or issues, please reach out!</p>
     
     <p>Cheers,<br>
@@ -90,8 +90,8 @@ We are a self-service studio, which means there won't always be a member of staf
 
 On the day of your rehearsal, we will text door codes to {{ .CustomerPhone }}. For security reasons we generally keep the code-lock enabled even when the studio is staffed, so please share these with your bandmates and make a note of them when you go in and out of the building.
 
-Further information about location and room specs can be found on our website at https://badhabiteastbourne.co.uk
-Please note that we have a 24 hour cancellation policy. More details can be found at https://badhabiteastbourne.co.uk/cancel.
+Further information about location and room specs can be found on our website at https://badhabitstudios.co.uk
+Please note that we have a 24 hour cancellation policy. More details can be found at https://badhabitstudios.co.uk/cancellation-policy.
 Any questions or issues, please reach out!
 
 Cheers,
