@@ -3,10 +3,10 @@
 style="background-color: #ACEEDB;"
 {{end}}
 {{define "body"}}
-
 <h1>ADMIN: View Codes</h1>
 <div>
     <button class="admin-update" onclick="window.location.href='/admin/codes/update'">Update Codes</button>
+    <button class="admin-update" onclick="window.location.href='/admin/bookings'">Bookings</button>
 </div>
 <div class="admin-view" style="padding: 20px;">
     {{ range .Codes }}
