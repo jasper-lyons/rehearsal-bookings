@@ -66,7 +66,7 @@ func AdminViewDailyBookings(br *da.BookingsRepository[da.StorageDriver], codes d
 		startOfDay := selectedDate.Truncate(24 * time.Hour)
 		endOfDay := startOfDay.Add(24 * time.Hour)
 
-		bookings, err := br.Where("status IN ('paid', 'unpaid', 'hold') and start_time >= ? and end_time <= ?", startOfDay, endOfDay)
+		bookings, err := br.Where("status IN ('paid', 'unpaid', 'cancelled') and start_time >= ? and end_time <= ?", startOfDay, endOfDay)
 		if err != nil {
 			http.Error(w, "Failed to fetch bookings", http.StatusInternalServerError)
 			return nil
