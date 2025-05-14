@@ -56,7 +56,7 @@
                     <td class="bookings-table">{{.Status}}</td>
                     <td class="bookings-table">{{.BookingNotes}}</td>
                     <td class="bookings-table" style="display: flex;">
-                        <button onclick="window.location.href='/admin/bookings/{{.Id}}/edit'">↻</button>
+                        <button onclick="window.open('/admin/bookings/{{.Id}}/edit', '_blank')">↻</button>
                         <form action="/admin/bookings/{{.Id}}" method="DELETE" onsubmit="return confirm('Are you sure you want to delete this booking?');">
                             <button>☒</button>
                         </form>
@@ -68,7 +68,7 @@
     <script>
     $(document).ready(function() {
         $('#bookings-table').DataTable();
-    });
+});
     </script>
 </body>
 </html>
