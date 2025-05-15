@@ -83,6 +83,7 @@ func main() {
 	http.Handle("GET /admin/bookings", basicauth(handlers.AdminViewDailyBookings(br, codes)))
 	http.Handle("GET /admin/availability", basicauth(handlers.AdminViewDailyAvailability(br)))
 	http.Handle("GET /admin/bookings/all", basicauth(handlers.AdminViewAllBookings(br)))
+	http.Handle("GET /admin/bookings/unpaid", basicauth(handlers.AdminViewUnpaidBookings(br)))
 	http.Handle("GET /admin", handlers.Redirect("/admin/bookings"))
 	http.Handle("GET /admin/", handlers.Redirect("/admin/bookings"))
 	http.Handle("GET /admin/export", basicauth(handlers.ExportData(br)))
