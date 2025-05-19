@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{block "title" .}}{{end}}</title>
+    <!-- Bringing in datatables from jquery -->
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="/static/css/bookings-new.css">
+	<script src="/static/js/admin/form-http-methods.js"></script>
+</head>
+<body>
+    <div class="flex-container">
+        <h1>User Details</h1>
+        <div class="flex-container" style="justify-content: right;">
+            <button onclick="window.location.href='/admin/bookings'" style="flex: 0;">BOOKINGS</button>
+        </div>
+    </div>
+    <table id="users-table" class="display compact" style="width:100%">
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Customer Email</th>
+                <th>Customer Phone</th>
+                <th>Last Booking Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range .Users }}
+                <tr>
+                    <td class="bookings-table">{{.UserName}}</td>
+                    <td class="bookings-table">{{.UserEmail}}</td>
+                    <td class="bookings-table">{{.UserPhone}}</td>
+                    <td class="bookings-table">{{.LastBooking}}</td>
+                </tr>
+            {{ end }}
+        </tbody>
+    </table>
+    <script>
+    $(document).ready(function() {
+        $('#users-table').DataTable();
+});
+    </script>
+</body>
+</html>
