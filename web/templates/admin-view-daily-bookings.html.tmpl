@@ -9,7 +9,7 @@ style="background-color: #D1C3F3;"
 	<h1 style="white-space: nowrap;">Daily Bookings</h1>
 	<div class="flex-container" style="justify-content: right;">
 		<button onclick="window.location.href=window.location.origin + '/admin/availability?date=' + new URLSearchParams(window.location.search).get('date')" style="flex: 0;">SLOT AVAILABILITY</button>
-		<button onclick="window.location.href='/admin/bookings/new'" style="flex: 0;">NEW BOOKING</button>
+		<button onclick="window.open('/admin/bookings/new', '_blank')" style="flex: 0;">NEW BOOKING</button>
 		<button onclick="window.location.href='/admin/bookings/all'" style="flex: 0;">ALL BOOKINGS</button>
 	</div>
 </div>
