@@ -44,6 +44,13 @@ func main() {
 		driver = da.NewSqliteDriver("db/development.db")
 	}
 
+	driver.Query("PRAGMA vdbe_debug=ON;")
+	driver.Query("PRAGAM journal_mode=WAL;")
+	driver.Query("PRAGMA wal_autocheckpoint=1000;")
+	driver.Query("PRAGMA busy_timeout=5000;") // 5000 milliseconds
+	driver.Query("PRAGMA wal_checkpoint(PASSIVE);")
+	driver.Query("PRAGMA synchronous=NORMAL;")
+
 	var paymentsApi handlers.Api
 	if os.Getenv("FEATURE_FLAG_PAYMENTS_PROVIDER") == "sumup" {
 		paymentsApi = handlers.NewApi("https://api.sumup.com", map[string]string{
