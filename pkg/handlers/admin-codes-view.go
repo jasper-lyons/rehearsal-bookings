@@ -25,9 +25,14 @@ func AdminViewCodes(cr *da.CodesRepository[da.StorageDriver]) Handler {
 		var adminCodes []AdminCode
 
 		for _, code := range codes {
+			expiryDuration := time.Now().AddDate(0, -1, 0) // Default expiry duration (1 month)
+			if code.CodeName == "Room 1" || code.CodeName == "Room 2" {
+				expiryDuration = time.Now().Add(-72 * time.Hour) // 72 hours expiry for Room 1 and Room 2
+			}
+
 			adminCodes = append(adminCodes, AdminCode{
 				Code:    code,
-				Expired: time.Now().AddDate(0, -1, 0).After(code.UpdatedAt),
+				Expired: expiryDuration.After(code.UpdatedAt),
 			})
 		}
 
