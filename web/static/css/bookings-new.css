@@ -339,6 +339,7 @@ td.start-slot, td.end-slot {
 .bookings-table {
     padding: 2px;
     text-transform: uppercase;
+    user-select: auto;
 }
 
 #payment-gateway {
