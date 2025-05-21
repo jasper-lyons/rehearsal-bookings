@@ -7,16 +7,14 @@
     <!-- Bringing in datatables from jquery -->
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <link rel="stylesheet" href="/static/css/bookings-new.css">
 	<script src="/static/js/admin/form-http-methods.js"></script>
 </head>
 <body>
     <div class="flex-container">
         <h1>User Details</h1>
-        <div class="flex-container" style="justify-content: right;">
-            <button onclick="window.location.href='/admin/bookings'" style="flex: 0;">BOOKINGS</button>
-        </div>
+        <button onclick="window.location.href='/admin/bookings'" style="flex: 0;">BOOKINGS</button>
     </div>
     <table id="users-table" class="display compact" style="width:100%">
         <thead>
@@ -38,7 +36,9 @@
     </table>
     <script>
     $(document).ready(function() {
-        $('#users-table').DataTable();
+        $('#users-table').DataTable({
+            "dom": 'frtip'
+        });
 });
     </script>
 </body>
