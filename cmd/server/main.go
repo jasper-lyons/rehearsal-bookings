@@ -84,8 +84,8 @@ func main() {
 	http.Handle("PUT /admin/bookings/{id}/cancel", basicauth(handlers.AdminBookingsStatusUpdate(br)))
 
 	// Admin panel forms
-	http.Handle("GET /admin/bookings/new", basicauth(handlers.AdminBookingsNew(br)))
-	http.Handle("GET /admin/new", basicauth(handlers.AdminBookingsNew(br)))
+	http.Handle("GET /admin/bookings/new", basicauth(handlers.AdminBookingsNew(br, ur)))
+	http.Handle("GET /admin/new", basicauth(handlers.AdminBookingsNew(br, ur)))
 	http.Handle("GET /admin/bookings/{id}/edit", basicauth(handlers.AdminBookingsUpdateView(br)))
 
 	// Admin booking views

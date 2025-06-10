@@ -8,59 +8,70 @@ body {
 }
 
 @font-face {
-    font-family: impact_label_reversed; /*a name to be used later*/
-    src: url('fonts/Impact_Label_Reversed-webfont.woff')  format('woff'); /*URL to font*/
+    font-family: impact_label_reversed;
+    /*a name to be used later*/
+    src: url('fonts/Impact_Label_Reversed-webfont.woff') format('woff');
+    /*URL to font*/
 }
+
 /* BUTTONS */
 button {
     font-family: 'impact_label_reversed', sans-serif;
     font-size: 20px;
     background-color: #f4f4f4;
-    color: black;  
-    border: 2px solid black; /* Bold black border for a label maker feel */
-    border-radius: 0; /* Sharp edges */
-    box-shadow: 2px 2px 0px black; /* Add a shadow for a raised effect */
-    transition: box-shadow 0.3s ease, transform 0.3s ease, background-color 0.3s ease;  /* Add transitions for a smooth effect */
+    color: black;
+    border: 2px solid black;
+    /* Bold black border for a label maker feel */
+    border-radius: 0;
+    /* Sharp edges */
+    box-shadow: 2px 2px 0px black;
+    /* Add a shadow for a raised effect */
+    transition: box-shadow 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+    /* Add transitions for a smooth effect */
     padding: 10px 15px;
-    margin: 5px;        
+    margin: 5px;
     flex: 1;
 }
 
 button:hover:not(:disabled) {
-    background-color: lightgrey; /* Slightly darker on hover */
-    box-shadow: 3px 3px 0px black; /* Larger shadow for hover effect */
+    background-color: lightgrey;
+    /* Slightly darker on hover */
+    box-shadow: 3px 3px 0px black;
+    /* Larger shadow for hover effect */
 }
 
 button:active:not(:disabled) {
-    transform: translate(2px, 2px); /* Pressed-in effect */
-    box-shadow: 1px 1px 0px black; /* Smaller shadow when pressed */
+    transform: translate(2px, 2px);
+    /* Pressed-in effect */
+    box-shadow: 1px 1px 0px black;
+    /* Smaller shadow when pressed */
 }
 
 button:disabled {
-    background-color: #e0e0e0; /* Light gray for disabled state */
-    border-color: #bbb; /* Muted border for disabled state */
-    box-shadow: none; /* No shadow for disabled state */
-    cursor: not-allowed;  /* Not-allowed cursor for disabled state */
+    background-color: #e0e0e0;
+    /* Light gray for disabled state */
+    border-color: #bbb;
+    /* Muted border for disabled state */
+    box-shadow: none;
+    /* No shadow for disabled state */
+    cursor: not-allowed;
+    /* Not-allowed cursor for disabled state */
 }
 
 /* FORMS */
-select{
-    display: block;
-    text-align: left;
-    width: 150px;
-    border: #b0b0b0 solid 1.5px;
-    border-radius: 2px;
-    margin: 5px;
-    padding: 8px;
-}
 
-label, input, textarea {
+label,
+input,
+textarea,
+select {
     display: block;
     text-align: left;
     width: 40%;
 }
 
-input, textarea {
+input,
+textarea,
+select {
     border: #b0b0b0 solid 1.5px;
     border-radius: 2px;
     margin: 5px 0px;
@@ -73,8 +84,8 @@ form {
     gap: 1rem;
 }
 
-fieldset { 
-    min-inline-size:inherit;
+fieldset {
+    min-inline-size: inherit;
 }
 
 .customer-info {
@@ -86,12 +97,17 @@ fieldset {
 #session-type-container {
     display: flex;
     flex-direction: row;
-    flex-grow: 1; /* Allows children to grow and take up available space */
-    width: 100%; /* Full width */
+    flex-grow: 1;
+    /* Allows children to grow and take up available space */
+    width: 100%;
+    /* Full width */
     height: 100%;
-    justify-content: space-between; /* Distribute space between elements */
-    align-items: stretch; /* Stretch items to fill the container height */
-    margin-bottom: 0px; /* so that the information box is flush with the buttons */
+    justify-content: space-between;
+    /* Distribute space between elements */
+    align-items: stretch;
+    /* Stretch items to fill the container height */
+    margin-bottom: 0px;
+    /* so that the information box is flush with the buttons */
 }
 
 .toggle-button.selected {
@@ -99,27 +115,32 @@ fieldset {
     color: white;
     border-color: black;
     margin-bottom: 0px;
-    box-shadow: none; /* No shadow for selected state */
+    box-shadow: none;
+    /* No shadow for selected state */
 
 }
 
 .info-box {
     margin: 5px;
-    margin-top: 0px; /* so that the information box is flush with the buttons */
+    margin-top: 0px;
+    /* so that the information box is flush with the buttons */
     padding: 10px;
     background-color: black;
     color: white;
     border-color: black;
 }
 
- /* date selectors */
+/* date selectors */
 .flex-container {
     display: flex;
     flex-direction: row;
-    flex-grow: 1; /* Allows children to grow and take up available space */
-    width: 100%; /* Full width */
+    flex-grow: 1;
+    /* Allows children to grow and take up available space */
+    width: 100%;
+    /* Full width */
     height: 100%;
-    justify-content: space-between; /* Distribute space between elements */
+    justify-content: space-between;
+    /* Distribute space between elements */
     align-items: center;
     gap: 10px;
 }
@@ -136,24 +157,31 @@ input[type="date"] {
 #date-input {
     font-family: 'impact_label_reversed', sans-serif;
     font-size: 20px;
-    background-color: #f4f4f4; /* Slightly off-white background */
+    background-color: #f4f4f4;
+    /* Slightly off-white background */
     text-align: center;
     color: black;
-    border: 2px solid black; /* Bold black border for a label maker feel */
-    border-radius: 0; /* Sharp edges */
-    box-shadow: 2px 2px 0px black; /* Add a shadow for a raised effect */
+    border: 2px solid black;
+    /* Bold black border for a label maker feel */
+    border-radius: 0;
+    /* Sharp edges */
+    box-shadow: 2px 2px 0px black;
+    /* Add a shadow for a raised effect */
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     padding: 10px;
 }
 
 #date-input.animate {
-    background-color:lightgrey; /* Highlight color */
+    background-color: lightgrey;
+    /* Highlight color */
     transform: scale(1.02);
 }
 
 #date-input:focus {
-    box-shadow: 2px 2px 4px black; /* Slightly larger shadow on focus */
-    background-color: #fff; /* Brighter background on focus */
+    box-shadow: 2px 2px 4px black;
+    /* Slightly larger shadow on focus */
+    background-color: #fff;
+    /* Brighter background on focus */
 }
 
 /* Time table */
@@ -163,13 +191,15 @@ table {
     margin-top: 20px;
 }
 
-th, td {
+th,
+td {
     border: 1px solid lightgrey;
     padding: 8px;
     text-align: center;
     cursor: pointer;
     user-select: none;
 }
+
 th {
     background-color: black;
     color: white;
@@ -177,21 +207,21 @@ th {
 }
 
 th.date-header {
-    text-align: center; 
-    background-color: transparent; 
+    text-align: center;
+    background-color: transparent;
     color: black;
     border: none;
 }
 
 td.unavailable {
     background-image: repeating-linear-gradient(45deg, white, white 2.5px, lightgray 2.5px, lightgray 5px);
-    cursor: not-allowed; 
+    cursor: not-allowed;
 }
 
 td.current-booking {
     background-color: goldenrod;
     background-image: none;
-    cursor: pointer; 
+    cursor: pointer;
 }
 
 td.grabbing {
@@ -202,7 +232,8 @@ td.selected {
     background-color: #FFE686;
 }
 
-td.start-slot, td.end-slot {
+td.start-slot,
+td.end-slot {
     background-color: #F8D23D;
 }
 
@@ -234,8 +265,10 @@ td.start-slot, td.end-slot {
 }
 
 .floating-box.enabled:active {
-    transform: translate(-50%, 2px); /* Relative to its centered position */
-    box-shadow: 0 1px 0px grey; /* Minimal shadow for pressed state */
+    transform: translate(-50%, 2px);
+    /* Relative to its centered position */
+    box-shadow: 0 1px 0px grey;
+    /* Minimal shadow for pressed state */
     background-color: white;
     color: black;
     border-color: black;
@@ -274,6 +307,7 @@ td.start-slot, td.end-slot {
 .room-link {
     color: white;
 }
+
 /*  ADMIN PANEL */
 .bookings-panel {
     display: flex;
@@ -305,7 +339,7 @@ td.start-slot, td.end-slot {
     background-color: #c7c7c7;
 }
 
-.rec-room{
+.rec-room {
     border: solid 1px red;
     border-left: solid 10px red;
 }
@@ -316,6 +350,7 @@ td.start-slot, td.end-slot {
     margin: 0;
 
 }
+
 .bookings-panel.update {
     background-color: #FFE686;
 }
@@ -343,11 +378,11 @@ td.start-slot, td.end-slot {
 }
 
 #payment-gateway {
-	margin-top: .5em;
+    margin-top: .5em;
 }
 
 #stripe-express {
-	margin-top: .5em;
+    margin-top: .5em;
 }
 
 
@@ -359,15 +394,18 @@ td.start-slot, td.end-slot {
     align-items: center;
     padding: 0px 8px;
 }
+
 .social-links a {
     text-decoration: none;
     font-size: 24px;
     color: #333;
     transition: color 0.3s ease;
 }
+
 .social-links a:hover {
     color: #007bff;
 }
+
 svg {
     width: 24px;
     height: 24px;
@@ -388,69 +426,84 @@ svg {
     #session-type-container {
         flex-direction: column;
     }
+
     .toggle-button:hover:not(:disabled) {
-        background-color: black; 
-        box-shadow: none; 
+        background-color: black;
+        box-shadow: none;
     }
+
     .info-box {
         margin-top: 5px;
     }
+
     .flex-container {
         flex-direction: column;
     }
-    .flex-container > * {
+
+    .flex-container>* {
         flex: 1;
         width: 100%;
         margin: 5px 0;
         box-sizing: border-box;
     }
+
     .time-slot-container {
         width: 100%;
         height: 100%;
         margin: 0;
         padding: 0;
     }
+
     .floating-box {
         width: 50%;
         font-size: x-large;
     }
-    td,th {
+
+    td,
+    th {
         font-size: small;
     }
-    input, textarea, label {
+
+    input,
+    textarea,
+    label {
         width: 75%;
-    } 
+    }
+
     .error-message {
         font-size: 12px;
     }
 
-    /* Admin panels */ 
+    /* Admin panels */
     .bookings-panel {
         flex-direction: column;
     }
+
     .admin-panel {
         width: auto;
     }
+
     .admin-update {
         width: 97%;
     }
 
     .legend {
-       font-size: small;
+        font-size: small;
     }
 }
 
 
 .logo {
-    max-width: 100px; 
+    max-width: 100px;
     height: auto;
 }
 
 .logo-text {
-    color:#ff004c;
+    color: #ff004c;
     text-align: left;
     font-size: 1em;
-    padding-left: 0.8em; ;
+    padding-left: 0.8em;
+    ;
 }
 
 h3 {
