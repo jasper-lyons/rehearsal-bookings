@@ -1,1 +1,1 @@
-DROP VIEW IF EXISTS customer_view;
+DROP VIEW IF EXISTS user_view;

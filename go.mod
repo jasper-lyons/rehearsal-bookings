@@ -2,6 +2,8 @@ module rehearsal-bookings
 
 go 1.23.4
 
+require golang.org/x/text v0.26.0
+
 require (
 	github.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883 // indirect
 	github.com/golang-migrate/migrate/v4 v4.18.1 // indirect
