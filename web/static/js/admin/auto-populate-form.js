@@ -1,10 +1,24 @@
 // Populate form fields when a payment method is selected
 function internalBookingsOveride(selectElement) {
     const selectedOption = selectElement.options[selectElement.selectedIndex];
-    if (selectedOption.value === 'internal' || selectedOption.value === 'regulars') {
-        // If 'Internal Bookings' or 'Weekly Regulars' is selected, set status to 'paid' and revised price to 0
-        document.getElementById('status').value = 'paid';
-        document.getElementById('revised-price').value = 0;
+    const cymbalsElement = document.getElementById('cymbals');
+
+    // If 'Internal Bookings', 'Weekly Regulars', or 'Last Minute Cancellation' is selected,
+    // set the status to 'paid' and revised price to 0
+    switch (selectedOption.value) {
+        case 'internal':
+        case 'regulars':
+            document.getElementById('status').value = 'paid';
+            document.getElementById('revised-price').value = 0;
+            break;
+        case 'last-minute-cancellation':
+            if (cymbalsElement.checked) {
+                document.getElementById('status').value = 'unpaid';
+                document.getElementById('revised-price').value = 3;
+            }
+            break;
+        default:
+            break;       
     }
 }
 
