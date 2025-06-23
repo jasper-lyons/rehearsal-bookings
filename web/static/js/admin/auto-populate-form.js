@@ -11,7 +11,7 @@ function internalBookingsOveride(selectElement) {
             document.getElementById('status').value = 'paid';
             document.getElementById('revised-price').value = 0;
             break;
-        case 'last-minute-cancellation':
+        case 'last_minute_cancellation':
             if (cymbalsElement.checked) {
                 document.getElementById('status').value = 'unpaid';
                 document.getElementById('revised-price').value = 3;
