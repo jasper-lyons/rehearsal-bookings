@@ -30,7 +30,6 @@ func ExportData(br *da.BookingsRepository[da.StorageDriver]) Handler {
 				return Error(err, http.StatusBadRequest)
 			}
 		}
-
 		bookings, err := br.Where("status != 'hold' and start_time >= ? and end_time <= ?", startDayFormatted, endDayFormatted)
 		if err != nil {
 			return Error(err, 500)
