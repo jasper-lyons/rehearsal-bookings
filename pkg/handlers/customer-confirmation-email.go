@@ -35,7 +35,7 @@ var customerConfirmationEmailHTMLTemplate = `
     
     <p>Just to confirm, you've booked a <strong>{{ .Type }}</strong> rehearsal in <strong>{{ .RoomName }}</strong> on <strong>{{ .Day }}</strong> from <strong>{{ .StartTime }}</strong> to <strong>{{ .EndTime }}</strong>.</p>
     
-    <p>If you need to cancel or modify your booking, please reach out to us at <a href="tel:07496983488">07496 983 488</a> or <a href="mailto:badhabitstudioseb@gmail.com">badhabitstudioseb@gmail.com</a>.</p>
+    <p>If you need to cancel or modify your booking, please reach out to us at <a href="tel:07496983488">07496 983 488</a> or <a href="mailto:hello@badhabitstudios.co.uk">hello@badhabitstudios.co.uk</a>.</p>
     
     <p>We are a self-service studio, which means there won't always be a member of staff on-site during your session.</p>
     
@@ -56,7 +56,7 @@ var customerConfirmationEmailHTMLTemplate = `
             </td>
             <td style="padding-left: 10px;">
                 <p><a href="tel:07496983488">07496 983 488</a></p> 
-                <p><a href="mailto:badhabitstudioseb@gmail.com">badhabitstudioseb@gmail.com</a></p>
+                <p><a href="mailto:hello@badhabitstudios.co.uk">hello@badhabitstudios.co.uk</a></p>
                 <p>
                     <a style="color: transparent;" href="https://facebook.com/badhabiteastbourne" target="_blank">
                         <img src="https://cdn-icons-png.flaticon.com/24/733/733547.png" alt="Facebook" width="24" height="24">
@@ -84,7 +84,7 @@ Thanks for booking a rehearsal at Bad Habit Studios!
 
 Just to confirm you've booked a {{ .Type}} rehearsal {{ .RoomName }} on {{ .Day }} from {{ .StartTime }} to {{ .EndTime }}. 
 
-If you need to cancel or modify your booking, please reach out to us on 07496 983 488 or badhabitstudioseb@gmail.com.
+If you need to cancel or modify your booking, please reach out to us on 07496 983 488 or hello@badhabitstudios.co.uk.
 
 We are a self-service studio, which means there won't always be a member of staff on-site during your session.
 
