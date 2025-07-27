@@ -2,12 +2,15 @@ package handlers
 
 import (
 	"fmt"
+	"context"
 	"os"
-	da "rehearsal-bookings/pkg/data_access"
-	"github.com/sendgrid/sendgrid-go"
-	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"html/template"
 	"bytes"
+	da "rehearsal-bookings/pkg/data_access"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/ses"
+	"github.com/aws/aws-sdk-go-v2/service/ses/types"
 )
 
 type AdminEmailTemplateData struct {
@@ -26,9 +29,16 @@ Times: {{.StartTime}} to {{.EndTime}}
 `
 
 func SendAdminBookingNotificationEmail(booking *da.Booking) error {
-	from := mail.NewEmail("Rehearsal Booking", os.Getenv("TRANSACTIONAL_FROM_ADDRESS"))
+	ctx := context.Background()
+
+	sesClient, err := createSESClient(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to created SES client: %v", err)
+	}
+
+	from := os.Getenv("TRANSACTIONAL_FROM_ADDRESS")
 	subject := "New Booking"
-	to := mail.NewEmail("Admin", os.Getenv("ADMIN_NOTIFICATION_EMAIL"))
+	to := os.Getenv("ADMIN_NOTIFICATION_EMAIL")
 	
 	// Prepare the template data
 	templateData := AdminEmailTemplateData {
@@ -51,17 +61,28 @@ func SendAdminBookingNotificationEmail(booking *da.Booking) error {
 		return fmt.Errorf("Failed to execute email template: %v", err)
 	}
 	
-	message := mail.NewSingleEmail(from, subject, to, emailContent.String(), "")
-	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
-	response, err := client.Send(message)
+	input := &ses.SendEmailInput {
+		Source: aws.String(from),
+		Destination: &types.Destination {
+			ToAddresses: []string{ to },
+		},
+		Message: &types.Message {
+			Subject: &types.Content {
+				Data: aws.String(subject),
+			},
+			Body: &types.Body {
+				Text: &types.Content {
+					Data: aws.String(emailContent.String()),
+				},
+			},
+		},
+	}
+
+	// Send the email
+	_, err = sesClient.SendEmail(ctx, input)
 	if err != nil {
-		return fmt.Errorf("Failed to send admin-notification email: %v", err)
+		return fmt.Errorf("failed to send adming notification email: %v", err)
 	}
-	
-	// Log the response for monitoring purposes
-	if response.StatusCode >= 400 {
-		return fmt.Errorf("Failed to send admin-notification email. Status: %d, Body: %s", response.StatusCode, response.Body)
-	}
-	
+
 	return nil
 }

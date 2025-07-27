@@ -2,13 +2,15 @@ package handlers
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"html/template"
 	"os"
 	da "rehearsal-bookings/pkg/data_access"
 
-	"github.com/sendgrid/sendgrid-go"
-	"github.com/sendgrid/sendgrid-go/helpers/mail"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/ses"
+	"github.com/aws/aws-sdk-go-v2/service/ses/types"
 )
 
 type CustomerEmailTemplateData struct {
@@ -100,10 +102,31 @@ Bad Habit Studios
 This is an automated email so if you reply to it, we might not be able to get back to you.
 `
 
+func createSESClient(ctx context.Context) (*ses.Client, error) {
+	cfg := aws.Config{
+		Region: os.Getenv("AWS_REGION"),
+		Credentials: aws.CredentialsProviderFunc(func(ctx context.Context) (aws.Credentials, error) {
+			return aws.Credentials{
+				AccessKeyID:     os.Getenv("AWS_ACCESS_KEY_ID"),
+				SecretAccessKey: os.Getenv("AWS_SECRET_ACCESS_KEY"),
+			}, nil
+		}),
+	}
+
+	return ses.NewFromConfig(cfg), nil
+}
+
 func SendCustomerBookingConfirmationEmail(booking *da.Booking) error {
-	from := mail.NewEmail("Rehearsal Booking", os.Getenv("TRANSACTIONAL_FROM_ADDRESS"))
+	ctx := context.Background()
+
+	sesClient, err := createSESClient(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to created SES client: %v", err)
+	}
+
+	from := os.Getenv("TRANSACTIONAL_FROM_ADDRESS")
 	subject := "Bad Habit Studios: Rehearsal Booking Confirmation"
-	to := mail.NewEmail(booking.CustomerName, booking.CustomerEmail)
+	to := booking.CustomerEmail
 
 	// Prepare the template data
 	templateData := CustomerEmailTemplateData{
@@ -138,16 +161,30 @@ func SendCustomerBookingConfirmationEmail(booking *da.Booking) error {
 		return fmt.Errorf("Failed to execute email template: %v", err)
 	}
 
-	message := mail.NewSingleEmail(from, subject, to, plainTextContent.String(), htmlContent.String())
-	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
-	response, err := client.Send(message)
-	if err != nil {
-		return fmt.Errorf("Failed to send confirmation email: %v", err)
+	input := &ses.SendEmailInput {
+		Source: aws.String(from),
+		Destination: &types.Destination {
+			ToAddresses: []string{ to },
+		},
+		Message: &types.Message {
+			Subject: &types.Content {
+				Data: aws.String(subject),
+			},
+			Body: &types.Body {
+				Text: &types.Content {
+					Data: aws.String(plainTextContent.String()),
+				},
+				Html: &types.Content {
+					Data: aws.String(htmlContent.String()),
+				},
+			},
+		},
 	}
 
-	// Log the response for monitoring purposes
-	if response.StatusCode >= 400 {
-		return fmt.Errorf("Failed to send confirmation email. Status: %d, Body: %s", response.StatusCode, response.Body)
+	// Send the email
+	_, err = sesClient.SendEmail(ctx, input)
+	if err != nil {
+		return fmt.Errorf("failed to send confirmation email: %v", err)
 	}
 
 	return nil
