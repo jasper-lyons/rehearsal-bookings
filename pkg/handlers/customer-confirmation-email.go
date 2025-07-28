@@ -133,7 +133,7 @@ func SendCustomerBookingConfirmationEmail(booking *da.Booking) error {
 		CustomerName:  booking.CustomerName,
 		Type:          booking.Type,
 		RoomName:      booking.RoomName,
-		Day:           booking.StartTime.Format("Monday, 2 January, 2006"),
+		Day:           booking.StartTime.Format("Monday 2 January, 2006"),
 		StartTime:     booking.StartTime.Format("3:04 PM"),
 		EndTime:       booking.EndTime.Format("3:04 PM"),
 		CustomerPhone: booking.CustomerPhone,
@@ -161,20 +161,20 @@ func SendCustomerBookingConfirmationEmail(booking *da.Booking) error {
 		return fmt.Errorf("Failed to execute email template: %v", err)
 	}
 
-	input := &ses.SendEmailInput {
+	input := &ses.SendEmailInput{
 		Source: aws.String(from),
-		Destination: &types.Destination {
-			ToAddresses: []string{ to },
+		Destination: &types.Destination{
+			ToAddresses: []string{to},
 		},
-		Message: &types.Message {
-			Subject: &types.Content {
+		Message: &types.Message{
+			Subject: &types.Content{
 				Data: aws.String(subject),
 			},
-			Body: &types.Body {
-				Text: &types.Content {
+			Body: &types.Body{
+				Text: &types.Content{
 					Data: aws.String(plainTextContent.String()),
 				},
-				Html: &types.Content {
+				Html: &types.Content{
 					Data: aws.String(htmlContent.String()),
 				},
 			},
