@@ -8,6 +8,7 @@ import (
 type AdminUpdateCodesForm struct {
 	CodeName  string `json:"code_name"`
 	CodeValue string `json:"code_value"`
+	Notes     string `json:"code_notes"` // New field for notes
 }
 
 // All bookings are created with a "hold" status
@@ -25,6 +26,7 @@ func AdminUpdateCodes(cr *da.CodesRepository[da.StorageDriver]) Handler {
 		}
 
 		code.CodeValue = form.CodeValue
+		code.Notes = form.Notes
 
 		codes, err := cr.Update([]da.Code{*code})
 		if err != nil {

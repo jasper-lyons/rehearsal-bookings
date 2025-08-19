@@ -129,6 +129,7 @@ function adminUpdateCodes() {
 		body: JSON.stringify({
 			code_name: document.getElementById('code-name').value,
 			code_value: document.getElementById('code-value').value,
+			code_notes: document.getElementById('code-notes').value,
 		}),
 		headers: {
 				'Content-Type': 'application/json'

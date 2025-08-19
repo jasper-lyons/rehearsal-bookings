@@ -11,23 +11,17 @@ style="background-color: #ACEEDB;"
         <script src="/static/js/admin/random-code-generator.js"></script>
         <div style="padding: 15px 5px;">
             <label for="code-name">Code Name:</label>
+
             <select id="code-name" name="code-name" required style="width: auto;">
                 <option value="" disabled selected>Please select code to change</option>
-                <option value="Room 1">Room 1</option>
-                <option value="Room 2">Room 2</option>
-                <option value="Monday Front Door">Monday Front Door</option>
-                <option value="Tuesday Front Door">Tuesday Front Door</option>
-                <option value="Wednesday Front Door">Wednesday Front Door</option>
-                <option value="Thursday Front Door">Thursday Front Door</option>
-                <option value="Friday Front Door">Friday Front Door</option>
-                <option value="Saturday Front Door">Saturday Front Door</option>
-                <option value="Sunday Front Door">Sunday Front Door</option>
-                <option value="Room 2 Store">Room 2 Store</option>
-                <option value="Rec Room Store">Rec Room Store</option>
-                <option value="Rec Room Keybox">Rec Room Keybox</option>
+                {{ range .CodeNames }}
+                    <option value="{{.CodeName}}">{{.CodeName}}</option>
+                {{ end }}
             </select>
             <label for="code-value">Code Value:</label>
-            <input type="text" id="code-value" name="code-value" pattern="\d{3-6}" title="Please enter a number between 3-6 digits long" required style="margin: 5px;">
+            <input type="text" id="code-value" name="code-value" pattern="\d{3,6}" title="Please enter a number between 3-6 digits long" required style="margin: 5px;">
+            <label for="code-notes">Notes:</label>
+            <input type="text" id="code-notes" name="code-notes" title="Notes" required style="margin: 5px;">
         </div>
         <!-- Submit Button -->
         <div class="submit-button">

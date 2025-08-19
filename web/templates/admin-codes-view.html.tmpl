@@ -13,6 +13,9 @@ style="background-color: #ACEEDB;"
     <div style='padding: 10px; color: {{if eq .Expired true }}red{{else}}black{{end}};'>
         <h3 class='codes-display' > {{.CodeName}} : {{.CodeValue}}</h3>
         <p class="codes-display" style="font-size: small;"><strong>Last Updated: </strong>{{.UpdatedAt.Format "2006-01-02 15:04"}}</p>
+        {{ if .Notes }}
+        <p class="codes-display" style="font-size: small;"><strong>Notes: </strong>{{.Notes}}</p>
+        {{ end }}
     </div>
     {{ end }}
 </div>

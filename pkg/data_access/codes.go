@@ -11,6 +11,7 @@ type Code struct {
 	CodeValue string    `sql:"code_value" json:"code_value"`
 	UpdatedAt time.Time `sql:"updated_at" generated:"true" json:"updated_at"`
 	CreatedAt time.Time `sql:"created_at" generated:"true" json:"created_at"`
+	Notes     string    `sql:"notes" json:"notes"` // Added notes field
 }
 
 type CodesRepository[D StorageDriver] struct {

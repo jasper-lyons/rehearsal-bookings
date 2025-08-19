@@ -1,0 +1,1 @@
+ALTER TABLE codes ADD COLUMN notes VARCHAR(100);
