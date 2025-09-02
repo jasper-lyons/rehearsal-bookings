@@ -40,6 +40,8 @@ var customerConfirmationEmailHTMLTemplate = `
     <p>If you need to cancel or modify your booking, please reach out to us at <a href="tel:07496983488">07496 983 488</a> or <a href="mailto:hello@badhabitstudios.co.uk">hello@badhabitstudios.co.uk</a>.</p>
     
     <p>We are a self-service studio, which means there won't always be a member of staff on-site during your session.</p>
+
+	<p>Need anything for the rehearsal? We have strings, drumsticks, picks, cables and more available to buy in the studio. Visit our shop at <a href="https://shop.badhabitstudios.co.uk/products" target="_blank">shop.badhabitstudios.co.uk</a> to see what we have in stock.</p>
     
     <p>On the day of your rehearsal, we will text door codes to <strong>{{ .CustomerPhone }}</strong>. For security reasons, we generally keep the code-lock enabled even when the studio is staffed, so please share these with your bandmates and make a note of them when you go in and out of the building.</p>
     
@@ -91,6 +93,9 @@ If you need to cancel or modify your booking, please reach out to us on 07496 98
 We are a self-service studio, which means there won't always be a member of staff on-site during your session.
 
 On the day of your rehearsal, we will text door codes to {{ .CustomerPhone }}. For security reasons we generally keep the code-lock enabled even when the studio is staffed, so please share these with your bandmates and make a note of them when you go in and out of the building.
+
+Need anything for the rehearsal? We have strings, drumsticks, picks, cables and more available to buy in the studio. 
+Visit our shop at https://shop.badhabitstudios.co.uk/products to see what we have in stock.
 
 Further information about location and room specs can be found on our website at https://badhabitstudios.co.uk
 Please note that we have a 24 hour cancellation policy. More details can be found at https://badhabitstudios.co.uk/cancellation-policy.

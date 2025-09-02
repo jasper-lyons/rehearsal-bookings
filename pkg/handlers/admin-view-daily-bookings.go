@@ -88,7 +88,10 @@ You asked for Cymbals so they'll be left in the room :)
 • ROOM 1. This is the room directly in front of you as you walk into the studio.
 • ROOM 2. This is the room on the right after you walk into the studio.
 {{ end }}
-Any questions or concerns, please get in touch!`
+Any questions or concerns, please get in touch!
+
+P.S. Need anything for the rehearsal? We have strings, drumsticks, picks, cables and more available to buy online at shop.badhabitstudios.co.uk or in the studio.
+`
 		for i, booking := range bookings {
 			var messageContent bytes.Buffer
 
