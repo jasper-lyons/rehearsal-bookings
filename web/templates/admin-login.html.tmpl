@@ -1,0 +1,15 @@
+{{template "layout.html.tmpl" .}}
+
+{{define "body"}}
+
+<script src="/static/js/admin/form-http-methods.js"></script>
+
+<h1>Admin Login</h1>
+
+<form method="POST" action="/admin/login"> 
+	<input type="text" name="username" id="username"/>
+	<input type="password" name="password" id="password" />
+	<button>Login</button>
+</form>
+
+{{ end }}

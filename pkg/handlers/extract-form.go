@@ -15,9 +15,6 @@ func ExtractForm[FormType any](r *http.Request) (*FormType, error) {
 		}
 
 		err = json.Unmarshal(body, &form)
-		if err != nil {
-			return nil, err
-		}
 
 		return form, nil
 }
