@@ -65,9 +65,10 @@ func main() {
 		})
 	}
 
-	basicauth := handlers.CreateBasicAuthMiddleware(
+	adminauth := handlers.CreateStaticAuthMiddleware(
 		os.Getenv("ADMIN_USERNAME"),
 		os.Getenv("ADMIN_PASSWORD"),
+		"/admin/login",
 	)
 
 	br := da.NewBookingsRepository(driver)
@@ -79,23 +80,23 @@ func main() {
 	// Adming methods
 	http.Handle("POST /admin/bookings", handlers.AdminBookingsCreate(br))
 	http.Handle("PUT /admin/bookings/{id}/update", handlers.AdminBookingsUpdate(br))
-	http.Handle("DELETE /admin/bookings/{id}", basicauth(handlers.AdminBookingsDelete(br)))
-	http.Handle("PUT /admin/bookings/{id}/paid", basicauth(handlers.AdminBookingsStatusUpdate(br)))
-	http.Handle("PUT /admin/bookings/{id}/cancel", basicauth(handlers.AdminBookingsStatusUpdate(br)))
+	http.Handle("DELETE /admin/bookings/{id}", adminauth(handlers.AdminBookingsDelete(br)))
+	http.Handle("PUT /admin/bookings/{id}/paid", adminauth(handlers.AdminBookingsStatusUpdate(br)))
+	http.Handle("PUT /admin/bookings/{id}/cancel", adminauth(handlers.AdminBookingsStatusUpdate(br)))
 
 	// Admin panel forms
-	http.Handle("GET /admin/bookings/new", basicauth(handlers.AdminBookingsNew(br, ur)))
-	http.Handle("GET /admin/new", basicauth(handlers.AdminBookingsNew(br, ur)))
-	http.Handle("GET /admin/bookings/{id}/edit", basicauth(handlers.AdminBookingsUpdateView(br)))
+	http.Handle("GET /admin/bookings/new", adminauth(handlers.AdminBookingsNew(br, ur)))
+	http.Handle("GET /admin/new", adminauth(handlers.AdminBookingsNew(br, ur)))
+	http.Handle("GET /admin/bookings/{id}/edit", adminauth(handlers.AdminBookingsUpdateView(br)))
 
 	// Admin booking views
-	http.Handle("GET /admin/bookings", basicauth(handlers.AdminViewDailyBookings(br, codes)))
-	http.Handle("GET /admin/availability", basicauth(handlers.AdminViewDailyAvailability(br)))
-	http.Handle("GET /admin/bookings/all", basicauth(handlers.AdminViewAllBookings(br)))
-	http.Handle("GET /admin/bookings/unpaid", basicauth(handlers.AdminViewUnpaidBookings(br)))
+	http.Handle("GET /admin/bookings", adminauth(handlers.AdminViewDailyBookings(br, codes)))
+	http.Handle("GET /admin/availability", adminauth(handlers.AdminViewDailyAvailability(br)))
+	http.Handle("GET /admin/bookings/all", adminauth(handlers.AdminViewAllBookings(br)))
+	http.Handle("GET /admin/bookings/unpaid", adminauth(handlers.AdminViewUnpaidBookings(br)))
 	http.Handle("GET /admin", handlers.Redirect("/admin/bookings"))
 	http.Handle("GET /admin/", handlers.Redirect("/admin/bookings"))
-	http.Handle("GET /admin/export", basicauth(handlers.ExportData(br)))
+	http.Handle("GET /admin/export", adminauth(handlers.ExportData(br)))
 
 	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, paymentsApi))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))
@@ -104,9 +105,9 @@ func main() {
 	http.Handle("GET /price-calculator", handlers.CalculatePrice(br))
 
 	// Codes
-	http.Handle("GET /admin/codes/update", basicauth(handlers.AdminUpdateCodesView(cr)))
-	http.Handle("PUT /admin/codes/update", basicauth(handlers.AdminUpdateCodes(cr)))
-	http.Handle("GET /admin/codes", basicauth(handlers.AdminViewCodes(cr)))
+	http.Handle("GET /admin/codes/update", adminauth(handlers.AdminUpdateCodesView(cr)))
+	http.Handle("PUT /admin/codes/update", adminauth(handlers.AdminUpdateCodes(cr)))
+	http.Handle("GET /admin/codes", adminauth(handlers.AdminViewCodes(cr)))
 
 	// Users
 	http.Handle("GET /admin/users", handlers.AdminUserDetailsViews(ur))

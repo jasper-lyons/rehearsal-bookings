@@ -2,11 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
+	"encoding/base64"
 	"errors"
 	"log"
 	"net/http"
 	templates "rehearsal-bookings/web/templates"
 	"time"
+	"strings"
 )
 
 // Infrastructure Type for nicer handler writing
@@ -89,6 +91,32 @@ func Logging(next http.Handler) Handler {
 
 		return nil
 	})
+}
+
+func CreateStaticAuthMiddleware(username string, password string, loginPath string) func(Handler) Handler {
+	return func(next Handler) Handler {
+		return Handler(func (w http.ResponseWriter, r *http.Request) Handler {
+			cookie, err := r.Cookie("StaticAuth")
+			if err != nil {
+				return Redirect(loginPath)
+			}
+
+			decodedValue, err := base64.StdEncoding.DecodeString(cookie.Value)
+			if err != nil {
+				return Redirect(loginPath)
+			}
+
+			credentials := strings.Split(string(decodedValue), ":")
+			incommingUsername := credentials[0]
+			incommingPassword := credentials[1]
+
+			if incommingUsername != username || incommingPassword != password {
+				return Redirect(loginPath)
+			}
+
+			return next
+		})
+	}
 }
 
 func CreateBasicAuthMiddleware(username string, password string) func(Handler) Handler {
