@@ -9,22 +9,21 @@ import (
 
 type AdminSessionCreateForm struct {
 	Username string `json:"username"`
-	Password string `json:"name"`
+	Password string `json:"password"`
 }
 
 func AdminSessionCreate(username string, password string, loginPath string) Handler {
 	return Handler(func(w http.ResponseWriter, r *http.Request) Handler {
-
 		form, err := ExtractForm[AdminSessionCreateForm](r)
 		if err != nil {
 			return Redirect(loginPath)
 		}
+
+		fmt.Println(form.Username, username, form.Password, password)
 		
 		if form.Username != username || form.Password != password {
 			return Redirect(loginPath)
 		}
-
-		fmt.Println(form.Username, username, form.Password, password)
 
 		cookie := http.Cookie {
 			Name: "StaticAuth",
