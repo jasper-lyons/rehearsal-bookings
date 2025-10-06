@@ -65,6 +65,10 @@ func main() {
 		})
 	}
 
+	basicauth := handlers.CreateBasicAuthMiddleware(
+		os.Getenv("ADMIN_USERNAME"),
+		os.Getenv("ADMIN_PASSWORD"),
+	)
 	adminauth := handlers.CreateStaticAuthMiddleware(
 		os.Getenv("ADMIN_USERNAME"),
 		os.Getenv("ADMIN_PASSWORD"),
@@ -103,7 +107,7 @@ func main() {
 	http.Handle("GET /admin/bookings/unpaid", adminauth(handlers.AdminViewUnpaidBookings(br)))
 	http.Handle("GET /admin", handlers.Redirect("/admin/bookings"))
 	http.Handle("GET /admin/", handlers.Redirect("/admin/bookings"))
-	http.Handle("GET /admin/export", adminauth(handlers.ExportData(br)))
+	http.Handle("GET /admin/export", basicauth(handlers.ExportData(br)))
 
 	http.Handle("POST /bookings/{id}/confirm", handlers.BookingsConfirm(br, paymentsApi))
 	http.Handle("POST /bookings", handlers.BookingsCreate(br))
