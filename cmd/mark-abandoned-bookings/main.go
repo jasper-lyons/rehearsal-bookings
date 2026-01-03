@@ -29,6 +29,13 @@ func main() {
 		driver = da.NewSqliteDriver("db/development.db")
 	}
 
+	driver.Query("PRAGMA vdbe_debug=ON;")
+	driver.Query("PRAGAM journal_mode=WAL;")
+	driver.Query("PRAGMA wal_autocheckpoint=1000;")
+	driver.Query("PRAGMA busy_timeout=5000;") // 5000 milliseconds
+	driver.Query("PRAGMA wal_checkpoint(PASSIVE);")
+	driver.Query("PRAGMA synchronous=NORMAL;")
+
 	br := da.NewBookingsRepository(driver)
 
 	heldBookings, err := br.Where(`datetime(expiration) < current_timestamp and status = 'hold'`)
