@@ -30,7 +30,7 @@ func main() {
 	}
 
 	driver.Query("PRAGMA vdbe_debug=ON;")
-	driver.Query("PRAGAM journal_mode=WAL;")
+	driver.Query("PRAGMA journal_mode=WAL;")
 	driver.Query("PRAGMA wal_autocheckpoint=1000;")
 	driver.Query("PRAGMA busy_timeout=5000;") // 5000 milliseconds
 	driver.Query("PRAGMA wal_checkpoint(PASSIVE);")
