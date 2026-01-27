@@ -91,6 +91,8 @@ You asked for Cymbals so they'll be left in the room :)
 Any questions or concerns, please get in touch!
 
 P.S. Need anything for the rehearsal? We have strings, drumsticks, picks, cables and more available to buy online at shop.badhabitstudios.co.uk or in the studio.
+
+P.P.S We're trying to figure out which strings to stock in the shop! If you have 30s, let us know via this form :) https://forms.gle/QYS1KVyqXjrHTHJ2A
 `
 		for i, booking := range bookings {
 			var messageContent bytes.Buffer
